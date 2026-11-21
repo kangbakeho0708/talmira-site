@@ -1,0 +1,32 @@
+<!doctype html><html><body style="margin:0;background:#000">
+<!-- 메인 그림을 미리 한 번 그려 파일로 굽는 도구. 사이트에서는 쓰지 않는다 -->
+<canvas id="c"></canvas>
+<script src="hero-engine.js"></script>
+<script>
+const q = new URLSearchParams(location.search);
+const W = +q.get('w') || 2560, H = +q.get('h') || 1200, QL = q.get('q') || 'high';
+const HERO = JSON.parse(decodeURIComponent(location.hash.slice(1)));
+const cv = document.getElementById('c'); cv.width = W; cv.height = H;
+const post = (cv) => {
+  const w = cv.width, h = cv.height, c = cv.getContext('2d');
+  const s = TalEngine.sunScreen(HERO, w, h);
+  const sw = w >> 2, sh = h >> 2;
+  const a = document.createElement('canvas'); a.width = sw; a.height = sh; const ac = a.getContext('2d');
+  ac.filter = 'brightness(.75) contrast(3.2) saturate(1.3)'; ac.drawImage(cv, 0, 0, sw, sh); ac.filter = 'none';
+  /* 빛줄기는 해 가까운 밝은 곳에서만 나온다. 먼 지평선 띠가 앞 바위 위로 번지지 않게 */
+  const g = ac.createRadialGradient(s.x * sw, s.y * sh, 0, s.x * sw, s.y * sh, sw * .32);
+  g.addColorStop(0, 'rgba(0,0,0,1)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+  ac.globalCompositeOperation = 'destination-in'; ac.fillStyle = g; ac.fillRect(0, 0, sw, sh); ac.globalCompositeOperation = 'source-over';
+  const r = document.createElement('canvas'); r.width = sw; r.height = sh; const rc = r.getContext('2d');
+  rc.globalCompositeOperation = 'lighter';
+  const cx = s.x * sw, cy = s.y * sh, N = 28;
+  for (let i = 0; i < N; i++) { const k = 1 + i * .045; rc.globalAlpha = (1 - i / N) * .07; rc.setTransform(k, 0, 0, k, cx * (1 - k), cy * (1 - k)); rc.drawImage(a, 0, 0); }
+  rc.setTransform(1, 0, 0, 1, 0, 0);
+  c.save(); c.imageSmoothingQuality = 'high';
+  c.globalCompositeOperation = 'screen'; c.globalAlpha = .42; c.drawImage(r, 0, 0, w, h);
+  c.filter = 'blur(' + Math.round(w / 90) + 'px)'; c.globalAlpha = .26; c.drawImage(a, 0, 0, w, h);
+  c.restore();
+  return s;
+};
+TalEngine.render(cv, HERO, QL, {}).then((ok) => { const s = post(cv); window.SUN = s; document.title = 'done' + ok; });
+</script></body></html>

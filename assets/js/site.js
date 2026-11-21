@@ -14,6 +14,8 @@ if (!Q || Q === 'high') {
 
 /* 장면 */
 const S = (o) => o;
+const HERO_OLD = { ty: 7, el: 3.2, az: 20, top: '#04050c', hor: '#c96a44', sun: '#ffc08a', si: 4, g1: '#2c2232', g2: '#0c0910', fog: .0024, cld: .4, str: 1, exp: 1.0, camy: 7, pit: .4, seed: 8.8, ssz: .03 };
+/* 메인 그림 장면 (tools/render-hero.html 로 미리 구워 둔다) */
 const HERO = { ty: 8, el: 3.0, az: 20, top: '#060a1e', hor: '#c8603c', sun: '#ffc490', si: 2.9, g1: '#4a4650', g2: '#0d0b12', fog: .0009, cld: 0, str: 1, exp: 1.05, camy: 24, pit: .3, seed: 8.8, ssz: .026 };
 const LANDS0 = [
   { n: '아르하', en: 'Arha', h: '아침', m: '다시 오는 것', d: '부드러운 아침빛이 오래 머무는 땅. 초원과 언덕 사이로 작은 도시와 농장, 풍차가 이어진다. 공동체의 신뢰를 중요하게 여기며, 방랑자가 탈미라를 처음 알아가는 곳이다.',
@@ -74,7 +76,7 @@ const FACTIONS_ALL = [
 const PEOPLE = FACTIONS_ALL.filter((f) => ['방랑자', '수호자'].includes(f.short));
 const ORGS = FACTIONS_ALL.filter((f) => ['이음회', '미라세'].includes(f.short));
 const LORE = [
-  { t: '멈춘 해', en: 'The Still Sun', c: '세계', d: '탈미라는 하늘의 해가 움직이지 않는 둥근 세계다. 먼 옛날 해가 멈춘 뒤로 빛과 시각은 제자리에 고정되었고, 그 뒤의 역사는 멈춘 해 아래에서 이어졌다. 해의 높이가 땅마다 달라서 어떤 땅은 늘 아침이고 어떤 땅은 늘 밤이다. 사람들은 움직이지 않는 해를 세상의 당연한 질서로 받아들이며 살아간다.', w: '사람들은 해가 멈춘 날을 「멈추던 날」이라 부른다.', p: tall(HERO, { pit: .34, seed: 2.6 }) },
+  { t: '멈춘 해', en: 'The Still Sun', c: '세계', d: '탈미라는 하늘의 해가 움직이지 않는 둥근 세계다. 먼 옛날 해가 멈춘 뒤로 빛과 시각은 제자리에 고정되었고, 그 뒤의 역사는 멈춘 해 아래에서 이어졌다. 해의 높이가 땅마다 달라서 어떤 땅은 늘 아침이고 어떤 땅은 늘 밤이다. 사람들은 움직이지 않는 해를 세상의 당연한 질서로 받아들이며 살아간다.', w: '사람들은 해가 멈춘 날을 「멈추던 날」이라 부른다.', p: tall(HERO_OLD, { pit: .34, seed: 2.6 }) },
   { t: '일곱 시각', en: 'Seven Hours', c: '세계', d: '탈미라의 빛은 한낮, 정오, 아침, 노을, 황혼, 새벽, 자정의 일곱 갈래로 나뉜다. 해의 높이가 같은 지점들은 세계를 한 바퀴 두르는 띠를 이루고, 띠마다 하나의 시각과 하나의 땅이 있다. 밝은 쪽의 땅은 빛을 당연히 여기지만, 어두운 쪽의 땅에서는 작은 온기조차 귀중한 자원이다. 시각마다 빛의 색과 성질이 달라 문명과 싸우는 방식에도 영향을 준다.', w: '', p: tall(LANDS0[2].p) },
   { t: '떨어지는 별', en: 'Falling Stars', c: '세계', d: '탈미라의 하늘에서는 별이 하나씩 떨어지고 있다. 많은 사람은 이를 길조로 받아들여, 별이 떨어지는 날이면 땅마다 축제를 연다.', w: '별이 왜 떨어지는지 정확히 아는 사람은 드물다.', p: tall(LANDS0[6].p, { seed: 8.2 }), fx: 'falls' },
   { t: '수호자', en: 'Guardians', c: '사람', d: '수호자는 일곱 시각의 해를 붙잡고 있는 존재들이다. 각 수호자는 자신의 시각에 속한 땅에서 신앙과 권위의 중심으로 받들어진다. 땅의 사람들에게 수호자는 해를 지키는 이이자 오래된 질서 그 자체다.', w: '해를 붙잡고 있는 이유는 수호자마다 다르다.', p: tall(LANDS0[5].p, { seed: 7.7 }) },
@@ -82,7 +84,7 @@ const LORE = [
   { t: '미끄러짐', en: 'The Slip', c: '법칙', d: '오래 지속된 멈춤이 조금씩 약해지면서, 정지해 있던 사물과 현상에 변화가 되돌아오는 징후가 나타나고 있다. 굳은 땅에서 풀이 돋았다는 보고가 각지에서 이어진다.', w: '', p: tall(LANDS0[0].p, { seed: 5.5 }) },
   { t: '밀린 시간', en: 'Delayed Time', c: '법칙', d: '멈춰 있던 대상이 다시 흐르기 시작하면, 그동안 쌓여 있던 변화가 한꺼번에 나타난다. 오래 멈춘 꽃이 순식간에 피었다 지거나, 굳어 있던 바위가 한 번에 풍화되어 무너지는 식이다. 회복과 붕괴는 같은 원리에서 나온 서로 다른 결과다.', w: '방랑자의 힘도 이 원리와 맞닿아 있다.', p: tall(LANDS0[3].p, { seed: 6.6 }) },
   { t: '발현자', en: 'Manifesters', c: '사람', d: '발현자는 시각판을 통해 빛의 힘을 다루는 사람이다. 발현의 단계는 3성, 4성, 5성으로 나뉜다. 시각판을 지니고도 힘이 켜지지 않은 사람이 있고, 시각판 자체가 없는 사람도 있다. 시각판이 없다고 약한 것은 아니며, 기술과 경험, 훈련으로 뛰어난 역량을 갖춘 사람도 많다.', w: '', p: tall(LANDS0[1].p, { seed: 9.4 }) },
-  { t: '멈춘 지형', en: 'Frozen Terrain', c: '땅', d: '굳어 버린 폭포, 허공에 머문 바위, 더 이상 밀려오지 않는 파도 같은 지형이 곳곳에 남아 있다. 일부는 다시 움직이기도 해서 평범해 보이는 길이 갑자기 위험해질 수 있다. 멈춤이 아주 짙은 곳은 풀도 자라지 않고 돌도 삭지 않아, 오랫동안 아무 변화가 없었던 것처럼 보인다.', w: '', p: tall(HERO, { el: 14, az: -40, top: '#1a2a44', hor: '#9fb4cc', sun: '#eef3ff', si: 2.4, g1: '#5c6a7a', g2: '#262c36', cld: .5, str: 0, exp: .9, seed: 4.1 }) },
+  { t: '멈춘 지형', en: 'Frozen Terrain', c: '땅', d: '굳어 버린 폭포, 허공에 머문 바위, 더 이상 밀려오지 않는 파도 같은 지형이 곳곳에 남아 있다. 일부는 다시 움직이기도 해서 평범해 보이는 길이 갑자기 위험해질 수 있다. 멈춤이 아주 짙은 곳은 풀도 자라지 않고 돌도 삭지 않아, 오랫동안 아무 변화가 없었던 것처럼 보인다.', w: '', p: tall(HERO_OLD, { el: 14, az: -40, top: '#1a2a44', hor: '#9fb4cc', sun: '#eef3ff', si: 2.4, g1: '#5c6a7a', g2: '#262c36', cld: .5, str: 0, exp: .9, seed: 4.1 }) },
   { t: '옛 이름', en: 'The Old Name', c: '세계', d: '해가 멈추기 전, 이 세계는 지금과 다른 이름으로 불렸다고 전해진다. 그 이름은 옛 문자로만 남아 있는데, 지금 사람들은 그 문자를 읽지 못한다. 옛 문자는 유적의 비문과 오래된 문, 그리고 미라세의 간판에서도 볼 수 있다.', w: '', p: tall(LANDS0[6].p, { top: '#030208', hor: '#1a1230', seed: 3.9 }) }
 ];
 
@@ -143,12 +145,25 @@ const SND = (() => {
     g.gain.setValueAtTime(.0001, t); g.gain.linearRampToValueAtTime(v, t + .004); g.gain.exponentialRampToValueAtTime(.0001, t + d);
     o.connect(lp); lp.connect(g); g.connect(out); o.start(t); o.stop(t + d + .05);
   };
+  /* 배경음악: 누를 때만. 반복은 파일이 이음매 없이 이어진다. 2초 페이드는 여기서 */
+  const bgm = $('#bgm'); const BGM_VOL = .7; let ft = null;
+  const fade = (to, ms) => {
+    clearInterval(ft);
+    const from = bgm.volume, t0 = performance.now();
+    ft = setInterval(() => {
+      const k = Math.min(1, (performance.now() - t0) / ms);
+      bgm.volume = from + (to - from) * k;
+      if (k === 1) { clearInterval(ft); if (to === 0) bgm.pause(); }
+    }, 40);
+  };
   const toggle = () => {
     boot(); ac.resume();
     on = !on;
-    if (on) tap(523.25, .1, .18);
+    if (on) { tap(523.25, .1, .18); try { if (bgm.volume === 0 && bgm.paused) bgm.volume = 0; bgm.play().then(() => fade(BGM_VOL, 2000)).catch(() => {}); } catch (e) {} }
+    else fade(0, 2000);
     return on;
   };
+  bgm.volume = 0;
   return { toggle, tick: () => tap(440, .07, .06), move: () => tap(349.23, .09, .1), soft: () => tap(392, .04, .05) };
 })();
 const sndBtn = $('#snd');
@@ -201,30 +216,36 @@ setTimeout(() => LD.finish(), 25000);
 $('#hours').innerHTML = HOURS.map((h) => '<li><i style="background:' + h[1] + '"></i>' + h[0] + '</li>').join('');
 const heroPic = $('#heroPic'), heroFx = $('#heroFx'), ring = $('#ring');
 let horizonY = .7;
-const placeRing = () => {
-  const w = heroPic.clientWidth, h = heroPic.clientHeight, s = TalEngine.sunScreen(HERO, w, h);
-  horizonY = (1 + HERO.pit) / 2 * .98;
-  if (s) { ring.style.left = (s.x * 100) + '%'; ring.style.top = (s.y * 100) + '%'; }
+/* 메인 그림은 미리 구워 둔 파일이다. 화질에 따라 크기만 고른다 */
+const HIMG = { w: 2560, h: 1200, sx: .64502, sy: .60259, files: [[1280, 'assets/img/hero-1280.webp'], [1920, 'assets/img/hero-1920.webp'], [2560, 'assets/img/hero-2560.webp']] };
+let heroImg = null, heroSrc = '';
+const pickHero = () => {
+  const need = heroPic.clientWidth * DPR(), cap = Q === 'low' ? 1280 : Q === 'mid' ? 1920 : 2560;
+  const f = HIMG.files.find((x) => x[0] >= Math.min(need, cap)) || HIMG.files[HIMG.files.length - 1];
+  return f[0] > cap ? HIMG.files.filter((x) => x[0] <= cap).pop()[1] : f[1];
 };
-/* 메인 그림 마무리: 해에서 퍼지는 빛줄기와 번짐. 그림 위에 한 번만 얹는다 */
-const heroPost = (cv) => {
-  const w = cv.width, h = cv.height, c = cv.getContext('2d');
-  if (!('filter' in c)) return;
-  const s = TalEngine.sunScreen(HERO, w, h); if (!s) return;
-  const sw = Math.max(2, w >> 2), sh = Math.max(2, h >> 2);
-  const a = document.createElement('canvas'); a.width = sw; a.height = sh; const ac = a.getContext('2d');
-  ac.filter = 'brightness(.75) contrast(3.2) saturate(1.3)'; ac.drawImage(cv, 0, 0, sw, sh); ac.filter = 'none';
-  const r = document.createElement('canvas'); r.width = sw; r.height = sh; const rc = r.getContext('2d');
-  rc.globalCompositeOperation = 'lighter';
-  const cx = s.x * sw, cy = s.y * sh, N = 28;
-  for (let i = 0; i < N; i++) { const k = 1 + i * .045; rc.globalAlpha = (1 - i / N) * .07; rc.setTransform(k, 0, 0, k, cx * (1 - k), cy * (1 - k)); rc.drawImage(a, 0, 0); }
-  rc.setTransform(1, 0, 0, 1, 0, 0);
-  c.save(); c.imageSmoothingQuality = 'high';
-  c.globalCompositeOperation = 'screen'; c.globalAlpha = .42; c.drawImage(r, 0, 0, w, h);
-  c.filter = 'blur(' + Math.round(w / 90) + 'px)'; c.globalAlpha = .26; c.drawImage(a, 0, 0, w, h);
-  c.restore();
+const drawHero = () => {
+  const [W, H] = size(heroPic); if (heroPic.width !== W || heroPic.height !== H) { heroPic.width = W; heroPic.height = H; }
+  const k = Math.max(W / HIMG.w, H / HIMG.h), dw = HIMG.w * k, dh = HIMG.h * k;
+  let ox = (W - dw) / 2; const sxp = ox + HIMG.sx * dw, lim = W * .8;
+  if (sxp > lim) ox -= sxp - lim; ox = Math.min(0, Math.max(W - dw, ox));
+  const oy = (H - dh) / 2;
+  const c = heroPic.getContext('2d'); c.imageSmoothingQuality = 'high'; c.drawImage(heroImg, ox, oy, dw, dh);
+  const fx = (ox + HIMG.sx * dw) / W, fy = (oy + HIMG.sy * dh) / H;
+  ring.style.left = (fx * 100) + '%'; ring.style.top = (fy * 100) + '%'; ring.style.opacity = .4;
+  horizonY = Math.min(.95, fy + .03);
+  heroPic.classList.remove('wait');
 };
-const paintHero = () => { placeRing(); return paint(heroPic, 'hero', HERO, 10, (cv) => { ring.style.opacity = .4; heroPost(cv); }); };
+const placeRing = () => { if (heroImg) drawHero(); };
+const paintHero = () => {
+  const src = pickHero();
+  if (heroImg && heroSrc === src) { drawHero(); return Promise.resolve(); }
+  return new Promise((ok) => {
+    const im = new Image(); im.decoding = 'async'; im.src = src;
+    const done = () => { heroImg = im; heroSrc = src; drawHero(); ok(); };
+    (im.decode ? im.decode() : new Promise((r, e) => { im.onload = r; im.onerror = e; })).then(done, () => { heroPic.classList.remove('wait'); ok(); });
+  });
+};
 
 /* 탭 따라가기, 나타나기 */
 const tabs = [...document.querySelectorAll('.tabs a')], arc = $('#arc');
