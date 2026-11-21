@@ -12,8 +12,27 @@ float vn(vec2 p){vec2 i=floor(p),f=fract(p);vec2 u=f*f*(3.-2.*f);
  return mix(mix(h21(i),h21(i+vec2(1,0)),u.x),mix(h21(i+vec2(0,1)),h21(i+vec2(1,1)),u.x),u.y);}
 const mat2 M=mat2(1.6,1.2,-1.2,1.6);
 float fbm(vec2 p,int o){float a=.5,s=0.;for(int i=0;i<o;i++){s+=a*vn(p);p=M*p;a*=.5;}return s;}
+vec3 vnd(vec2 p){vec2 i=floor(p),f=fract(p);vec2 u=f*f*(3.-2.*f),du=6.*f*(1.-f);
+ float a=h21(i),b=h21(i+vec2(1,0)),c=h21(i+vec2(0,1)),d=h21(i+vec2(1,1));
+ return vec3(a+(b-a)*u.x+(c-a)*u.y+(a-b-c+d)*u.x*u.y,du*(vec2(b-a,c-a)+(a-b-c+d)*u.yx));}
+float ero(vec2 p,int o){float a=0.,b=1.;vec2 d=vec2(0);for(int i=0;i<o;i++){vec3 n=vnd(p);d+=n.yz;a+=b*n.x/(1.+dot(d,d));b*=.5;p=M*p;}return a;}
 float rid(vec2 p,int o){float a=.5,s=0.;for(int i=0;i<o;i++){float n=1.-abs(2.*vn(p)-1.);s+=a*n*n;p=M*p;a*=.5;}return s;}
+float heroH(vec2 q,int o){
+ float x=q.x,z=q.y; vec2 p=q+SEED*37.;
+ float h=-26.+fbm(p*.012,min(o,5))*9.;
+ h+=rid(p*vec2(.011,.019),min(o,6))*24.*smoothstep(60.,130.,z)*smoothstep(340.,210.,z);
+ float ang=x/max(z,1.);
+ float sad=1.-.72*exp(-pow((ang-.36)*3.4,2.));
+ float big=(.55+.75*exp(-pow((ang-.36)*1.6,2.)))*(1.-.35*smoothstep(-.2,-.7,ang));
+ float e=ero(p*.0042,o);
+ h+=pow(max(e,0.),1.7)*150.*smoothstep(250.,430.,z)*sad*big;
+ h+=(rid(p*.003+9.,5)*70.-10.)*smoothstep(470.,560.,z);
+ float fz=smoothstep(80.,6.,z), fx=max(smoothstep(10.,-30.,x+z*.3),.7*smoothstep(-4.,26.,x-z*.5));
+ h+=fz*fx*(62.+rid(p*.05,min(o,7))*14.+fbm(p*.4,3)*1.5*smoothstep(30.,5.,z));
+ return h;
+}
 float H(vec2 q,int o){
+ if(TY>7.5) return heroH(q,o);
  float z=q.y; vec2 p=q+SEED*37.;
  if(TY<.5){ return fbm(p*.011,o)*24.-15.+rid(p*.005,4)*34.*smoothstep(200.,480.,z); }
  if(TY<1.5){ vec2 w=p+vec2(fbm(p*.006,3)*90.,fbm(p*.007,2)*30.); float r=1.-abs(2.*vn(w*vec2(.014,.026))-1.); float r2=1.-abs(2.*vn(w*vec2(.05,.09)+3.)-1.); return r*r*14.+r2*r2*1.6+fbm(p*.004,3)*10.-16.; }
@@ -28,16 +47,16 @@ const float FAR=700.;
 float march(vec3 ro,vec3 rd,out vec3 p){
  float t=.5;
  float lt=t;
- for(int i=0;i<ST;i++){ p=ro+rd*t; int oc=int(clamp(9.-log2(t+1.),3.,8.)); float d=p.y-H(p.xz,oc); if(d<.002*t){ float a=lt,b=t; for(int k=0;k<6;k++){float m=.5*(a+b); vec3 q=ro+rd*m; if(q.y-H(q.xz,oc)<0.)b=m; else a=m;} t=b; p=ro+rd*t; return t; } if(t>FAR)break; lt=t; t+=max(.4*d,.012*t); }
+ for(int i=0;i<ST;i++){ p=ro+rd*t; int oc=TY>7.5?int(clamp(13.-log2(t+1.),5.,10.)):int(clamp(9.-log2(t+1.),3.,8.)); float d=p.y-H(p.xz,oc); if(d<.002*t){ float a=lt,b=t; for(int k=0;k<6;k++){float m=.5*(a+b); vec3 q=ro+rd*m; if(q.y-H(q.xz,oc)<0.)b=m; else a=m;} t=b; p=ro+rd*t; return t; } if(t>FAR)break; lt=t; t+=max((TY>7.5?.2:.4)*d,(TY>7.5?.004:.012)*t); }
  if(rd.y<0.&&t<FAR*1.5){ p=ro+rd*t; p.y=H(p.xz,4); return t; }
  return -1.;
 }
-vec3 nrm(vec3 p,float t){ float e=.004*t+.04; int oc=int(clamp(9.-log2(t+1.),3.,8.));
+vec3 nrm(vec3 p,float t){ float e=.004*t+.04; int oc=TY>7.5?int(clamp(13.-log2(t+1.),5.,10.)):int(clamp(9.-log2(t+1.),3.,8.));
  return normalize(vec3(H(p.xz-vec2(e,0),oc)-H(p.xz+vec2(e,0),oc),2.*e,H(p.xz-vec2(0,e),oc)-H(p.xz+vec2(0,e),oc))); }
 float shadow(vec3 p){ if(SD.y<.0)return 0.; float r=1.,t=.6; for(int i=0;i<SH;i++){ vec3 q=p+SD*t; float d=q.y-H(q.xz,5); r=min(r,9.*d/t); if(r<.002||q.y>120.)break; t+=clamp(d*.6,.4,25.);} return clamp(r,0.,1.); }
 vec3 sky(vec3 rd,bool sun){
  float y=rd.y, mu=dot(rd,SD);
- vec3 c=mix(CH,CT,1.-exp(-max(y,0.)*5.5));
+ vec3 c=mix(CH,CT,1.-exp(-max(y,0.)*(TY>7.5?11.:5.5)));
  c=mix(c,CH*.5,smoothstep(0.,-.25,y));
  vec2 a=normalize(rd.xz+1e-4), b=normalize(SD.xz+1e-4);
  float lowSun=smoothstep(.5,-.08,SD.y)*smoothstep(-.45,-.02,SD.y+.1);
@@ -76,6 +95,7 @@ vec3 fogc(vec3 col,float t,vec3 rd,float py){
  f=max(f,smoothstep(FAR*.55,FAR*1.2,t));
  float mu=max(dot(rd,SD),0.);
  vec3 fc=mix(CH*.9,CS*min(SI,1.5)*.7,pow(mu,6.)*.6);
+ if(TY>7.5){ vec2 a=normalize(rd.xz+1e-4),b=normalize(SD.xz+1e-4); float side=pow(dot(a,b)*.5+.5,3.); fc=mix(CT*1.8+CH*.12,CH*.9,side*side)+CS*min(SI,2.)*.6*pow(mu,12.); }
  return mix(col,fc,f);
 }
 vec3 shade(vec3 p,vec3 n,vec3 rd,float t){
@@ -84,7 +104,8 @@ vec3 shade(vec3 p,vec3 n,vec3 rd,float t){
  al=mix(al,G2*.62,smoothstep(.82,.55,n.y));
  if(TY>3.5&&TY<4.5) al=mix(G2,G1,smoothstep(.5,.8,n.y));
  if(TY>2.5&&TY<3.5) al*=.6+.4*fbm(p.xz*.5,3);
- if(TY>6.5) al=mix(al,vec3(.82,.8,.86),smoothstep(30.,46.,p.y)*smoothstep(.55,.8,n.y));
+ if(TY>6.5&&TY<7.5) al=mix(al,vec3(.82,.8,.86),smoothstep(30.,46.,p.y)*smoothstep(.55,.8,n.y));
+ if(TY>7.5){ al*=.75+.5*fbm(vec2(p.y*.35,p.x*.02),3); float sn=smoothstep(18.,52.,p.y+fbm(p.xz*.05,4)*14.)*smoothstep(.42,.78,n.y); al=mix(al,vec3(.86,.84,.9),sn); }
  float sh=mix(.12,1.,shadow(p+n*.35));
  float dif=max(dot(n,SD),0.)*sh;
  float amb=.55+.45*n.y;
@@ -93,6 +114,7 @@ vec3 shade(vec3 p,vec3 n,vec3 rd,float t){
  float occ=clamp(.4+.6*smoothstep(-2.,6.,p.y-H(p.xz,3)+2.),0.,1.);
  vec3 skyA=mix(CH,CT,clamp(.3+.55*n.y,0.,1.));
  float night=smoothstep(.02,-.15,SD.y);
+ if(TY>7.5){ amb*=.4; dif*=mix(.12,1.,smoothstep(25.,110.,t)); }
  vec3 col=al*(CS*SI*dif*.9+skyA*amb*.75*occ+CH*bk*.15+CS*SI*night*.35*amb);
  float rim=pow(1.-max(dot(n,-rd),0.),6.)*pow(max(dot(rd,SD),0.),4.)*smoothstep(.95,.55,n.y);
  col+=CS*min(SI,2.)*rim*.8*smoothstep(.45,-.05,SD.y)*smoothstep(260.,60.,t)*(TY>2.5&&TY<3.5?.35:1.);
@@ -102,7 +124,7 @@ void main(){
  vec2 uv=(gl_FragCoord.xy*2.-R)/R.y;
  bool sea=TY>1.5&&TY<2.5;
  float base=H(vec2(0.,6.),6);
- vec3 ro=vec3(0.,(sea?0.:base)+CAMY,0.);
+ vec3 ro=vec3(0.,(sea?0.:(TY>7.5?0.:base))+CAMY,0.);
  vec3 rd=normalize(vec3(uv.x,uv.y+PIT,1.7));
  vec3 p; float t=march(ro,rd,p);
  vec3 col;
@@ -119,10 +141,37 @@ void main(){
   col=fogc(col,tw,rd,0.);
  } else if(t<0.){
   col=clouds(ro,rd,sky(rd,true));
+  if(TY>7.5&&rd.y>.002){
+   float tc=(300.-ro.y)/rd.y; vec2 pc=ro.xz+rd.xz*tc;
+   float n=fbm(pc*vec2(.0009,.006)+SEED*3.,7)+.12*fbm(pc*.01,4);
+   float d=smoothstep(.56,.88,n)*.75*smoothstep(.0,.03,rd.y)*smoothstep(.3,.06,rd.y);
+   float mu=max(dot(rd,SD),0.);
+   vec3 cc=mix(CT*.9+CH*.06,CS*SI*.6,clamp(pow(mu,4.)*.95+smoothstep(.1,.0,rd.y)*.25,0.,1.));
+   cc+=CS*SI*.5*pow(mu,14.)*smoothstep(.8,.55,n);
+   col=mix(col,cc,d);
+  }
  } else {
   vec3 n=nrm(p,t);
   col=shade(p,n,rd,t);
   col=fogc(col,t,rd,p.y);
+ }
+ if(TY>7.5&&rd.y<0.){
+  float top=-3.;
+  float t0=max((top-ro.y)/rd.y,0.), t1=t<0.?FAR:min(t,FAR);
+  if(t1>t0){
+   float mu=max(dot(rd,SD),0.);
+   vec3 lc=mix(CH*.16+CT*.7,CS*SI*.4,pow(mu,6.)*.9)+CS*SI*.6*pow(mu,40.);
+   float tr=1.; vec3 acc=vec3(0.); float dt=(t1-t0)/24.;
+   for(int i=0;i<24;i++){
+    float tt=t0+dt*(float(i)+h21(gl_FragCoord.xy+float(i)));
+    vec3 q=ro+rd*tt;
+    float dn=smoothstep(top,top-9.,q.y)*smoothstep(.4,.78,fbm(q.xz*vec2(.006,.013)+SEED,5))*.035;
+    float hl=.55+.45*smoothstep(top-12.,top,q.y);
+    acc+=tr*dn*dt*lc*hl; tr*=exp(-dn*dt);
+    if(tr<.02)break;
+   }
+   col=col*tr+acc;
+  }
  }
  col*=EXP;
  col=(col*(2.51*col+.03))/(col*(2.43*col+.59)+.14);
@@ -213,7 +262,7 @@ const run = async (j) => {
   }
   let k = q.s; if (w * h * k * k > q.cap) k = Math.sqrt(q.cap / (w * h));
   const rw = Math.max(2, Math.round(w * k)), rh = Math.max(2, Math.round(h * k));
-  cv.width = rw; cv.height = rh; gl.viewport(0, 0, rw, rh); setU(P, q, rw, rh, q.st, q.sh);
+  cv.width = rw; cv.height = rh; gl.viewport(0, 0, rw, rh); setU(P, q, rw, rh, P.ty > 7.5 ? Math.max(q.st * 2, 240) : q.st, q.sh);
   const bh = Math.max(2, Math.floor(q.band / rw));
   gl.enable(gl.SCISSOR_TEST);
   for (let y = 0; y < rh; y += bh) { if (lost) return; gl.scissor(0, y, rw, bh); gl.drawArrays(gl.TRIANGLES, 0, 3); gl.flush(); await frame(); }

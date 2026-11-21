@@ -14,7 +14,7 @@ if (!Q || Q === 'high') {
 
 /* 장면 */
 const S = (o) => o;
-const HERO = { ty: 7, el: 3.2, az: 20, top: '#04050c', hor: '#c96a44', sun: '#ffc08a', si: 4, g1: '#2c2232', g2: '#0c0910', fog: .0024, cld: .4, str: 1, exp: 1.0, camy: 7, pit: .4, seed: 8.8, ssz: .03 };
+const HERO = { ty: 8, el: 3.0, az: 20, top: '#060a1e', hor: '#c8603c', sun: '#ffc490', si: 2.9, g1: '#4a4650', g2: '#0d0b12', fog: .0009, cld: 0, str: 1, exp: 1.05, camy: 24, pit: .3, seed: 8.8, ssz: .026 };
 const LANDS = [
   { n: '아르하', en: 'Arha', h: '아침', m: '다시 오는 것', d: '부드러운 아침빛이 오래 머무는 땅. 초원과 언덕 사이로 작은 도시와 농장, 풍차가 이어진다. 공동체의 신뢰를 중요하게 여기며, 방랑자가 탈미라를 처음 알아가는 곳이다.',
     p: S({ ty: 0, el: 9, az: -32, top: '#244a82', hor: '#f2c894', sun: '#ffd9a4', si: 3.4, g1: '#8fb04c', g2: '#3d5a2c', fog: .0018, cld: .45, exp: 1.0, camy: 5, pit: .2, seed: 1.3, ssz: .03 }) },
@@ -204,7 +204,25 @@ const placeRing = () => {
   horizonY = (1 + HERO.pit) / 2 * .98;
   if (s) { ring.style.left = (s.x * 100) + '%'; ring.style.top = (s.y * 100) + '%'; }
 };
-const paintHero = () => { placeRing(); return paint(heroPic, 'hero', HERO, 10, () => { ring.style.opacity = .4; }); };
+/* 메인 그림 마무리: 해에서 퍼지는 빛줄기와 번짐. 그림 위에 한 번만 얹는다 */
+const heroPost = (cv) => {
+  const w = cv.width, h = cv.height, c = cv.getContext('2d');
+  if (!('filter' in c)) return;
+  const s = TalEngine.sunScreen(HERO, w, h); if (!s) return;
+  const sw = Math.max(2, w >> 2), sh = Math.max(2, h >> 2);
+  const a = document.createElement('canvas'); a.width = sw; a.height = sh; const ac = a.getContext('2d');
+  ac.filter = 'brightness(.75) contrast(3.2) saturate(1.3)'; ac.drawImage(cv, 0, 0, sw, sh); ac.filter = 'none';
+  const r = document.createElement('canvas'); r.width = sw; r.height = sh; const rc = r.getContext('2d');
+  rc.globalCompositeOperation = 'lighter';
+  const cx = s.x * sw, cy = s.y * sh, N = 28;
+  for (let i = 0; i < N; i++) { const k = 1 + i * .045; rc.globalAlpha = (1 - i / N) * .07; rc.setTransform(k, 0, 0, k, cx * (1 - k), cy * (1 - k)); rc.drawImage(a, 0, 0); }
+  rc.setTransform(1, 0, 0, 1, 0, 0);
+  c.save(); c.imageSmoothingQuality = 'high';
+  c.globalCompositeOperation = 'screen'; c.globalAlpha = .42; c.drawImage(r, 0, 0, w, h);
+  c.filter = 'blur(' + Math.round(w / 90) + 'px)'; c.globalAlpha = .26; c.drawImage(a, 0, 0, w, h);
+  c.restore();
+};
+const paintHero = () => { placeRing(); return paint(heroPic, 'hero', HERO, 10, (cv) => { ring.style.opacity = .4; heroPost(cv); }); };
 
 /* 탭 따라가기, 나타나기 */
 const tabs = [...document.querySelectorAll('.tabs a')], arc = $('#arc');
