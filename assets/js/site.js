@@ -42,13 +42,13 @@ const NEWS = [
   ['dev', '개발', '사용 엔진: 언리얼 엔진 5.8', '26.11.20']
 ];
 const FTABS = [['all', '전체'], ['note', '알림'], ['world', '세계'], ['dev', '개발']];
-const FACTIONS = [
-  { short: '방랑자', en: 'Wanderer', name: '방랑자 일행', sub: '주인공', dot: '#7fb0ff',
+const FACTIONS_ALL = [
+  { short: '방랑자', en: 'Wanderer', name: '방랑자', sub: '방랑자와 동행', dot: '#7fb0ff',
     desc: '제 시각의 띠를 벗어나 일곱 땅을 여행하는 방랑자와 그 동행. 탈미라의 사람들은 대부분 자기 시각의 띠 안에서 평생을 보내기 때문에, 띠를 넘어 다니는 이는 드물다.',
     cards: [
       { n: '방랑자', t: '일곱 땅을 가로지르며 멈춘 시간을 다시 흐르게 하는 여행자. 여러 시각의 빛을 다룰 수 있는 드문 존재지만, 여행을 시작할 때는 힘을 대부분 잃은 상태다.', w: '무기: 한손검 「자정 속 별」', p: tall(LANDS[6].p, { seed: 9.1 }), fx: 'ring' },
       { n: '하루', t: '방랑자의 곁에서 쫑알대며 함께 여행하는 작은 존재. 공중을 헤엄치듯 떠다니며 길 안내와 설명을 맡는다.', w: '어디서 왔는지는 알려지지 않았다.', p: tall(LANDS[3].p, { seed: 4.9 }), fx: 'wisp' }] },
-  { short: '수호자', en: 'Guardians', name: '수호자', sub: '일곱 시각의 수호자', dot: '#f0dcae',
+  { short: '수호자', en: 'Guardians', name: '수호자', sub: '일곱 시각의 해를 붙잡은 이들', dot: '#f0dcae',
     desc: '일곱 시각의 해를 붙잡고 있는 존재들. 시각마다 한 명씩, 모두 일곱이다. 각자의 땅에서 신앙과 권위의 중심으로 받들어지며, 땅의 사람들에게는 오래된 질서 그 자체다. 해를 붙잡고 있는 까닭은 수호자마다 다르다.',
     cards: [
       { n: '한낮의 수호자', t: '메르한의 해를 붙잡고 있는 수호자. 일곱 시각 가운데 가장 높은 해를 맡고 있다. 빛과 질서가 정점에 이른 메르한에서 받들어진다.', w: '한낮 · 메르한', p: tall(LANDS[5].p, { seed: 6.8 }) },
@@ -69,6 +69,8 @@ const FACTIONS = [
       { n: '일곱 간부', t: '미라세의 핵심 권력자 일곱 명. 일곱 시각에 대응하는 자리를 하나씩 맡아, 각 지역과 미라세의 사업에 저마다 다른 이해관계를 갖는다.', w: '', p: tall(LANDS[1].p, { seed: 6.1, exp: .9 }), fx: 'lamps' },
       { n: '온기 등불', t: '긴 밤을 견딜 열을 만들어 내는 특수한 등불. 미라세가 생산과 공급을 장악하고 있으며, 등불 하나에 공동체의 존속이 달린 마을도 있다.', w: '작동 원리는 공개되지 않았다.', p: tall(LANDS[4].p, { seed: 3.3, exp: 1.6 }), fx: 'lamp' }] }
 ];
+const PEOPLE = FACTIONS_ALL.filter((f) => ['방랑자', '수호자'].includes(f.short));
+const ORGS = FACTIONS_ALL.filter((f) => ['이음회', '미라세'].includes(f.short));
 const LORE = [
   { t: '멈춘 해', en: 'The Still Sun', c: '세계', d: '탈미라는 하늘의 해가 움직이지 않는 둥근 세계다. 먼 옛날 해가 멈춘 뒤로 빛과 시각은 제자리에 고정되었고, 그 뒤의 역사는 멈춘 해 아래에서 이어졌다. 해의 높이가 땅마다 달라서 어떤 땅은 늘 아침이고 어떤 땅은 늘 밤이다. 사람들은 움직이지 않는 해를 세상의 당연한 질서로 받아들이며 살아간다.', w: '사람들은 해가 멈춘 날을 「멈추던 날」이라 부른다.', p: tall(HERO, { pit: .34, seed: 2.6 }) },
   { t: '일곱 시각', en: 'Seven Hours', c: '세계', d: '탈미라의 빛은 한낮, 정오, 아침, 노을, 황혼, 새벽, 자정의 일곱 갈래로 나뉜다. 해의 높이가 같은 지점들은 세계를 한 바퀴 두르는 띠를 이루고, 띠마다 하나의 시각과 하나의 땅이 있다. 밝은 쪽의 땅은 빛을 당연히 여기지만, 어두운 쪽의 땅에서는 작은 온기조차 귀중한 자원이다. 시각마다 빛의 색과 성질이 달라 문명과 싸우는 방식에도 영향을 준다.', w: '', p: tall(LANDS[2].p) },
@@ -290,7 +292,6 @@ const showFeat = () => {
 };
 
 /* 인물 */
-let pi = 0;
 const swap = (el, fn) => { if (RM) { fn(); return; } el.classList.add('out'); setTimeout(() => { fn(); el.classList.remove('out'); }, 300); };
 const cardFx = (kind) => (cv) => {
   const c = cv.getContext('2d'), w = cv.width, h = cv.height, r = DPR();
@@ -301,28 +302,35 @@ const cardFx = (kind) => (cv) => {
   if (kind === 'lamp') drawLamps(c, w, h, 0, [[.5, .58]], true);
   if (kind === 'falls') [[.75, .1, 160], [.35, .2, 110], [.62, .34, 70]].forEach((m) => { const x = w * m[0], y = h * m[1], l = m[2] * r, g = c.createLinearGradient(x + l * .45, y - l * .9, x, y); g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(1, '#fffaf0'); c.strokeStyle = g; c.lineWidth = 1.4 * r; c.beginPath(); c.moveTo(x + l * .45, y - l * .9); c.lineTo(x, y); c.stroke(); });
 };
-const renderPeople = (first) => {
-  $('#rail').innerHTML = FACTIONS.map((f, i) => '<button role="tab" data-i="' + i + '" aria-selected="' + (i === pi) + '"><span class="mk" aria-hidden="true"><i style="background:' + f.dot + ';box-shadow:0 0 12px ' + f.dot + '"></i></span><span>' + f.short + '</span></button>').join('');
-  const f = FACTIONS[pi];
-  $('#crestDot').setAttribute('fill', f.dot);
-  const fill = () => { $('#pen').textContent = f.en; $('#pname').textContent = f.name; $('#psub').textContent = f.sub; $('#pdesc').textContent = f.desc; };
-  first ? fill() : swap($('#pbox'), fill);
-  $('#cards').innerHTML = f.cards.map((c, i) => '<article class="card" style="animation-delay:' + (150 + i * 120) + 'ms"><canvas class="pic wait" aria-hidden="true"></canvas><div class="tx"><h3>' + c.n + '</h3><p>' + c.t + '</p><p class="w">' + c.w + '</p></div></article>').join('');
-  $('#cards').scrollLeft = 0; cardNav();
-  requestAnimationFrame(() => [...$('#cards').querySelectorAll('canvas')].forEach((cv, i) => { const c = f.cards[i]; paint(cv, 'card' + pi + '-' + i, c.p, 3, c.fx ? cardFx(c.fx) : null); }));
+const makeGroup = (root, DATA, tag) => {
+  const R = (n) => root.querySelector('[data-r="' + n + '"]');
+  let gi = 0;
+  const box = R('cards');
+  const nav = () => {
+    const n = box.children.length; R('cnav').hidden = n <= 2;
+    const one = box.children[0] ? box.children[0].getBoundingClientRect().width + 18 : 1;
+    R('cpos').textContent = Math.min(n, Math.round(box.scrollLeft / one) + 1) + ' / ' + n;
+  };
+  const render = (first) => {
+    R('rail').innerHTML = DATA.map((f, i) => '<button role="tab" data-i="' + i + '" aria-selected="' + (i === gi) + '"><span class="mk" aria-hidden="true"><i style="background:' + f.dot + ';box-shadow:0 0 12px ' + f.dot + '"></i></span><span>' + f.short + '</span></button>').join('');
+    const f = DATA[gi];
+    R('crestDot').setAttribute('fill', f.dot);
+    const fill = () => { R('pen').textContent = f.en; R('pname').textContent = f.name; R('psub').textContent = f.sub; R('pdesc').textContent = f.desc; };
+    first ? fill() : swap(R('pbox'), fill);
+    box.innerHTML = f.cards.map((c, i) => '<article class="card" style="animation-delay:' + (150 + i * 120) + 'ms"><canvas class="pic wait" aria-hidden="true"></canvas><div class="tx"><h3>' + c.n + '</h3><p>' + c.t + '</p>' + (c.w ? '<p class="w">' + c.w + '</p>' : '') + '</div></article>').join('');
+    box.scrollLeft = 0; nav();
+    requestAnimationFrame(() => [...box.querySelectorAll('canvas')].forEach((cv, i) => { const c = f.cards[i]; paint(cv, tag + gi + '-' + i, c.p, 3, c.fx ? cardFx(c.fx) : null); }));
+  };
+  box.addEventListener('scroll', nav, { passive: true });
+  const step = (d) => { const one = box.children[0].getBoundingClientRect().width + 18; box.scrollBy({ left: d * one, behavior: 'smooth' }); };
+  R('cprev').onclick = () => step(-1);
+  R('cnext').onclick = () => step(1);
+  R('rail').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b && +b.dataset.i !== gi) { gi = +b.dataset.i; render(false); } });
+  return render;
 };
-function cardNav() {
-  const box = $('#cards'), n = box.children.length, nav = $('#cnav');
-  nav.hidden = n <= 2;
-  const one = box.children[0] ? box.children[0].getBoundingClientRect().width + 18 : 1;
-  const k = Math.round(box.scrollLeft / one);
-  $('#cpos').textContent = Math.min(n, k + 1) + ' / ' + n;
-}
-$('#cards').addEventListener('scroll', () => cardNav(), { passive: true });
-const cardStep = (d) => { const box = $('#cards'), one = box.children[0].getBoundingClientRect().width + 18; box.scrollBy({ left: d * one, behavior: 'smooth' }); };
-$('#cprev').onclick = () => cardStep(-1);
-$('#cnext').onclick = () => cardStep(1);
-$('#rail').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b && +b.dataset.i !== pi) { pi = +b.dataset.i; renderPeople(false); } });
+const renderPeopleG = makeGroup($('#people'), PEOPLE, 'pp');
+const renderOrgsG = makeGroup($('#orgs'), ORGS, 'og');
+const renderPeople = (first) => { renderPeopleG(first); renderOrgsG(first); };
 
 /* 정보 */
 let li = 0; const track = $('#track');
@@ -440,13 +448,19 @@ const startW = () => { wPic.dataset.done = ''; showLand(wi2, true); };
 
 /* 화질 */
 const qBtns = [...document.querySelectorAll('.qual button')];
-const markQ = () => qBtns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.q === Q)));
+const QN = { low: '낮음', mid: '중간', high: '높음' };
+const markQ = () => { qBtns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.q === Q))); $('#qnow').textContent = QN[Q]; };
+const qBtn = $('#qbtn'), qPop = $('#qpop');
+const qOpen = (v) => { qPop.hidden = !v; qBtn.setAttribute('aria-expanded', String(v)); };
+qBtn.onclick = (e) => { e.stopPropagation(); qOpen(qPop.hidden); };
+document.addEventListener('click', (e) => { if (!e.target.closest('.qwrap')) qOpen(false); });
+addEventListener('keydown', (e) => { if (e.key === 'Escape') qOpen(false); });
 markQ();
 const repaintAll = () => {
   TalEngine.clear(); cache.clear();
   paintHero(); renderPeople(true); renderLoreCards(); showFeat(); curImg = null; startW();
 };
-qBtns.forEach((b) => b.onclick = () => { if (Q === b.dataset.q) return; Q = b.dataset.q; try { localStorage.setItem('tal-q', Q); } catch (e) {} markQ(); repaintAll(); });
+qBtns.forEach((b) => b.onclick = () => { qOpen(false); if (Q === b.dataset.q) return; Q = b.dataset.q; try { localStorage.setItem('tal-q', Q); } catch (e) {} markQ(); repaintAll(); });
 let rT = 0; addEventListener('resize', () => { fpOn(); const on = tabs.find((t) => t.classList.contains('on')); if (on) setTab(on.dataset.s); clearTimeout(rT); rT = setTimeout(() => { placeRing(); paintHero(); curImg = null; startW(); }, 400); });
 
 /* 차례: 메인 먼저, 나머지는 뒤에 */

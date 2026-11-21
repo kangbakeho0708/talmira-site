@@ -199,9 +199,9 @@ html.fp .hero h1{font-size:clamp(64px,min(11vw,16vh),148px)}
 html.fp .card{min-height:0;height:min(460px,52vh)}
 
 /* 칸 배경: 단색 대신 은은한 빛, 큰 시각 고리, 종이결 */
-#news,#people,#lore,#world{isolation:isolate}
-#news::before,#people::before,#lore::before,#world::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background-repeat:no-repeat}
-#news::after,#people::after,#lore::after,#world::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .85 0 0 0 0 .75 0 0 0 0 .6 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.05;mix-blend-mode:overlay}
+#news,#people,#orgs,#lore,#world{isolation:isolate}
+#news::before,#people::before,#orgs::before,#lore::before,#world::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background-repeat:no-repeat}
+#news::after,#people::after,#orgs::after,#lore::after,#world::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .85 0 0 0 0 .75 0 0 0 0 .6 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.05;mix-blend-mode:overlay}
 #news{background:radial-gradient(120% 90% at 85% 10%,#2a2118 0%,#16130f 45%,#0d0c0e 100%)}
 #news::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Cg fill='none' stroke='%23d6be8c'%3E%3Ccircle cx='200' cy='200' r='170'/%3E%3Ccircle cx='200' cy='200' r='118' stroke-width='.6' stroke-dasharray='3 6'/%3E%3Ccircle cx='200' cy='200' r='60' stroke-width='.5'/%3E%3Cg stroke-width='2'%3E%3Cline x1='200' y1='50' x2='200' y2='15'/%3E%3Cline x1='317.3' y1='106.5' x2='344.6' y2='84.7'/%3E%3Cline x1='346.2' y1='233.4' x2='380.4' y2='241.2'/%3E%3Cline x1='265.1' y1='335.2' x2='280.3' y2='366.7'/%3E%3Cline x1='134.9' y1='335.2' x2='119.7' y2='366.7'/%3E%3Cline x1='53.8' y1='233.4' x2='19.6' y2='241.2'/%3E%3Cline x1='82.7' y1='106.5' x2='55.4' y2='84.7'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");background-size:min(780px,70vw);background-position:112% 120%;opacity:.07}
 #people{background:radial-gradient(110% 100% at 15% 30%,#2b2318 0%,#17140f 48%,#0c0b0d 100%)}
@@ -214,3 +214,18 @@ html.fp .card{min-height:0;height:min(460px,52vh)}
 
 /* 마우스로 누른 탭에는 테두리를 안 그린다 (키보드는 그대로) */
 :focus:not(:focus-visible){outline:none}
+
+#orgs{background:radial-gradient(110% 100% at 85% 70%,#2a1d14 0%,#16120e 48%,#0c0b0d 100%)}
+#orgs::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Cg fill='none' stroke='%23d6be8c'%3E%3Ccircle cx='200' cy='200' r='170'/%3E%3Ccircle cx='200' cy='200' r='118' stroke-width='.6' stroke-dasharray='3 6'/%3E%3Ccircle cx='200' cy='200' r='60' stroke-width='.5'/%3E%3Cg stroke-width='2'%3E%3Cline x1='200' y1='50' x2='200' y2='15'/%3E%3Cline x1='317.3' y1='106.5' x2='344.6' y2='84.7'/%3E%3Cline x1='346.2' y1='233.4' x2='380.4' y2='241.2'/%3E%3Cline x1='265.1' y1='335.2' x2='280.3' y2='366.7'/%3E%3Cline x1='134.9' y1='335.2' x2='119.7' y2='366.7'/%3E%3Cline x1='53.8' y1='233.4' x2='19.6' y2='241.2'/%3E%3Cline x1='82.7' y1='106.5' x2='55.4' y2='84.7'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");background-size:min(900px,78vw);background-position:118% 50%;opacity:.07}
+.hr{justify-self:end;display:flex;gap:10px;align-items:center}
+.hr .snd{justify-self:auto}
+.qwrap{position:relative}
+#qbtn b{font-weight:500;color:var(--gold2)}
+.qpop{position:absolute;right:0;top:calc(100% + 10px);padding:10px;background:rgba(14,13,16,.96);border:1px solid var(--line2);border-radius:6px;box-shadow:0 12px 40px rgba(0,0,0,.5);z-index:40}
+.qpop[hidden]{display:none}
+.qpop .qual span{display:none}
+html.fp #world footer{display:none}
+html.fp #world{padding-bottom:28px}
+@media (max-width:620px){#qbtn{padding:0 10px}}
+.qpop .qual{flex-wrap:nowrap}
+.qpop .qual button{white-space:nowrap;min-width:64px}
