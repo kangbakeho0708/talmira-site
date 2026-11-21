@@ -93,6 +93,50 @@ const getImg = (key, params, w, h, prio) => {
   return TalEngine.render(off, params, Q, { prio }).then((ok) => { if (!ok) return null; cache.set(k, off); return off; });
 };
 
+
+/* 소리: 잡음 없는 사인파만. 선율 없이 바닥 화음과 종소리. 누르기 전엔 안 난다 */
+const SND = (() => {
+  let ac = null, master = null, on = false, padNodes = [];
+  const start = () => {
+    ac = ac || new (window.AudioContext || window.webkitAudioContext)();
+    master = ac.createGain(); master.gain.value = 0; master.connect(ac.destination);
+    const lp = ac.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 900; lp.connect(master);
+    [110, 164.81, 220, 277.18, 329.63].forEach((f, i) => {
+      const o = ac.createOscillator(), g = ac.createGain(), l = ac.createOscillator(), lg = ac.createGain();
+      o.type = 'sine'; o.frequency.value = f; g.gain.value = [.16, .1, .08, .05, .04][i];
+      l.frequency.value = .05 + i * .03; lg.gain.value = g.gain.value * .6; l.connect(lg); lg.connect(g.gain);
+      o.connect(g); g.connect(lp); o.start(); l.start(); padNodes.push(o, l);
+    });
+    master.gain.linearRampToValueAtTime(.5, ac.currentTime + 3);
+  };
+  const bell = (f, v, d) => {
+    if (!on || !ac) return;
+    const t = ac.currentTime;
+    [[1, 1], [2.76, .35], [5.4, .12]].forEach(([m, a]) => {
+      const o = ac.createOscillator(), g = ac.createGain(); o.type = 'sine'; o.frequency.value = f * m;
+      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(v * a, t + .008); g.gain.exponentialRampToValueAtTime(.0001, t + d / m);
+      o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t + d);
+    });
+  };
+  const toggle = () => {
+    on = !on;
+    if (on) { if (!ac || !master) start(); else { ac.resume(); master.gain.linearRampToValueAtTime(.5, ac.currentTime + 1.5); } bell(880, .08, 2.5); }
+    else if (ac) { master.gain.linearRampToValueAtTime(0, ac.currentTime + .8); }
+    try { localStorage.setItem('tal-snd', on ? '1' : '0'); } catch (e) {}
+    return on;
+  };
+  return { toggle, tick: () => bell(1318.5, .035, .9), move: () => bell(659.25, .05, 1.8), soft: () => bell(987.77, .025, 1.2) };
+})();
+const sndBtn = $('#snd');
+sndBtn.onclick = () => { const v = SND.toggle(); sndBtn.setAttribute('aria-pressed', String(v)); sndBtn.setAttribute('aria-label', v ? '소리 끄기' : '소리 켜기'); };
+document.addEventListener('click', (e) => {
+  if (e.target.closest('#snd')) return;
+  if (e.target.closest('.arrow,.dot,.lc,.peek,.rail button')) SND.move();
+  else if (e.target.closest('.tabs a,.ftabs button,.qual button,.btn')) SND.tick();
+});
+document.querySelectorAll('.card,.nlist li').forEach(() => {});
+document.addEventListener('mouseover', (e) => { const c = e.target.closest('.card,.lc'); if (c && !c.dataset.h) { c.dataset.h = '1'; SND.soft(); c.addEventListener('mouseleave', () => { delete c.dataset.h; }, { once: true }); } });
+
 /* 처음 여는 막 */
 setTimeout(() => $('#intro').classList.add('done'), RM ? 0 : 1900);
 
