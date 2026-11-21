@@ -37,7 +37,7 @@ const NEWS = [
   ['note', '알림', '공식 홈페이지 오픈', '26.11.22'],
   ['world', '세계', '일곱 땅 소개', '26.11.22'],
   ['world', '세계', '정보 추가: 떨어지는 별, 멈춤, 밀린 시간', '26.11.22'],
-  ['world', '인물', '인물 소개: 방랑자, 하루, 수호자, 온기상회', '26.11.22'],
+  ['world', '인물', '인물 소개: 방랑자, 하루, 일곱 수호자, 이음회, 온기상회', '26.11.22'],
   ['dev', '개발', '오프닝 영상 제작 중', '26.11.21'],
   ['dev', '개발', '사용 엔진: 언리얼 엔진 5.8', '26.11.20']
 ];
@@ -48,15 +48,26 @@ const FACTIONS = [
     cards: [
       { n: '방랑자', t: '일곱 땅을 가로지르며 멈춘 시간을 다시 흐르게 하는 여행자. 여러 시각의 빛을 다룰 수 있는 드문 존재지만, 여행을 시작할 때는 힘을 대부분 잃은 상태다.', w: '무기: 한손검 「자정 속 별」', p: tall(LANDS[6].p, { seed: 9.1 }), fx: 'ring' },
       { n: '하루', t: '방랑자의 곁에서 쫑알대며 함께 여행하는 작은 존재. 공중을 헤엄치듯 떠다니며 길 안내와 설명을 맡는다.', w: '어디서 왔는지는 알려지지 않았다.', p: tall(LANDS[3].p, { seed: 4.9 }), fx: 'wisp' }] },
-  { short: '수호자', en: 'GUARDIANS', name: '수호자', sub: '각 땅의 수호자', dot: '#f0dcae',
-    desc: '일곱 시각의 해를 붙잡고 있는 존재들. 각자의 땅에서 신앙과 권위의 중심으로 받들어지며, 땅의 사람들에게는 오래된 질서 그 자체다.',
+  { short: '수호자', en: 'GUARDIANS', name: '수호자', sub: '일곱 시각의 수호자', dot: '#f0dcae',
+    desc: '일곱 시각의 해를 붙잡고 있는 존재들. 시각마다 한 명씩, 모두 일곱이다. 각자의 땅에서 신앙과 권위의 중심으로 받들어지며, 땅의 사람들에게는 오래된 질서 그 자체다. 해를 붙잡고 있는 까닭은 수호자마다 다르다.',
     cards: [
-      { n: '아침의 수호자', t: '아르하의 해를 붙잡고 있는 수호자. 아르하 사람들에게 신앙과 권위의 중심이다.', w: '', p: tall(LANDS[0].p, { seed: 1.9 }) },
-      { n: '한낮의 수호자', t: '메르한의 해를 붙잡고 있는 수호자. 일곱 시각 가운데 가장 높은 해를 맡고 있다.', w: '', p: tall(LANDS[5].p, { seed: 6.8 }) }] },
+      { n: '한낮의 수호자', t: '메르한의 해를 붙잡고 있는 수호자. 일곱 시각 가운데 가장 높은 해를 맡고 있다. 빛과 질서가 정점에 이른 메르한에서 받들어진다.', w: '한낮 · 메르한', p: tall(LANDS[5].p, { seed: 6.8 }) },
+      { n: '정오의 수호자', t: '카라드의 해를 붙잡고 있는 수호자. 흰 석조 도시와 법정, 기록 보관소가 늘어선 카라드에서 질서와 진실의 상징으로 받들어진다.', w: '정오 · 카라드', p: tall(LANDS[1].p, { seed: 2.7 }) },
+      { n: '아침의 수호자', t: '아르하의 해를 붙잡고 있는 수호자. 초원과 풍차가 이어지는 아르하의 마을들에게 신앙과 권위의 중심이다.', w: '아침 · 아르하', p: tall(LANDS[0].p, { seed: 1.9 }) },
+      { n: '노을의 수호자', t: '세이라의 해를 붙잡고 있는 수호자. 끝나지 않는 노을이 바다를 물들이는 항구 도시들에서 섬겨진다. 세이라 사람들은 예술과 기억을 소중히 여긴다.', w: '노을 · 세이라', p: tall(LANDS[2].p, { seed: 3.6 }) },
+      { n: '황혼의 수호자', t: '무레의 해를 붙잡고 있는 수호자. 푸른 황혼이 숲과 첨탑에 내려앉는 땅에서, 삶과 죽음의 경계를 존중하는 무레의 문화 한가운데에 있다.', w: '황혼 · 무레', p: tall(LANDS[3].p, { seed: 5.1 }) },
+      { n: '새벽의 수호자', t: '도른의 해를 붙잡고 있는 수호자. 해 없는 추위가 이어지는 도른에서, 등불의 온기로 버티는 도시들 위에 있다.', w: '새벽 · 도른', p: tall(LANDS[4].p, { seed: 4.4 }) },
+      { n: '자정의 수호자', t: '가장 깊은 밤의 시각, 네이의 해를 맡는 수호자. 그에 대해 알려진 것은 거의 없다.', w: '자정 · 네이', p: tall(LANDS[6].p, { seed: 7.3 }) }] },
+  { short: '이음회', en: 'IEUMHOE', name: '이음회', sub: '사람들의 공동체', dot: '#e6c27a',
+    desc: '수천 년 동안 사람들이 서로 도우며 만들어 온 공동체. 특정한 신을 따르기보다, 탈미라에서 살아가는 사람들의 내일을 지키는 일을 먼저 생각한다. 땅과 시각을 가리지 않고 사람을 돕는다.',
+    cards: [
+      { n: '이음회', t: '서로 다른 땅의 사람들이 손을 보태며 이어 온 모임. 누군가를 이기기 위해서가 아니라, 어려운 사람을 돕기 위해 모인다.', w: '', p: tall(LANDS[2].p, { seed: 8.8, exp: 1.2 }), fx: 'lamps' },
+      { n: '돌아갈 곳', t: '띠를 넘어 먼 길을 다니는 이에게도 믿고 돌아갈 곳이 필요하다. 이음회는 이해관계로 맺은 계약이 아니라, 사람을 돕겠다는 마음으로 문을 열어 둔다.', w: '', p: tall(LANDS[0].p, { seed: 2.3, exp: 1.3 }) }] },
   { short: '온기상회', en: 'MIRASE', name: '온기상회', sub: '미라세', dot: '#ffb466',
     desc: '밤쪽에서 시작해 탈미라 전역으로 진출한 거대 상업 조직. 정식 이름은 미라세지만 사람들은 흔히 온기상회라고 부른다. 어두운 지역의 사람들은 상회가 공급하는 등불과 물자에 생활을 의존한다.',
     cards: [
       { n: '상회장', t: '온기상회를 이끄는 최고 지도자. 조직의 규모와 목표를 통제하며, 일곱 시각에 대응하는 일곱 간부를 거느린다.', w: '', p: tall(LANDS[4].p, { seed: 5.2 }), fx: 'lamps' },
+      { n: '일곱 간부', t: '온기상회의 핵심 권력자 일곱 명. 일곱 시각에 대응하는 자리를 하나씩 맡아, 각 지역과 상회의 사업에 저마다 다른 이해관계를 갖는다.', w: '', p: tall(LANDS[1].p, { seed: 6.1, exp: .9 }), fx: 'lamps' },
       { n: '온기 등불', t: '긴 밤을 견딜 열을 만들어 내는 특수한 등불. 온기상회가 생산과 공급을 장악하고 있으며, 등불 하나에 공동체의 존속이 달린 마을도 있다.', w: '작동 원리는 공개되지 않았다.', p: tall(LANDS[4].p, { seed: 3.3, exp: 1.6 }), fx: 'lamp' }] }
 ];
 const LORE = [
@@ -275,8 +286,20 @@ const renderPeople = (first) => {
   const fill = () => { $('#pen').textContent = f.en; $('#pname').textContent = f.name; $('#psub').textContent = f.sub; $('#pdesc').textContent = f.desc; };
   first ? fill() : swap($('#pbox'), fill);
   $('#cards').innerHTML = f.cards.map((c, i) => '<article class="card" style="animation-delay:' + (150 + i * 120) + 'ms"><canvas class="pic wait" aria-hidden="true"></canvas><div class="tx"><h3>' + c.n + '</h3><p>' + c.t + '</p><p class="w">' + c.w + '</p></div></article>').join('');
+  $('#cards').scrollLeft = 0; cardNav();
   requestAnimationFrame(() => [...$('#cards').querySelectorAll('canvas')].forEach((cv, i) => { const c = f.cards[i]; paint(cv, 'card' + pi + '-' + i, c.p, 3, c.fx ? cardFx(c.fx) : null); }));
 };
+function cardNav() {
+  const box = $('#cards'), n = box.children.length, nav = $('#cnav');
+  nav.hidden = n <= 2;
+  const one = box.children[0] ? box.children[0].getBoundingClientRect().width + 18 : 1;
+  const k = Math.round(box.scrollLeft / one);
+  $('#cpos').textContent = Math.min(n, k + 1) + ' / ' + n;
+}
+$('#cards').addEventListener('scroll', () => cardNav(), { passive: true });
+const cardStep = (d) => { const box = $('#cards'), one = box.children[0].getBoundingClientRect().width + 18; box.scrollBy({ left: d * one, behavior: 'smooth' }); };
+$('#cprev').onclick = () => cardStep(-1);
+$('#cnext').onclick = () => cardStep(1);
 $('#rail').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b && +b.dataset.i !== pi) { pi = +b.dataset.i; renderPeople(false); } });
 
 /* 정보 */

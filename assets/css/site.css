@@ -187,3 +187,13 @@ html.fp .pager{display:flex}
 .pager button[aria-current=true] i{background:var(--gold2);transform:scale(1.3)}
 html.fp .hero{min-height:0;height:100vh;gap:16px;padding-bottom:96px}
 html.fp .hero h1{font-size:clamp(64px,min(11vw,16vh),148px)}
+
+/* 인물 카드 줄: 여러 장이면 옆으로 넘긴다 */
+.cbox{flex:1 1 460px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.cbox .cards{flex:none;flex-wrap:nowrap;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none}
+.cbox .cards::-webkit-scrollbar{display:none}
+.cbox .card{flex:0 0 calc(50% - 9px);scroll-snap-align:start}
+.cbox .card:hover{transform:none}
+.cnav{display:flex;align-items:center;justify-content:flex-end;gap:14px;color:var(--dim);font-size:13px;letter-spacing:.12em}
+.cnav[hidden]{display:none}
+html.fp .card{min-height:0;height:min(460px,52vh)}
