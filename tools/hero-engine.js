@@ -5,7 +5,7 @@ precision highp float;
 out vec4 O;
 uniform vec2 R;
 uniform vec3 SD, CT, CH, CS, G1, G2;
-uniform float TY, FOG, CLD, STR, EXP, SEED, CAMY, PIT, SSZ, SI, MIST, MTN, FGR, MZ;
+uniform float TY, FOG, CLD, STR, EXP, SEED, CAMY, PIT, SSZ, SI, MIST, MTN, FGR, MZ, MODE, FLD, PLZ;
 uniform int ST, SH;
 float h21(vec2 p){p=fract(p*vec2(123.34,456.21));p+=dot(p,p+45.32);return fract(p.x*p.y);}
 float vn(vec2 p){vec2 i=floor(p),f=fract(p);vec2 u=f*f*(3.-2.*f);
@@ -46,6 +46,7 @@ float H(vec2 q,int o){
  if(TY>7.5) return heroH(q,o);
  float h=Hb(q,o); float x=q.x,z=q.y; vec2 p=q+SEED*37.;
  if(MTN>0.){ float e=ero(p*.0042+11.,o); float ang=x/max(z,1.); float sh=1.-.55*exp(-pow((ang-.3)*2.6,2.)); h+=pow(max(e,0.),1.7)*MTN*smoothstep(MZ,MZ*1.7,z)*sh; h+=(rid(p*.003+9.,5)*MTN*.5-8.)*smoothstep(MZ*1.9,MZ*2.3,z); }
+ if(PLZ>0.){ float m=smoothstep(60.,30.,abs(x-z*.0))*smoothstep(PLZ*1.25,PLZ*.9,z)*step(0.,z); h=mix(h,-4.+fbm(p*.01,2)*.4,m); }
  if(FGR>0.){ float fz=smoothstep(80.,6.,z), fx=smoothstep(10.,-30.,x+z*.3); h+=fz*fx*FGR*(1.+rid(p*.05,min(o,7))*.25+fbm(p*.4,3)*.03*smoothstep(30.,5.,z)); }
  return h;
 }
@@ -113,6 +114,8 @@ vec3 shade(vec3 p,vec3 n,vec3 rd,float t){
  if(TY>6.5&&TY<7.5) al=mix(al,vec3(.82,.8,.86),smoothstep(30.,46.,p.y)*smoothstep(.55,.8,n.y));
  if(MTN>0.&&TY<7.5&&(TY<.5||TY>3.5)){ float sn=smoothstep(40.,80.,p.y+fbm(p.xz*.05,4)*14.)*smoothstep(.45,.8,n.y); al=mix(al,vec3(.86,.86,.92),sn*step(3.5,TY)); }
  if(TY>7.5){ al*=.75+.5*fbm(vec2(p.y*.35,p.x*.02),3); float sn=smoothstep(18.,52.,p.y+fbm(p.xz*.05,4)*14.)*smoothstep(.42,.78,n.y); al=mix(al,vec3(.86,.84,.9),sn); }
+ if(PLZ>0.){ float m=smoothstep(60.,30.,abs(p.x))*smoothstep(PLZ*1.25,PLZ*.9,p.z); vec2 tf=fract(p.xz*.25); float ln=1.-smoothstep(.0,.05,min(min(tf.x,tf.y),min(1.-tf.x,1.-tf.y)))*.0; float grid=smoothstep(.03,.0,min(min(tf.x,1.-tf.x),min(tf.y,1.-tf.y))); vec3 stone=mix(vec3(.58,.55,.48),vec3(.42,.39,.33),grid*.6)*(.92+.08*fbm(p.xz*.3,3)); al=mix(al,stone,m*smoothstep(.8,.95,n.y)); }
+ if(FLD>0.){ vec2 fp=p.xz*vec2(.045,.06); fp=mat2(.94,.34,-.34,.94)*fp; vec2 ci=floor(fp), cf=fract(fp); float hc=h21(ci+SEED); vec3 fc=mix(G2*1.1,vec3(.78,.66,.32),smoothstep(.55,.85,hc)); fc=mix(fc,G1*1.15,step(hc,.35)); float edge=smoothstep(.0,.035,min(min(cf.x,cf.y),min(1.-cf.x,1.-cf.y))); float fl8=smoothstep(.86,.97,n.y)*smoothstep(70.,150.,t)*smoothstep(560.,260.,t); al=mix(al,mix(G2*.55,fc,edge),FLD*fl8*step(.2,hc)); }
  float sh=mix(.12,1.,shadow(p+n*.35));
  float dif=max(dot(n,SD),0.)*sh;
  float amb=.55+.45*n.y;
@@ -136,6 +139,7 @@ void main(){
  vec3 p; float t=march(ro,rd,p);
  vec3 col;
  float tw=(sea&&rd.y<0.)?-ro.y/rd.y:1e9;
+ if(MODE>.5){ float dd=(sea&&tw<FAR&&(t<0.||tw<t))?tw:(t<0.?FAR*2.:t); float v=clamp(dd/(FAR*2.),0.,1.); float r=floor(v*255.)/255.; float g=floor(fract(v*255.)*255.)/255.; float b=fract(v*65025.); O=vec4(r,g,b,1.); return; }
  if(sea&&tw<FAR&&(t<0.||tw<t)){
   vec3 q=ro+rd*tw; vec2 w=q.xz*.3; float e=.06;
   float w0=fbm(w,5), wx=fbm(w+vec2(e,0),5), wz=fbm(w+vec2(0,e),5);
@@ -192,7 +196,7 @@ in vec2 a; void main(){gl_Position=vec4(a,0.,1.);}`;
 
 const lin = (h) => { const n = parseInt(h.slice(1), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255].map((v) => Math.pow(v / 255, 2.2)); };
 const sunDir = (el, az) => { const e = el * Math.PI / 180, a = az * Math.PI / 180; return [Math.sin(a) * Math.cos(e), Math.sin(e), Math.cos(a) * Math.cos(e)]; };
-const DEF = { mist: 0, mtn: 0, fgr: 0, mz: 250, ty: 0, el: 5, az: 0, top: '#20304f', hor: '#e9c8a0', sun: '#ffd9a0', si: 3, g1: '#5d7a3a', g2: '#3a4d2a', fog: .005, cld: .4, str: 0, exp: 1, seed: 1, camy: 3, pit: .24, ssz: .03 };
+const DEF = { mode: 0, fld: 0, plz: 0, mist: 0, mtn: 0, fgr: 0, mz: 250, ty: 0, el: 5, az: 0, top: '#20304f', hor: '#e9c8a0', sun: '#ffd9a0', si: 3, g1: '#5d7a3a', g2: '#3a4d2a', fog: .005, cld: .4, str: 0, exp: 1, seed: 1, camy: 3, pit: .24, ssz: .03 };
 const QUAL = { bake: { s: 1, st: 420, sh: 72, cap: 9e6, band: 12e4 }, low: { s: .6, st: 100, sh: 16, cap: 7e5, band: 4e4 }, mid: { s: 1, st: 170, sh: 32, cap: 2.2e6, band: 6e4 }, high: { s: 1.6, st: 280, sh: 56, cap: 7e6, band: 9e4 } };
 
 let gl = null, cv = null, prog = null, U = {}, lost = false, ready = null;
@@ -217,7 +221,7 @@ const prepare = () => {
         const b = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, b);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
         const loc = gl.getAttribLocation(prog, 'a'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-        ['R', 'SD', 'CT', 'CH', 'CS', 'G1', 'G2', 'TY', 'FOG', 'CLD', 'STR', 'EXP', 'SEED', 'CAMY', 'PIT', 'SSZ', 'SI', 'MIST', 'MTN', 'FGR', 'MZ', 'ST', 'SH'].forEach((k) => { U[k] = gl.getUniformLocation(prog, k); });
+        ['R', 'SD', 'CT', 'CH', 'CS', 'G1', 'G2', 'TY', 'FOG', 'CLD', 'STR', 'EXP', 'SEED', 'CAMY', 'PIT', 'SSZ', 'SI', 'MIST', 'MTN', 'FGR', 'MZ', 'MODE', 'FLD', 'PLZ', 'ST', 'SH'].forEach((k) => { U[k] = gl.getUniformLocation(prog, k); });
         res(true);
       };
       if (!ext) { setTimeout(finish, 0); return; }
@@ -245,7 +249,7 @@ const setU = (P, q, rw, rh, st, sh) => {
   gl.uniform3fv(U.CT, lin(P.top)); gl.uniform3fv(U.CH, lin(P.hor)); gl.uniform3fv(U.CS, lin(P.sun));
   gl.uniform3fv(U.G1, lin(P.g1)); gl.uniform3fv(U.G2, lin(P.g2));
   gl.uniform1f(U.TY, P.ty); gl.uniform1f(U.FOG, P.fog); gl.uniform1f(U.CLD, P.cld); gl.uniform1f(U.STR, P.str);
-  gl.uniform1f(U.EXP, P.exp); gl.uniform1f(U.SEED, P.seed); gl.uniform1f(U.CAMY, P.camy); gl.uniform1f(U.PIT, P.pit); gl.uniform1f(U.SSZ, P.ssz); gl.uniform1f(U.SI, P.si); gl.uniform1f(U.MIST, P.mist || 0); gl.uniform1f(U.MTN, P.mtn || 0); gl.uniform1f(U.FGR, P.fgr || 0); gl.uniform1f(U.MZ, P.mz || 250);
+  gl.uniform1f(U.EXP, P.exp); gl.uniform1f(U.SEED, P.seed); gl.uniform1f(U.CAMY, P.camy); gl.uniform1f(U.PIT, P.pit); gl.uniform1f(U.SSZ, P.ssz); gl.uniform1f(U.SI, P.si); gl.uniform1f(U.MIST, P.mist || 0); gl.uniform1f(U.MTN, P.mtn || 0); gl.uniform1f(U.FGR, P.fgr || 0); gl.uniform1f(U.MZ, P.mz || 250); gl.uniform1f(U.MODE, P.mode || 0); gl.uniform1f(U.FLD, P.fld || 0); gl.uniform1f(U.PLZ, P.plz || 0);
   gl.uniform1i(U.ST, st); gl.uniform1i(U.SH, sh);
 };
 const frame = () => new Promise((r) => requestAnimationFrame(() => r()));

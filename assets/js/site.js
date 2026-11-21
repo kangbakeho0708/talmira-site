@@ -365,11 +365,14 @@ const figFx = (c0) => (cv) => {
   const c = cv.getContext('2d'), w = cv.width, h = cv.height;
   const o = { kind: c0.fig, hour: c0.hour || 0, sunX: .55 };
   if (c0.fig === 'seven') {
-    if (FIG_MODE === 'symbol') { TalFigure.symbol(c, w, h, o); return; }
+    if (FIG_MODE === 'symbol') { const g = c.createLinearGradient(0, h * .2, 0, h * .7); g.addColorStop(0, 'rgba(8,8,12,0)'); g.addColorStop(.5, 'rgba(8,8,12,.55)'); g.addColorStop(1, 'rgba(8,8,12,0)'); c.fillStyle = g; c.fillRect(0, 0, w, h); TalFigure.symbol(c, w, h, o); return; }
     for (let i = 0; i < 7; i++) { const x = .14 + .72 * i / 6, big = i === 3; (FIG_MODE === 'shadow' ? TalFigure.shadow : TalFigure.silhouette)(c, w, h, { kind: 'merchant', x, feet: FIG_MODE === 'shadow' ? .6 : .74 + (big ? .04 : 0), size: FIG_MODE === 'shadow' ? .12 : (big ? .3 : .24), sunX: .5 }); }
     return;
   }
-  if (c0.fig === 'bond') { TalFigure.symbol(c, w, h, o); return; }
+  /* 상징 뒤에 어두운 막을 깔아 풍경과 겹쳐도 읽히게 */
+  const scrim = () => { const g = c.createRadialGradient(w * .5, h * .42, 0, w * .5, h * .42, Math.min(w, h) * .55); g.addColorStop(0, 'rgba(8,8,12,.62)'); g.addColorStop(1, 'rgba(8,8,12,0)'); c.fillStyle = g; c.fillRect(0, 0, w, h); };
+  if (c0.fig === 'bond') { scrim(); TalFigure.symbol(c, w, h, o); return; }
+  if (FIG_MODE === 'symbol') scrim();
   TalFigure[FIG_MODE](c, w, h, o);
 };
 const cardFx = (kind) => (cv) => {
