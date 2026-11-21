@@ -18,6 +18,8 @@ jobs:
       url: ${{ steps.d.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      - name: 새 파일을 받게 이름표 바꾸기
+        run: sed -i -E "s/\?v=[0-9a-z]+/?v=${GITHUB_SHA::8}/g" index.html 404.html
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
