@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>탈미라</title>
+<meta name="description" content="해가 멈춘 세계. 일곱 땅을 여행하는 3D 오픈월드 액션 RPG, 탈미라.">
+<meta name="theme-color" content="#0f0f13">
+<meta property="og:type" content="website">
+<meta property="og:title" content="탈미라">
+<meta property="og:description" content="해가 멈춘 세계. 일곱 땅을 여행하는 3D 오픈월드 액션 RPG.">
+<meta property="og:image" content="assets/img/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Noto+Sans+KR:wght@400;500&display=swap">
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+
+<div id="intro" aria-hidden="true">
+<svg viewBox="0 0 400 400">
+<circle class="r" cx="200" cy="200" r="170" fill="none" stroke="#d6be8c" stroke-width="1.2"/>
+<g stroke="#d6be8c" stroke-width="2">
+<line class="t" style="animation-delay:.9s" x1="200" y1="50" x2="200" y2="15"/>
+<line class="t" style="animation-delay:.98s" x1="317.3" y1="106.5" x2="344.6" y2="84.7"/>
+<line class="t" style="animation-delay:1.06s" x1="346.2" y1="233.4" x2="380.4" y2="241.2"/>
+<line class="t" style="animation-delay:1.14s" x1="265.1" y1="335.2" x2="280.3" y2="366.7"/>
+<line class="t" style="animation-delay:1.22s" x1="134.9" y1="335.2" x2="119.7" y2="366.7"/>
+<line class="t" style="animation-delay:1.3s" x1="53.8" y1="233.4" x2="19.6" y2="241.2"/>
+</g>
+<line class="t" style="animation-delay:1.45s" x1="82.7" y1="106.5" x2="55.4" y2="84.7" stroke="#7fb0ff" stroke-width="2.4"/>
+</svg>
+</div>
+
+<header>
+<div class="wrap">
+<a class="logo" href="#main">탈미라</a>
+<nav class="tabs" aria-label="주 메뉴">
+<svg id="arc" aria-hidden="true" viewBox="0 0 64 12"><path d="M2 11 Q32 -2 62 11" fill="none" stroke="#d6be8c"/><circle cx="32" cy="4.5" r="2" fill="#7fb0ff"/></svg>
+<a href="#main" data-s="main">메인</a>
+<a href="#news" data-s="news">소식</a>
+<a href="#people" data-s="people">인물</a>
+<a href="#lore" data-s="lore">정보</a>
+<a href="#world" data-s="world">세계</a>
+</nav>
+<span aria-hidden="true"></span>
+</div>
+</header>
+
+<main>
+<section id="main" class="sec" aria-label="메인">
+<canvas class="pic wait" id="heroPic" aria-hidden="true"></canvas>
+<canvas class="pic" id="heroFx" aria-hidden="true"></canvas>
+<div class="shade" aria-hidden="true"></div>
+<svg class="ring" id="ring" aria-hidden="true" viewBox="0 0 400 400" style="opacity:0">
+<circle cx="200" cy="200" r="170" fill="none" stroke="#d6be8c" stroke-width=".6"/>
+<circle cx="200" cy="200" r="150" fill="none" stroke="#d6be8c" stroke-width=".35" stroke-dasharray="2 5"/>
+<g stroke="#d6be8c"><line x1="200" y1="50" x2="200" y2="15"/><line x1="317.3" y1="106.5" x2="344.6" y2="84.7"/><line x1="346.2" y1="233.4" x2="380.4" y2="241.2"/><line x1="265.1" y1="335.2" x2="280.3" y2="366.7"/><line x1="134.9" y1="335.2" x2="119.7" y2="366.7"/><line x1="53.8" y1="233.4" x2="19.6" y2="241.2"/></g>
+<line x1="82.7" y1="106.5" x2="55.4" y2="84.7" stroke="#7fb0ff" stroke-width="1.6"/><circle cx="67.1" cy="94" r="3" fill="#7fb0ff"/>
+</svg>
+<div class="wrap hero">
+<div class="kick">3D 오픈월드 액션 RPG</div>
+<h1>탈미라</h1>
+<p class="lead">해가 멈춘 세계</p>
+<p class="sub">방랑자가 되어 일곱 땅을 여행하고, 멈춘 시간을 다시 흐르게 한다.</p>
+<div class="btns"><a class="btn main" href="#world">일곱 땅 보기</a><span class="btn off">오프닝 영상 · 곧 공개</span></div>
+</div>
+<div class="hours"><div class="wrap"><ol id="hours" aria-label="일곱 시각"></ol></div></div>
+</section>
+
+<section id="news" class="sec" aria-label="소식">
+<div class="wrap reveal">
+<div class="head"><h2 class="h2">소식</h2><div class="ftabs" role="tablist" aria-label="소식 갈래" id="ftabs"></div></div>
+<div class="newsgrid">
+<ul class="nlist" id="nlist"></ul>
+<a class="feat" id="feat" href="#world" aria-label="일곱 땅 소개로 가기">
+<canvas class="pic wait" id="featPic" aria-hidden="true"></canvas>
+<div class="fdots" id="fdots" aria-hidden="true"></div>
+<div class="cap"><small>세계</small><b id="featName">일곱 땅</b><em id="featSub">아르하 · 카라드 · 세이라 · 무레 · 도른 · 메르한 · 네이</em></div>
+</a>
+</div>
+</div>
+</section>
+
+<section id="people" class="sec" aria-label="인물">
+<div class="wrap reveal">
+<div class="pgrid">
+<div class="rail" role="tablist" aria-label="세력" id="rail"></div>
+<div class="pinfo">
+<svg class="crest" aria-hidden="true" viewBox="0 0 400 400"><circle cx="200" cy="200" r="170" fill="none" stroke="#d6be8c"/><circle cx="200" cy="200" r="118" fill="none" stroke="#d6be8c" stroke-width=".6" stroke-dasharray="3 6"/><g stroke="#d6be8c" stroke-width="2"><line x1="200" y1="50" x2="200" y2="15"/><line x1="317.3" y1="106.5" x2="344.6" y2="84.7"/><line x1="346.2" y1="233.4" x2="380.4" y2="241.2"/><line x1="265.1" y1="335.2" x2="280.3" y2="366.7"/><line x1="134.9" y1="335.2" x2="119.7" y2="366.7"/><line x1="53.8" y1="233.4" x2="19.6" y2="241.2"/><line x1="82.7" y1="106.5" x2="55.4" y2="84.7"/></g><circle id="crestDot" cx="200" cy="200" r="10" fill="#7fb0ff"/></svg>
+<div class="rule"></div>
+<div class="swap" id="pbox"><h2 id="pname"></h2><p class="s" id="psub"></p><p class="d" id="pdesc"></p></div>
+<div class="rule"></div>
+</div>
+<div class="cards" id="cards"></div>
+</div>
+</div>
+</section>
+
+<section id="lore" class="sec" aria-label="정보">
+<div class="wrap reveal">
+<div class="lgrid">
+<div class="ltext">
+<svg aria-hidden="true" viewBox="0 0 400 400"><circle cx="200" cy="200" r="170" fill="none" stroke="#d6be8c"/><circle cx="200" cy="200" r="120" fill="none" stroke="#d6be8c" stroke-width=".6" stroke-dasharray="3 6"/><g stroke="#d6be8c" stroke-width="2"><line x1="200" y1="50" x2="200" y2="15"/><line x1="317.3" y1="106.5" x2="344.6" y2="84.7"/><line x1="346.2" y1="233.4" x2="380.4" y2="241.2"/><line x1="265.1" y1="335.2" x2="280.3" y2="366.7"/><line x1="134.9" y1="335.2" x2="119.7" y2="366.7"/><line x1="53.8" y1="233.4" x2="19.6" y2="241.2"/><line x1="82.7" y1="106.5" x2="55.4" y2="84.7"/></g></svg>
+<div class="rule"></div>
+<div class="swap" id="lbox" style="display:flex;flex-direction:column;gap:16px">
+<p class="lmeta" id="lmeta"></p><h2 id="ltitle"></h2><p class="d" id="ldesc"></p><p class="w" id="lfrag"></p>
+</div>
+<div class="rule"></div>
+</div>
+<div class="slider">
+<button class="arrow" id="lprev" aria-label="앞 항목"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
+<div class="track" id="track" aria-label="정보 카드"></div>
+<button class="arrow" id="lnext" aria-label="다음 항목"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16"><path d="m6 3 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
+</div>
+</div>
+</div>
+</section>
+
+<section id="world" class="sec" aria-label="세계">
+<div class="wrap whead reveal"><h2 class="h2" style="font-size:32px">일곱 땅</h2></div>
+<div class="stage reveal">
+<div class="scene" id="scene" role="img" aria-label=""><canvas class="pic" id="wPic"></canvas><canvas class="pic" id="wFx"></canvas></div>
+<button class="peek" id="peek"><canvas class="pic" id="peekPic" aria-hidden="true"></canvas><span id="peekname"></span></button>
+</div>
+<div class="wrap reveal">
+<div class="wbar">
+<div class="wname swap" id="wn"><b id="wname"></b><small id="wsub"></small></div>
+<p class="wdesc swap" id="wdesc"></p>
+<div class="wnav">
+<button class="arrow" id="wprev" aria-label="앞 땅"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
+<span id="dots" style="display:flex"></span>
+<button class="arrow" id="wnext" aria-label="다음 땅"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16"><path d="m6 3 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
+</div>
+</div>
+</div>
+</section>
+</main>
+
+<footer>
+<div class="wrap">
+<b>탈미라</b>
+<div class="qual" role="group" aria-label="그래픽 화질"><span>화질</span><button data-q="low">낮음</button><button data-q="mid">중간</button><button data-q="high">높음</button></div>
+</div>
+</footer>
+
+<script src="assets/js/engine.js"></script>
+<script src="assets/js/site.js"></script>
+</body>
+</html>
