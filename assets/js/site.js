@@ -19,19 +19,19 @@ const HERO_OLD = { ty: 7, el: 3.2, az: 20, top: '#04050c', hor: '#c96a44', sun: 
 const HERO = { ty: 8, el: 3.0, az: 20, top: '#060a1e', hor: '#c8603c', sun: '#ffc490', si: 2.9, g1: '#4a4650', g2: '#0d0b12', fog: .0009, cld: 0, str: 1, exp: 1.05, camy: 24, pit: .3, seed: 8.8, ssz: .026 };
 const LANDS0 = [
   { n: '아르하', en: 'Arha', h: '아침', m: '다시 오는 것', d: '부드러운 아침빛이 오래 머무는 땅. 초원과 언덕 사이로 작은 도시와 농장, 풍차가 이어진다. 공동체의 신뢰를 중요하게 여기며, 방랑자가 탈미라를 처음 알아가는 곳이다.',
-    p: S({ ty: 0, el: 9, az: -32, top: '#244a82', hor: '#f2c894', sun: '#ffd9a4', si: 3.4, g1: '#8fb04c', g2: '#3d5a2c', fog: .0018, cld: .45, exp: 1.0, camy: 5, pit: .2, seed: 1.3, ssz: .03 }) },
+    p: S({ ty: 0, el: 9, az: -32, top: '#1e3f78', hor: '#f0c493', sun: '#ffd9a4', si: 3.4, g1: '#8fb04c', g2: '#3a5a2a', fog: .0014, cld: .4, exp: 1.0, camy: 9, pit: .2, seed: 1.3, ssz: .03, mist: .25, mtn: 110, fgr: 0, mz: 260 }) },
   { n: '카라드', en: 'Karad', h: '정오', m: '그림자 없는 곳', d: '해가 높이 떠 그림자가 짧은 땅. 흰 돌로 지은 도시와 수로, 거대한 기록 보관소가 있다. 법과 증언, 기록을 중시하며 진실을 밝히는 일을 미덕으로 여긴다.',
-    p: S({ ty: 1, el: 62, az: 25, top: '#2b62ad', hor: '#c5d7e6', sun: '#fff0d6', si: 3, g1: '#e8cf9c', g2: '#a8794a', fog: .0018, cld: .18, exp: .8, camy: 7, pit: .18, seed: 2.1 }) },
+    p: S({ ty: 1, el: 62, az: 25, top: '#1f5aa8', hor: '#d8e2ea', sun: '#fff0d6', si: 3, g1: '#e8cf9c', g2: '#a8794a', fog: .0012, cld: .12, exp: .82, camy: 9, pit: .18, seed: 2.1, mist: .08, mtn: 90, fgr: 0, mz: 300 }) },
   { n: '세이라', en: 'Seira', h: '노을', m: '남는 빛', d: '노을이 지지 않는 바닷가. 운하와 항구를 따라 무역과 예술이 발달했다. 지난 사건과 인물을 기념하는 문화가 깊다.',
-    p: S({ ty: 2, el: 1.2, az: 6, top: '#1d1736', hor: '#f07a46', sun: '#ffa860', si: 4, g1: '#4a2836', g2: '#22121f', fog: .0032, cld: .6, exp: 1.0, camy: 9, pit: .22, seed: 3.7, ssz: .035 }) },
+    p: S({ ty: 2, el: 1.2, az: 6, top: '#1b1534', hor: '#f07a46', sun: '#ffa860', si: 4, g1: '#3a2030', g2: '#1a0e18', fog: .0028, cld: .55, exp: 1.0, camy: 10, pit: .22, seed: 3.7, ssz: .035, mist: 0, mtn: 0, fgr: 0, mz: 250 }) },
   { n: '무레', en: 'Mure', h: '황혼', m: '사이', d: '푸른 황혼이 숲과 첨탑에 내려앉는 땅. 학자와 기록관, 장례를 맡는 이들이 중요한 지위를 가진다. 삶과 죽음의 경계를 존중하는 문화가 있다.',
-    p: S({ ty: 3, el: -4, az: -25, top: '#060d22', hor: '#3d5e8c', sun: '#8fb0e8', si: 1.3, g1: '#20374a', g2: '#0b1620', fog: .014, cld: .3, str: .4, exp: 1.1, camy: 7, pit: .2, seed: 4.4 }) },
+    p: S({ ty: 3, el: -3, az: -25, top: '#060d22', hor: '#5a7fb0', sun: '#a8c4f0', si: 1.6, g1: '#1d3340', g2: '#0a141c', fog: .0035, cld: .2, str: .5, exp: .92, camy: 11, pit: .2, seed: 4.4, mist: .3, mtn: 120, fgr: 24, mz: 220 }) },
   { n: '도른', en: 'Dorn', h: '새벽', m: '등지고 선 땅', d: '해가 뜨지 않는 추운 땅. 철골과 증기, 등불의 불빛으로 이루어진 산업 도시가 긴 밤을 견딘다. 온기상회가 처음 생긴 곳으로, 따뜻한 공간 하나의 값이 다른 땅과 전혀 다르다.', lamps: true,
-    p: S({ ty: 4, el: -20, az: 0, top: '#02040a', hor: '#0c172b', sun: '#4a68a0', si: .6, g1: '#b4c3dc', g2: '#4a5874', fog: .0035, cld: .1, str: .8, exp: 2.0, camy: 4, pit: .2, seed: 5.9 }) },
+    p: S({ ty: 4, el: -20, az: 0, top: '#02040a', hor: '#0c172b', sun: '#4a68a0', si: .6, g1: '#b4c3dc', g2: '#4a5874', fog: .003, cld: .1, str: .8, exp: 2.0, camy: 8, pit: .2, seed: 5.9, mist: .35, mtn: 100, fgr: 0, mz: 240 }) },
   { n: '메르한', en: 'Merhan', h: '한낮', m: '해 아래', d: '해가 바로 머리 위에 있는 땅. 빛을 다루는 기술이 가장 발달했고, 완성된 질서를 지키는 일을 무엇보다 중요하게 여긴다.',
-    p: S({ ty: 5, el: 74, az: 35, top: '#5f95d2', hor: '#eaf0f4', sun: '#fffaf0', si: 3.2, g1: '#f3ead6', g2: '#a88f66', fog: .0014, cld: .12, exp: .7, camy: 6, pit: .14, seed: 6.2 }) },
+    p: S({ ty: 5, el: 74, az: 35, top: '#3a74c0', hor: '#c9d6e3', sun: '#fffaf0', si: 3.2, g1: '#e2d3b4', g2: '#8f7650', fog: .0009, cld: .1, exp: .68, camy: 9, pit: .14, seed: 6.2, mist: .1, mtn: 140, fgr: 0, mz: 280 }) },
   { n: '네이', en: 'Nei', h: '자정', m: '끝이자 처음', d: '가장 깊은 밤에 속한 땅. 다른 여섯 땅과 근본적으로 다른 곳이라고 전해진다.', night: true,
-    p: S({ ty: 6, el: -45, az: 0, top: '#000002', hor: '#0c1226', sun: '#0d1630', si: .3, g1: '#0a0b12', g2: '#030308', fog: .0016, cld: 0, str: 1, exp: 2.2, camy: 3, pit: .2, seed: 7.5 }) }
+    p: S({ ty: 6, el: -45, az: 0, top: '#000002', hor: '#0c1226', sun: '#0d1630', si: .3, g1: '#0a0b12', g2: '#030308', fog: .0014, cld: 0, str: 1, exp: 2.2, camy: 7, pit: .2, seed: 7.5, mist: .3, mtn: 130, fgr: 20, mz: 230 }) }
 ];
 /* 해에서 가까운 순서: 한낮, 정오, 아침, 노을, 황혼, 새벽, 자정 */
 const LANDS = [5, 1, 0, 2, 3, 4, 6].map((i) => LANDS0[i]);
@@ -50,27 +50,27 @@ const FACTIONS_ALL = [
   { short: '방랑자', en: 'Wanderer', name: '방랑자', sub: '방랑자와 동행', dot: '#7fb0ff',
     desc: '제 시각의 띠를 벗어나 일곱 땅을 여행하는 방랑자와 그 동행. 탈미라의 사람들은 대부분 자기 시각의 띠 안에서 평생을 보내기 때문에, 띠를 넘어 다니는 이는 드물다.',
     cards: [
-      { n: '방랑자', t: '일곱 땅을 가로지르며 멈춘 시간을 다시 흐르게 하는 여행자. 여러 시각의 빛을 다룰 수 있는 드문 존재지만, 여행을 시작할 때는 힘을 대부분 잃은 상태다.', w: '무기: 한손검 「자정 속 별」', p: tall(LANDS0[6].p, { seed: 9.1 }), fx: 'ring' },
+      { n: '방랑자', fig: 'wanderer', t: '일곱 땅을 가로지르며 멈춘 시간을 다시 흐르게 하는 여행자. 여러 시각의 빛을 다룰 수 있는 드문 존재지만, 여행을 시작할 때는 힘을 대부분 잃은 상태다.', w: '무기: 한손검 「자정 속 별」', p: tall(LANDS0[2].p, { seed: 9.1, el: .6 }) },
       { n: '하루', t: '방랑자의 곁에서 쫑알대며 함께 여행하는 작은 존재. 공중을 헤엄치듯 떠다니며 길 안내와 설명을 맡는다.', w: '어디서 왔는지는 알려지지 않았다.', p: tall(LANDS0[3].p, { seed: 4.9 }), fx: 'wisp' }] },
   { short: '수호자', en: 'Guardians', name: '수호자', sub: '일곱 시각의 해를 붙잡은 이들', dot: '#f0dcae',
     desc: '일곱 시각의 해를 붙잡고 있는 존재들. 시각마다 한 명씩, 모두 일곱이다. 각자의 땅에서 신앙과 권위의 중심으로 받들어지며, 땅의 사람들에게는 오래된 질서 그 자체다. 해를 붙잡고 있는 까닭은 수호자마다 다르다.',
     cards: [
-      { n: '한낮의 수호자', t: '메르한의 해를 붙잡고 있는 수호자. 일곱 시각 가운데 가장 높은 해를 맡고 있다. 빛과 질서가 정점에 이른 메르한에서 받들어진다.', w: '한낮 · 메르한', p: tall(LANDS0[5].p, { seed: 6.8 }) },
-      { n: '정오의 수호자', t: '카라드의 해를 붙잡고 있는 수호자. 흰 석조 도시와 법정, 기록 보관소가 늘어선 카라드에서 질서와 진실의 상징으로 받들어진다.', w: '정오 · 카라드', p: tall(LANDS0[1].p, { seed: 2.7 }) },
-      { n: '아침의 수호자', t: '아르하의 해를 붙잡고 있는 수호자. 초원과 풍차가 이어지는 아르하의 마을들에게 신앙과 권위의 중심이다.', w: '아침 · 아르하', p: tall(LANDS0[0].p, { seed: 1.9 }) },
-      { n: '노을의 수호자', t: '세이라의 해를 붙잡고 있는 수호자. 끝나지 않는 노을이 바다를 물들이는 항구 도시들에서 섬겨진다. 세이라 사람들은 예술과 기억을 소중히 여긴다.', w: '노을 · 세이라', p: tall(LANDS0[2].p, { seed: 3.6 }) },
-      { n: '황혼의 수호자', t: '무레의 해를 붙잡고 있는 수호자. 푸른 황혼이 숲과 첨탑에 내려앉는 땅에서, 삶과 죽음의 경계를 존중하는 무레의 문화 한가운데에 있다.', w: '황혼 · 무레', p: tall(LANDS0[3].p, { seed: 5.1 }) },
-      { n: '새벽의 수호자', t: '도른의 해를 붙잡고 있는 수호자. 해 없는 추위가 이어지는 도른에서, 등불의 온기로 버티는 도시들 위에 있다.', w: '새벽 · 도른', p: tall(LANDS0[4].p, { seed: 4.4 }) },
-      { n: '자정의 수호자', t: '가장 깊은 밤의 시각, 네이의 해를 맡는 수호자. 그에 대해 알려진 것은 거의 없다.', w: '자정 · 네이', p: tall(LANDS0[6].p, { seed: 7.3 }) }] },
+      { n: '한낮의 수호자', fig: 'guardian', hour: 0, t: '메르한의 해를 붙잡고 있는 수호자. 일곱 시각 가운데 가장 높은 해를 맡고 있다. 빛과 질서가 정점에 이른 메르한에서 받들어진다.', w: '한낮 · 메르한', p: tall(LANDS0[5].p, { seed: 6.8 }) },
+      { n: '정오의 수호자', fig: 'guardian', hour: 1, t: '카라드의 해를 붙잡고 있는 수호자. 흰 석조 도시와 법정, 기록 보관소가 늘어선 카라드에서 질서와 진실의 상징으로 받들어진다.', w: '정오 · 카라드', p: tall(LANDS0[1].p, { seed: 2.7 }) },
+      { n: '아침의 수호자', fig: 'guardian', hour: 2, t: '아르하의 해를 붙잡고 있는 수호자. 초원과 풍차가 이어지는 아르하의 마을들에게 신앙과 권위의 중심이다.', w: '아침 · 아르하', p: tall(LANDS0[0].p, { seed: 1.9 }) },
+      { n: '노을의 수호자', fig: 'guardian', hour: 3, t: '세이라의 해를 붙잡고 있는 수호자. 끝나지 않는 노을이 바다를 물들이는 항구 도시들에서 섬겨진다. 세이라 사람들은 예술과 기억을 소중히 여긴다.', w: '노을 · 세이라', p: tall(LANDS0[2].p, { seed: 3.6 }) },
+      { n: '황혼의 수호자', fig: 'guardian', hour: 4, t: '무레의 해를 붙잡고 있는 수호자. 푸른 황혼이 숲과 첨탑에 내려앉는 땅에서, 삶과 죽음의 경계를 존중하는 무레의 문화 한가운데에 있다.', w: '황혼 · 무레', p: tall(LANDS0[3].p, { seed: 5.1 }) },
+      { n: '새벽의 수호자', fig: 'guardian', hour: 5, t: '도른의 해를 붙잡고 있는 수호자. 해 없는 추위가 이어지는 도른에서, 등불의 온기로 버티는 도시들 위에 있다.', w: '새벽 · 도른', p: tall(LANDS0[4].p, { seed: 4.4 }) },
+      { n: '자정의 수호자', fig: 'guardian', hour: 6, t: '가장 깊은 밤의 시각, 네이의 해를 맡는 수호자. 그에 대해 알려진 것은 거의 없다.', w: '자정 · 네이', p: tall(LANDS0[6].p, { seed: 7.3 }) }] },
   { short: '이음회', en: 'The Bond', name: '이음회', sub: '사람들의 공동체', dot: '#e6c27a',
     desc: '특정한 신을 따르기보다, 탈미라에서 살아가는 사람들의 내일을 지키는 일을 먼저 생각하는 공동체. 땅과 시각을 가리지 않고 어려운 사람을 돕는다.',
     cards: [
-      { n: '수천 년의 손길', t: '멈춘 해 아래에서 수천 년 동안, 사람들이 서로 도우며 조금씩 만들어 온 모임이다. 누군가를 이기려고 모인 것이 아니라, 사람을 돕겠다는 마음으로 이어져 왔다.', w: '', p: tall(LANDS0[2].p, { seed: 8.8, exp: 1.2 }), fx: 'lamps' }] },
+      { n: '수천 년의 손길', fig: 'bond', t: '멈춘 해 아래에서 수천 년 동안, 사람들이 서로 도우며 조금씩 만들어 온 모임이다. 누군가를 이기려고 모인 것이 아니라, 사람을 돕겠다는 마음으로 이어져 왔다.', w: '', p: tall(LANDS0[2].p, { seed: 8.8, exp: 1.2 }), fx: 'lamps' }] },
   { short: '미라세', en: 'Mirase', name: '미라세', sub: '온기상회', dot: '#ffb466',
     desc: '밤쪽에서 시작해 탈미라 전역으로 진출한 거대 상업 조직. 사람들은 흔히 온기상회라고 부른다. 어두운 지역의 사람들은 미라세가 공급하는 등불과 물자에 생활을 의존한다.',
     cards: [
-      { n: '상회장', t: '미라세를 이끄는 최고 지도자. 조직의 규모와 목표를 통제하며, 일곱 시각에 대응하는 일곱 간부를 거느린다.', w: '', p: tall(LANDS0[4].p, { seed: 5.2 }), fx: 'lamps' },
-      { n: '일곱 간부', t: '미라세의 핵심 권력자 일곱 명. 일곱 시각에 대응하는 자리를 하나씩 맡아, 각 지역과 미라세의 사업에 저마다 다른 이해관계를 갖는다.', w: '', p: tall(LANDS0[1].p, { seed: 6.1, exp: .9 }), fx: 'lamps' },
+      { n: '상회장', fig: 'merchant', t: '미라세를 이끄는 최고 지도자. 조직의 규모와 목표를 통제하며, 일곱 시각에 대응하는 일곱 간부를 거느린다.', w: '', p: tall(LANDS0[4].p, { seed: 5.2 }), fx: 'lamps' },
+      { n: '일곱 간부', fig: 'seven', t: '미라세의 핵심 권력자 일곱 명. 일곱 시각에 대응하는 자리를 하나씩 맡아, 각 지역과 미라세의 사업에 저마다 다른 이해관계를 갖는다.', w: '', p: tall(LANDS0[1].p, { seed: 6.1, exp: .9 }), fx: 'lamps' },
       { n: '온기 등불', t: '긴 밤을 견딜 열을 만들어 내는 특수한 등불. 미라세가 생산과 공급을 장악하고 있으며, 등불 하나에 공동체의 존속이 달린 마을도 있다.', w: '작동 원리는 공개되지 않았다.', p: tall(LANDS0[4].p, { seed: 3.3, exp: 1.6 }), fx: 'lamp' }] }
 ];
 const PEOPLE = FACTIONS_ALL.filter((f) => ['방랑자', '수호자'].includes(f.short));
@@ -88,6 +88,14 @@ const LORE = [
   { t: '옛 이름', en: 'The Old Name', c: '세계', d: '해가 멈추기 전, 이 세계는 지금과 다른 이름으로 불렸다고 전해진다. 그 이름은 옛 문자로만 남아 있는데, 지금 사람들은 그 문자를 읽지 못한다. 옛 문자는 유적의 비문과 오래된 문, 그리고 미라세의 간판에서도 볼 수 있다.', w: '', p: tall(LANDS0[6].p, { top: '#030208', hor: '#1a1230', seed: 3.9 }) }
 ];
 
+/* 굽기 도구용 장면 목록 (?bake 일 때만) */
+if (location.search.includes('bake')) {
+  const list = [];
+  LANDS0.forEach((L, i) => { list.push({ key: 'land' + i, p: L.p, w: 1920, h: 1080 }); list.push({ key: 'peek' + i, p: Object.assign({}, L.p, { pit: .3 }), w: 720, h: 1080 }); });
+  LORE.forEach((d, i) => list.push({ key: 'lore' + i, p: d.p, w: 720, h: 1080 }));
+  FACTIONS_ALL.forEach((f, a) => f.cards.forEach((c, b) => list.push({ key: 'card' + a + '-' + b, p: c.p, w: 720, h: 1080 })));
+  window.TAL_SCENES = list;
+}
 /* 그림 캐시: 같은 장면 같은 크기는 한 번만. 브라우저에 저장해 두고 다음 방문엔 다시 안 그린다 */
 const cache = new Map();
 const hsh = (o) => { const t = JSON.stringify(o); let a = 2166136261; for (let i = 0; i < t.length; i++) { a ^= t.charCodeAt(i); a = Math.imul(a, 16777619); } return (a >>> 0).toString(36); };
@@ -100,28 +108,45 @@ const DB = (() => {
 })();
 const fromDB = (k, w, h) => DB.get(k).then((b) => b ? createImageBitmap(b).then((bm) => { const c = document.createElement('canvas'); c.width = w; c.height = h; c.getContext('2d').drawImage(bm, 0, 0, w, h); cache.set(k, c); return c; }).catch(() => null) : null);
 const size = (cv) => { const r = DPR(); const w = Math.max(2, Math.round(cv.clientWidth * r)), h = Math.max(2, Math.round(cv.clientHeight * r)); return [w, h]; };
+/* 미리 구운 장면 그림. 키 → 파일. 있으면 그리지 않고 읽는다 */
+const BAKED = new Set(window.TAL_BAKED || []);
+const bakedKey = (key) => key.replace(/^(lore\d+)[ab]$/, '$1').replace(/^feat/, 'land');
+const imgCache = new Map();
+const loadBaked = (key) => {
+  const k = bakedKey(key); if (!BAKED.has(k)) return Promise.resolve(null);
+  if (imgCache.has(k)) return imgCache.get(k);
+  const p = new Promise((ok) => { const im = new Image(); im.decoding = 'async'; im.src = 'assets/img/s/' + k + '.webp'; (im.decode ? im.decode() : new Promise((r, e) => { im.onload = r; im.onerror = e; })).then(() => ok(im), () => ok(null)); });
+  imgCache.set(k, p); return p;
+};
+const cover = (c, im, w, h) => { const k = Math.max(w / im.width, h / im.height), dw = im.width * k, dh = im.height * k; c.imageSmoothingQuality = 'high'; c.drawImage(im, (w - dw) / 2, (h - dh) / 2, dw, dh); };
 const paint = (cv, key, params, prio, after) => {
   const [w, h] = size(cv); const k = hsh(params) + '|' + w + 'x' + h + '|' + Q;
   if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; }
   const show = () => { cv.classList.remove('wait'); if (after) after(cv); };
   const put = (img) => { const c = cv.getContext('2d'); c.drawImage(img, 0, 0, w, h); show(); };
   if (cache.has(k)) { put(cache.get(k)); return Promise.resolve(); }
-  return fromDB(k, w, h).then((img) => {
+  return loadBaked(key).then((bi) => {
+    if (bi) { const c = cv.getContext('2d'); cover(c, bi, w, h); show(); return; }
+    return fromDB(k, w, h).then((img) => {
     if (img) { put(img); return; }
     const off = document.createElement('canvas'); off.width = w; off.height = h;
     return TalEngine.render(cv, params, Q, { preview: true, into: off, prio, onPreview: show }).then((ok) => {
       if (!ok) return;
       cache.set(k, off); DB.put(k, off); put(off);
     });
+    });
   });
 };
 const getImg = (key, params, w, h, prio) => {
   const k = hsh(params) + '|' + w + 'x' + h + '|' + Q;
   if (cache.has(k)) return Promise.resolve(cache.get(k));
-  return fromDB(k, w, h).then((img) => {
+  return loadBaked(key).then((bi) => {
+    if (bi) { const off = document.createElement('canvas'); off.width = w; off.height = h; cover(off.getContext('2d'), bi, w, h); cache.set(k, off); return off; }
+    return fromDB(k, w, h).then((img) => {
     if (img) return img;
     const off = document.createElement('canvas'); off.width = w; off.height = h;
     return TalEngine.render(off, params, Q, { prio }).then((ok) => { if (!ok) return null; cache.set(k, off); DB.put(k, off); return off; });
+    });
   });
 };
 
@@ -319,7 +344,7 @@ const showFeat = () => {
   if (featBusy) return;
   const i = fi, L = LANDS[i], [w, h] = size(featPic);
   featBusy = true;
-  getImg('feat' + i, L.p, w, h, 2).then((img) => {
+  getImg('land' + LANDS0.indexOf(L), L.p, w, h, 2).then((img) => {
     featBusy = false;
     if (!img) return;
     const swapIn = () => {
@@ -334,6 +359,19 @@ const showFeat = () => {
 
 /* 인물 */
 const swap = (el, fn) => { if (RM) { fn(); return; } el.classList.add('out'); setTimeout(() => { fn(); el.classList.remove('out'); }, 300); };
+/* 사람 표현 방식: 가 silhouette · 나 shadow · 다 symbol (강백호가 고른다) */
+let FIG_MODE = 'silhouette'; try { const q = new URLSearchParams(location.search).get('fig'); if (q && ['silhouette', 'shadow', 'symbol'].includes(q)) localStorage.setItem('tal-fig', q); FIG_MODE = localStorage.getItem('tal-fig') || FIG_MODE; } catch (e) {}
+const figFx = (c0) => (cv) => {
+  const c = cv.getContext('2d'), w = cv.width, h = cv.height;
+  const o = { kind: c0.fig, hour: c0.hour || 0, sunX: .55 };
+  if (c0.fig === 'seven') {
+    if (FIG_MODE === 'symbol') { TalFigure.symbol(c, w, h, o); return; }
+    for (let i = 0; i < 7; i++) { const x = .14 + .72 * i / 6, big = i === 3; (FIG_MODE === 'shadow' ? TalFigure.shadow : TalFigure.silhouette)(c, w, h, { kind: 'merchant', x, feet: FIG_MODE === 'shadow' ? .6 : .74 + (big ? .04 : 0), size: FIG_MODE === 'shadow' ? .12 : (big ? .3 : .24), sunX: .5 }); }
+    return;
+  }
+  if (c0.fig === 'bond') { TalFigure.symbol(c, w, h, o); return; }
+  TalFigure[FIG_MODE](c, w, h, o);
+};
 const cardFx = (kind) => (cv) => {
   const c = cv.getContext('2d'), w = cv.width, h = cv.height, r = DPR();
   if (kind === 'ring') { const R = Math.min(w, h) * .26, X = w / 2, Y = h * .36; c.strokeStyle = 'rgba(240,220,174,.55)'; c.lineWidth = r; c.beginPath(); c.arc(X, Y, R, 0, 6.29); c.stroke();
@@ -360,7 +398,7 @@ const makeGroup = (root, DATA, tag) => {
     first ? fill() : swap(R('pbox'), fill);
     box.innerHTML = f.cards.map((c, i) => '<article class="card" style="animation-delay:' + (150 + i * 120) + 'ms"><canvas class="pic wait" aria-hidden="true"></canvas><div class="tx"><h3>' + c.n + '</h3><p>' + c.t + '</p>' + (c.w ? '<p class="w">' + c.w + '</p>' : '') + '</div></article>').join('');
     box.scrollLeft = 0; nav();
-    requestAnimationFrame(() => [...box.querySelectorAll('canvas')].forEach((cv, i) => { const c = f.cards[i]; paint(cv, tag + gi + '-' + i, c.p, 3, c.fx ? cardFx(c.fx) : null); }));
+    requestAnimationFrame(() => [...box.querySelectorAll('canvas')].forEach((cv, i) => { const c = f.cards[i]; paint(cv, 'card' + FACTIONS_ALL.indexOf(f) + '-' + i, c.p, 3, c.fig ? figFx(c) : (c.fx ? cardFx(c.fx) : null)); }));
   };
   box.addEventListener('scroll', nav, { passive: true });
   const step = (d) => { const one = box.children[0].getBoundingClientRect().width + 18; box.scrollBy({ left: d * one, behavior: 'smooth' }); };
@@ -399,7 +437,7 @@ track.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight') goLore(li
 let wi2 = 0, from = null, fadeStart = 0, curImg = null;
 const wPic = $('#wPic'), wFx = $('#wFx');
 const wGl = glints(40, .03, .5), wMet = meteorField();
-const loadLand = (i, prio) => { const [w, h] = size(wPic); return getImg('land' + i, LANDS[i].p, w, h, prio); };
+const loadLand = (i, prio) => { const [w, h] = size(wPic); return getImg('land' + LANDS0.indexOf(LANDS[i]), LANDS[i].p, w, h, prio); };
 const showLand = (i, first) => {
   const L = LANDS[i], N = LANDS[(i + 1) % LANDS.length];
   $('#scene').setAttribute('aria-label', L.n + '의 풍경');
@@ -408,7 +446,7 @@ const showLand = (i, first) => {
   $('#peekname').textContent = N.n; $('#peek').setAttribute('aria-label', '다음 땅 ' + N.n);
   $('#dots').innerHTML = LANDS.map((l, k) => '<button class="dot" data-i="' + k + '" aria-label="' + l.n + '"' + (k === i ? ' aria-current="true"' : '') + '><i></i></button>').join('');
   loadLand(i, 6).then((img) => { if (!img || wi2 !== i) return; from = curImg; curImg = img; fadeStart = performance.now(); });
-  paint($('#peekPic'), 'peek' + ((i + 1) % LANDS.length), Object.assign({}, N.p, { pit: .3 }), 1);
+  paint($('#peekPic'), 'peek' + LANDS0.indexOf(N), Object.assign({}, N.p, { pit: .3 }), 1);
 };
 const goW = (n) => { wi2 = (n + LANDS.length) % LANDS.length; showLand(wi2, false); };
 $('#wprev').onclick = () => goW(wi2 - 1);

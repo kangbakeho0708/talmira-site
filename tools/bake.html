@@ -1,0 +1,31 @@
+<!doctype html><html><body style="margin:0;background:#000">
+<!-- 장면 하나를 굽는다. #에 {p, w, h, rays} -->
+<canvas id="c"></canvas>
+<script src="hero-engine.js"></script>
+<script>
+const J = JSON.parse(decodeURIComponent(location.hash.slice(1)));
+const cv = document.getElementById('c'); cv.width = J.w; cv.height = J.h;
+const post = (cv, P) => {
+  const w = cv.width, h = cv.height, c = cv.getContext('2d');
+  const s = TalEngine.sunScreen(P, w, h);
+  if (!s || s.x < -.1 || s.x > 1.1 || s.y < -.1 || s.y > 1.1) return s;
+  const k = J.rays == null ? 1 : J.rays; if (k <= 0) return s;
+  const sw = w >> 2, sh = h >> 2;
+  const a = document.createElement('canvas'); a.width = sw; a.height = sh; const ac = a.getContext('2d');
+  ac.filter = 'brightness(.75) contrast(3.2) saturate(1.3)'; ac.drawImage(cv, 0, 0, sw, sh); ac.filter = 'none';
+  const g = ac.createRadialGradient(s.x * sw, s.y * sh, 0, s.x * sw, s.y * sh, Math.max(sw, sh) * .32);
+  g.addColorStop(0, 'rgba(0,0,0,1)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+  ac.globalCompositeOperation = 'destination-in'; ac.fillStyle = g; ac.fillRect(0, 0, sw, sh); ac.globalCompositeOperation = 'source-over';
+  const r = document.createElement('canvas'); r.width = sw; r.height = sh; const rc = r.getContext('2d');
+  rc.globalCompositeOperation = 'lighter';
+  const cx = s.x * sw, cy = s.y * sh, N = 28;
+  for (let i = 0; i < N; i++) { const q = 1 + i * .045; rc.globalAlpha = (1 - i / N) * .07 * k; rc.setTransform(q, 0, 0, q, cx * (1 - q), cy * (1 - q)); rc.drawImage(a, 0, 0); }
+  rc.setTransform(1, 0, 0, 1, 0, 0);
+  c.save(); c.imageSmoothingQuality = 'high';
+  c.globalCompositeOperation = 'screen'; c.globalAlpha = .42; c.drawImage(r, 0, 0, w, h);
+  c.filter = 'blur(' + Math.round(w / 90) + 'px)'; c.globalAlpha = .26 * k; c.drawImage(a, 0, 0, w, h);
+  c.restore();
+  return s;
+};
+TalEngine.render(cv, J.p, 'bake', {}).then((ok) => { window.SUN = post(cv, J.p); document.title = 'done' + ok; });
+</script></body></html>

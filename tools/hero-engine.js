@@ -5,7 +5,7 @@ precision highp float;
 out vec4 O;
 uniform vec2 R;
 uniform vec3 SD, CT, CH, CS, G1, G2;
-uniform float TY, FOG, CLD, STR, EXP, SEED, CAMY, PIT, SSZ, SI;
+uniform float TY, FOG, CLD, STR, EXP, SEED, CAMY, PIT, SSZ, SI, MIST, MTN, FGR, MZ;
 uniform int ST, SH;
 float h21(vec2 p){p=fract(p*vec2(123.34,456.21));p+=dot(p,p+45.32);return fract(p.x*p.y);}
 float vn(vec2 p){vec2 i=floor(p),f=fract(p);vec2 u=f*f*(3.-2.*f);
@@ -31,8 +31,7 @@ float heroH(vec2 q,int o){
  h+=fz*fx*(62.+rid(p*.05,min(o,7))*14.+fbm(p*.4,3)*1.5*smoothstep(30.,5.,z));
  return h;
 }
-float H(vec2 q,int o){
- if(TY>7.5) return heroH(q,o);
+float Hb(vec2 q,int o){
  float z=q.y; vec2 p=q+SEED*37.;
  if(TY<.5){ return fbm(p*.011,o)*24.-15.+rid(p*.005,4)*34.*smoothstep(200.,480.,z); }
  if(TY<1.5){ vec2 w=p+vec2(fbm(p*.006,3)*90.,fbm(p*.007,2)*30.); float r=1.-abs(2.*vn(w*vec2(.014,.026))-1.); float r2=1.-abs(2.*vn(w*vec2(.05,.09)+3.)-1.); return r*r*14.+r2*r2*1.6+fbm(p*.004,3)*10.-16.; }
@@ -43,11 +42,18 @@ float H(vec2 q,int o){
  if(TY<6.5){ return fbm(p*.012,min(o,4))*5.-5.+rid(p*.006,o)*34.*smoothstep(140.,420.,z); }
  return (rid(p*.006,o)*120.-34.)*smoothstep(40.,240.,z)+fbm(p*.02,4)*5.-10.;
 }
+float H(vec2 q,int o){
+ if(TY>7.5) return heroH(q,o);
+ float h=Hb(q,o); float x=q.x,z=q.y; vec2 p=q+SEED*37.;
+ if(MTN>0.){ float e=ero(p*.0042+11.,o); float ang=x/max(z,1.); float sh=1.-.55*exp(-pow((ang-.3)*2.6,2.)); h+=pow(max(e,0.),1.7)*MTN*smoothstep(MZ,MZ*1.7,z)*sh; h+=(rid(p*.003+9.,5)*MTN*.5-8.)*smoothstep(MZ*1.9,MZ*2.3,z); }
+ if(FGR>0.){ float fz=smoothstep(80.,6.,z), fx=smoothstep(10.,-30.,x+z*.3); h+=fz*fx*FGR*(1.+rid(p*.05,min(o,7))*.25+fbm(p*.4,3)*.03*smoothstep(30.,5.,z)); }
+ return h;
+}
 const float FAR=700.;
 float march(vec3 ro,vec3 rd,out vec3 p){
  float t=.5;
  float lt=t;
- for(int i=0;i<ST;i++){ p=ro+rd*t; int oc=TY>7.5?int(clamp(13.-log2(t+1.),5.,10.)):int(clamp(9.-log2(t+1.),3.,8.)); float d=p.y-H(p.xz,oc); if(d<.002*t){ float a=lt,b=t; for(int k=0;k<6;k++){float m=.5*(a+b); vec3 q=ro+rd*m; if(q.y-H(q.xz,oc)<0.)b=m; else a=m;} t=b; p=ro+rd*t; return t; } if(t>FAR)break; lt=t; t+=max((TY>7.5?.2:.4)*d,(TY>7.5?.004:.012)*t); }
+ for(int i=0;i<ST;i++){ p=ro+rd*t; int oc=TY>7.5?int(clamp(13.-log2(t+1.),5.,10.)):int(clamp(9.-log2(t+1.),3.,8.)); float d=p.y-H(p.xz,oc); if(d<.002*t){ float a=lt,b=t; for(int k=0;k<6;k++){float m=.5*(a+b); vec3 q=ro+rd*m; if(q.y-H(q.xz,oc)<0.)b=m; else a=m;} t=b; p=ro+rd*t; return t; } if(t>FAR)break; lt=t; t+=max(.2*d,.004*t); }
  if(rd.y<0.&&t<FAR*1.5){ p=ro+rd*t; p.y=H(p.xz,4); return t; }
  return -1.;
 }
@@ -105,6 +111,7 @@ vec3 shade(vec3 p,vec3 n,vec3 rd,float t){
  if(TY>3.5&&TY<4.5) al=mix(G2,G1,smoothstep(.5,.8,n.y));
  if(TY>2.5&&TY<3.5) al*=.6+.4*fbm(p.xz*.5,3);
  if(TY>6.5&&TY<7.5) al=mix(al,vec3(.82,.8,.86),smoothstep(30.,46.,p.y)*smoothstep(.55,.8,n.y));
+ if(MTN>0.&&TY<7.5&&(TY<.5||TY>3.5)){ float sn=smoothstep(40.,80.,p.y+fbm(p.xz*.05,4)*14.)*smoothstep(.45,.8,n.y); al=mix(al,vec3(.86,.86,.92),sn*step(3.5,TY)); }
  if(TY>7.5){ al*=.75+.5*fbm(vec2(p.y*.35,p.x*.02),3); float sn=smoothstep(18.,52.,p.y+fbm(p.xz*.05,4)*14.)*smoothstep(.42,.78,n.y); al=mix(al,vec3(.86,.84,.9),sn); }
  float sh=mix(.12,1.,shadow(p+n*.35));
  float dif=max(dot(n,SD),0.)*sh;
@@ -155,8 +162,8 @@ void main(){
   col=shade(p,n,rd,t);
   col=fogc(col,t,rd,p.y);
  }
- if(TY>7.5&&rd.y<0.){
-  float top=-3.;
+ if(MIST>0.&&rd.y<0.){
+  float top=TY>7.5?-3.:Hb(vec2(0.,40.),4)+6.;
   float t0=max((top-ro.y)/rd.y,0.), t1=t<0.?FAR:min(t,FAR);
   if(t1>t0){
    float mu=max(dot(rd,SD),0.);
@@ -167,7 +174,7 @@ void main(){
     vec3 q=ro+rd*tt;
     float dn=smoothstep(top,top-9.,q.y)*smoothstep(.4,.78,fbm(q.xz*vec2(.006,.013)+SEED,5))*.035;
     float hl=.55+.45*smoothstep(top-12.,top,q.y);
-    acc+=tr*dn*dt*lc*hl; tr*=exp(-dn*dt);
+    dn*=MIST; acc+=tr*dn*dt*lc*hl; tr*=exp(-dn*dt);
     if(tr<.02)break;
    }
    col=col*tr+acc;
@@ -185,8 +192,8 @@ in vec2 a; void main(){gl_Position=vec4(a,0.,1.);}`;
 
 const lin = (h) => { const n = parseInt(h.slice(1), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255].map((v) => Math.pow(v / 255, 2.2)); };
 const sunDir = (el, az) => { const e = el * Math.PI / 180, a = az * Math.PI / 180; return [Math.sin(a) * Math.cos(e), Math.sin(e), Math.cos(a) * Math.cos(e)]; };
-const DEF = { ty: 0, el: 5, az: 0, top: '#20304f', hor: '#e9c8a0', sun: '#ffd9a0', si: 3, g1: '#5d7a3a', g2: '#3a4d2a', fog: .005, cld: .4, str: 0, exp: 1, seed: 1, camy: 3, pit: .24, ssz: .03 };
-const QUAL = { low: { s: .6, st: 100, sh: 16, cap: 7e5, band: 4e4 }, mid: { s: 1, st: 170, sh: 32, cap: 2.2e6, band: 6e4 }, high: { s: 1.6, st: 280, sh: 56, cap: 7e6, band: 9e4 } };
+const DEF = { mist: 0, mtn: 0, fgr: 0, mz: 250, ty: 0, el: 5, az: 0, top: '#20304f', hor: '#e9c8a0', sun: '#ffd9a0', si: 3, g1: '#5d7a3a', g2: '#3a4d2a', fog: .005, cld: .4, str: 0, exp: 1, seed: 1, camy: 3, pit: .24, ssz: .03 };
+const QUAL = { bake: { s: 1, st: 420, sh: 72, cap: 9e6, band: 12e4 }, low: { s: .6, st: 100, sh: 16, cap: 7e5, band: 4e4 }, mid: { s: 1, st: 170, sh: 32, cap: 2.2e6, band: 6e4 }, high: { s: 1.6, st: 280, sh: 56, cap: 7e6, band: 9e4 } };
 
 let gl = null, cv = null, prog = null, U = {}, lost = false, ready = null;
 const fail = (why) => { console.warn('엔진 대체 그림 사용:', why); prog = null; gl = false; };
@@ -210,7 +217,7 @@ const prepare = () => {
         const b = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, b);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
         const loc = gl.getAttribLocation(prog, 'a'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-        ['R', 'SD', 'CT', 'CH', 'CS', 'G1', 'G2', 'TY', 'FOG', 'CLD', 'STR', 'EXP', 'SEED', 'CAMY', 'PIT', 'SSZ', 'SI', 'ST', 'SH'].forEach((k) => { U[k] = gl.getUniformLocation(prog, k); });
+        ['R', 'SD', 'CT', 'CH', 'CS', 'G1', 'G2', 'TY', 'FOG', 'CLD', 'STR', 'EXP', 'SEED', 'CAMY', 'PIT', 'SSZ', 'SI', 'MIST', 'MTN', 'FGR', 'MZ', 'ST', 'SH'].forEach((k) => { U[k] = gl.getUniformLocation(prog, k); });
         res(true);
       };
       if (!ext) { setTimeout(finish, 0); return; }
@@ -238,7 +245,7 @@ const setU = (P, q, rw, rh, st, sh) => {
   gl.uniform3fv(U.CT, lin(P.top)); gl.uniform3fv(U.CH, lin(P.hor)); gl.uniform3fv(U.CS, lin(P.sun));
   gl.uniform3fv(U.G1, lin(P.g1)); gl.uniform3fv(U.G2, lin(P.g2));
   gl.uniform1f(U.TY, P.ty); gl.uniform1f(U.FOG, P.fog); gl.uniform1f(U.CLD, P.cld); gl.uniform1f(U.STR, P.str);
-  gl.uniform1f(U.EXP, P.exp); gl.uniform1f(U.SEED, P.seed); gl.uniform1f(U.CAMY, P.camy); gl.uniform1f(U.PIT, P.pit); gl.uniform1f(U.SSZ, P.ssz); gl.uniform1f(U.SI, P.si);
+  gl.uniform1f(U.EXP, P.exp); gl.uniform1f(U.SEED, P.seed); gl.uniform1f(U.CAMY, P.camy); gl.uniform1f(U.PIT, P.pit); gl.uniform1f(U.SSZ, P.ssz); gl.uniform1f(U.SI, P.si); gl.uniform1f(U.MIST, P.mist || 0); gl.uniform1f(U.MTN, P.mtn || 0); gl.uniform1f(U.FGR, P.fgr || 0); gl.uniform1f(U.MZ, P.mz || 250);
   gl.uniform1i(U.ST, st); gl.uniform1i(U.SH, sh);
 };
 const frame = () => new Promise((r) => requestAnimationFrame(() => r()));
