@@ -19,19 +19,14 @@
 </head>
 <body>
 
-<div id="intro" aria-hidden="true">
-<svg viewBox="0 0 400 400">
-<circle class="r" cx="200" cy="200" r="170" fill="none" stroke="#d6be8c" stroke-width="1.2"/>
-<g stroke="#d6be8c" stroke-width="2">
-<line class="t" style="animation-delay:.9s" x1="200" y1="50" x2="200" y2="15"/>
-<line class="t" style="animation-delay:.98s" x1="317.3" y1="106.5" x2="344.6" y2="84.7"/>
-<line class="t" style="animation-delay:1.06s" x1="346.2" y1="233.4" x2="380.4" y2="241.2"/>
-<line class="t" style="animation-delay:1.14s" x1="265.1" y1="335.2" x2="280.3" y2="366.7"/>
-<line class="t" style="animation-delay:1.22s" x1="134.9" y1="335.2" x2="119.7" y2="366.7"/>
-<line class="t" style="animation-delay:1.3s" x1="53.8" y1="233.4" x2="19.6" y2="241.2"/>
-</g>
-<line class="t" style="animation-delay:1.45s" x1="82.7" y1="106.5" x2="55.4" y2="84.7" stroke="#7fb0ff" stroke-width="2.4"/>
+<div id="intro" role="status" aria-label="불러오는 중">
+<svg viewBox="0 0 400 400" aria-hidden="true">
+<circle cx="200" cy="200" r="150" fill="none" stroke="rgba(214,190,140,.35)" stroke-width="1"/>
+<g id="ticks"></g>
+<circle id="sunDot" r="6" fill="#f0dcae"/>
 </svg>
+<p id="hourName">한낮</p>
+<p class="ld-en" id="hourEn">MIDDAY</p>
 </div>
 
 <header>
@@ -62,6 +57,7 @@
 </svg>
 <div class="wrap hero">
 <div class="kick">3D 오픈월드 액션 RPG</div>
+<p class="en hero-en">TALMIRA</p>
 <h1>탈미라</h1>
 <p class="lead">해가 멈춘 세계</p>
 <p class="sub">방랑자가 되어 일곱 땅을 여행하고, 멈춘 시간을 다시 흐르게 한다.</p>
@@ -72,7 +68,7 @@
 
 <section id="news" class="sec" aria-label="소식">
 <div class="wrap reveal">
-<div class="head"><h2 class="h2">소식</h2><div class="ftabs" role="tablist" aria-label="소식 갈래" id="ftabs"></div></div>
+<div class="head"><h2 class="h2"><span class="en">NEWS</span>소식</h2><div class="ftabs" role="tablist" aria-label="소식 갈래" id="ftabs"></div></div>
 <div class="newsgrid">
 <ul class="nlist" id="nlist"></ul>
 <a class="feat" id="feat" href="#world" aria-label="일곱 땅 소개로 가기">
@@ -91,7 +87,7 @@
 <div class="pinfo">
 <svg class="crest" aria-hidden="true" viewBox="0 0 400 400"><circle cx="200" cy="200" r="170" fill="none" stroke="#d6be8c"/><circle cx="200" cy="200" r="118" fill="none" stroke="#d6be8c" stroke-width=".6" stroke-dasharray="3 6"/><g stroke="#d6be8c" stroke-width="2"><line x1="200" y1="50" x2="200" y2="15"/><line x1="317.3" y1="106.5" x2="344.6" y2="84.7"/><line x1="346.2" y1="233.4" x2="380.4" y2="241.2"/><line x1="265.1" y1="335.2" x2="280.3" y2="366.7"/><line x1="134.9" y1="335.2" x2="119.7" y2="366.7"/><line x1="53.8" y1="233.4" x2="19.6" y2="241.2"/><line x1="82.7" y1="106.5" x2="55.4" y2="84.7"/></g><circle id="crestDot" cx="200" cy="200" r="10" fill="#7fb0ff"/></svg>
 <div class="rule"></div>
-<div class="swap" id="pbox"><h2 id="pname"></h2><p class="s" id="psub"></p><p class="d" id="pdesc"></p></div>
+<div class="swap" id="pbox"><p class="en big" id="pen"></p><h2 id="pname"></h2><p class="s" id="psub"></p><p class="d" id="pdesc"></p></div>
 <div class="rule"></div>
 </div>
 <div class="cards" id="cards"></div>
@@ -106,7 +102,7 @@
 <svg aria-hidden="true" viewBox="0 0 400 400"><circle cx="200" cy="200" r="170" fill="none" stroke="#d6be8c"/><circle cx="200" cy="200" r="120" fill="none" stroke="#d6be8c" stroke-width=".6" stroke-dasharray="3 6"/><g stroke="#d6be8c" stroke-width="2"><line x1="200" y1="50" x2="200" y2="15"/><line x1="317.3" y1="106.5" x2="344.6" y2="84.7"/><line x1="346.2" y1="233.4" x2="380.4" y2="241.2"/><line x1="265.1" y1="335.2" x2="280.3" y2="366.7"/><line x1="134.9" y1="335.2" x2="119.7" y2="366.7"/><line x1="53.8" y1="233.4" x2="19.6" y2="241.2"/><line x1="82.7" y1="106.5" x2="55.4" y2="84.7"/></g></svg>
 <div class="rule"></div>
 <div class="swap" id="lbox" style="display:flex;flex-direction:column;gap:16px">
-<p class="lmeta" id="lmeta"></p><h2 id="ltitle"></h2><p class="d" id="ldesc"></p><p class="w" id="lfrag"></p>
+<p class="lmeta" id="lmeta"></p><p class="en big" id="len"></p><h2 id="ltitle"></h2><p class="d" id="ldesc"></p><p class="w" id="lfrag"></p>
 </div>
 <div class="rule"></div>
 </div>
@@ -120,14 +116,14 @@
 </section>
 
 <section id="world" class="sec" aria-label="세계">
-<div class="wrap whead reveal"><h2 class="h2" style="font-size:32px">일곱 땅</h2></div>
+<div class="wrap whead reveal"><h2 class="h2"><span class="en">WORLD</span>일곱 땅</h2></div>
 <div class="stage reveal">
 <div class="scene" id="scene" role="img" aria-label=""><canvas class="pic" id="wPic"></canvas><canvas class="pic" id="wFx"></canvas></div>
 <button class="peek" id="peek"><canvas class="pic" id="peekPic" aria-hidden="true"></canvas><span id="peekname"></span></button>
 </div>
 <div class="wrap reveal">
 <div class="wbar">
-<div class="wname swap" id="wn"><b id="wname"></b><small id="wsub"></small></div>
+<div class="wname swap" id="wn"><span class="en" id="wen"></span><b id="wname"></b><small id="wsub"></small></div>
 <p class="wdesc swap" id="wdesc"></p>
 <div class="wnav">
 <button class="arrow" id="wprev" aria-label="앞 땅"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>
@@ -136,15 +132,16 @@
 </div>
 </div>
 </div>
-</section>
-</main>
-
 <footer>
 <div class="wrap">
 <b>탈미라</b>
 <div class="qual" role="group" aria-label="그래픽 화질"><span>화질</span><button data-q="low">낮음</button><button data-q="mid">중간</button><button data-q="high">높음</button></div>
 </div>
 </footer>
+</section>
+</main>
+
+
 
 <script src="assets/js/engine.js"></script>
 <script src="assets/js/site.js"></script>

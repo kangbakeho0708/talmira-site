@@ -16,19 +16,19 @@ if (!Q || Q === 'high') {
 const S = (o) => o;
 const HERO = { ty: 7, el: 3.2, az: 20, top: '#04050c', hor: '#c96a44', sun: '#ffc08a', si: 4, g1: '#2c2232', g2: '#0c0910', fog: .0024, cld: .4, str: 1, exp: 1.0, camy: 7, pit: .4, seed: 8.8, ssz: .03 };
 const LANDS = [
-  { n: '아르하', h: '아침', m: '다시 오는 것', d: '부드러운 아침빛이 오래 머무는 땅. 초원과 언덕 사이로 작은 도시와 농장, 풍차가 이어진다. 공동체의 신뢰를 중요하게 여기며, 방랑자가 탈미라를 처음 알아가는 곳이다.',
+  { n: '아르하', en: 'ARHA', h: '아침', m: '다시 오는 것', d: '부드러운 아침빛이 오래 머무는 땅. 초원과 언덕 사이로 작은 도시와 농장, 풍차가 이어진다. 공동체의 신뢰를 중요하게 여기며, 방랑자가 탈미라를 처음 알아가는 곳이다.',
     p: S({ ty: 0, el: 9, az: -32, top: '#244a82', hor: '#f2c894', sun: '#ffd9a4', si: 3.4, g1: '#8fb04c', g2: '#3d5a2c', fog: .0018, cld: .45, exp: 1.0, camy: 5, pit: .2, seed: 1.3, ssz: .03 }) },
-  { n: '카라드', h: '정오', m: '그림자 없는 곳', d: '해가 높이 떠 그림자가 짧은 땅. 흰 돌로 지은 도시와 수로, 거대한 기록 보관소가 있다. 법과 증언, 기록을 중시하며 진실을 밝히는 일을 미덕으로 여긴다.',
+  { n: '카라드', en: 'KARAD', h: '정오', m: '그림자 없는 곳', d: '해가 높이 떠 그림자가 짧은 땅. 흰 돌로 지은 도시와 수로, 거대한 기록 보관소가 있다. 법과 증언, 기록을 중시하며 진실을 밝히는 일을 미덕으로 여긴다.',
     p: S({ ty: 1, el: 62, az: 25, top: '#2b62ad', hor: '#c5d7e6', sun: '#fff0d6', si: 3, g1: '#e8cf9c', g2: '#a8794a', fog: .0018, cld: .18, exp: .8, camy: 7, pit: .18, seed: 2.1 }) },
-  { n: '세이라', h: '노을', m: '남는 빛', d: '노을이 지지 않는 바닷가. 운하와 항구를 따라 무역과 예술이 발달했다. 지난 사건과 인물을 기념하는 문화가 깊다.',
+  { n: '세이라', en: 'SEIRA', h: '노을', m: '남는 빛', d: '노을이 지지 않는 바닷가. 운하와 항구를 따라 무역과 예술이 발달했다. 지난 사건과 인물을 기념하는 문화가 깊다.',
     p: S({ ty: 2, el: 1.2, az: 6, top: '#1d1736', hor: '#f07a46', sun: '#ffa860', si: 4, g1: '#4a2836', g2: '#22121f', fog: .0032, cld: .6, exp: 1.0, camy: 9, pit: .22, seed: 3.7, ssz: .035 }) },
-  { n: '무레', h: '황혼', m: '사이', d: '푸른 황혼이 숲과 첨탑에 내려앉는 땅. 학자와 기록관, 장례를 맡는 이들이 중요한 지위를 가진다. 삶과 죽음의 경계를 존중하는 문화가 있다.',
+  { n: '무레', en: 'MURE', h: '황혼', m: '사이', d: '푸른 황혼이 숲과 첨탑에 내려앉는 땅. 학자와 기록관, 장례를 맡는 이들이 중요한 지위를 가진다. 삶과 죽음의 경계를 존중하는 문화가 있다.',
     p: S({ ty: 3, el: -4, az: -25, top: '#060d22', hor: '#3d5e8c', sun: '#8fb0e8', si: 1.3, g1: '#20374a', g2: '#0b1620', fog: .014, cld: .3, str: .4, exp: 1.1, camy: 7, pit: .2, seed: 4.4 }) },
-  { n: '도른', h: '새벽', m: '등지고 선 땅', d: '해가 뜨지 않는 추운 땅. 철골과 증기, 등불의 불빛으로 이루어진 산업 도시가 긴 밤을 견딘다. 온기상회가 처음 생긴 곳으로, 따뜻한 공간 하나의 값이 다른 땅과 전혀 다르다.', lamps: true,
+  { n: '도른', en: 'DORN', h: '새벽', m: '등지고 선 땅', d: '해가 뜨지 않는 추운 땅. 철골과 증기, 등불의 불빛으로 이루어진 산업 도시가 긴 밤을 견딘다. 온기상회가 처음 생긴 곳으로, 따뜻한 공간 하나의 값이 다른 땅과 전혀 다르다.', lamps: true,
     p: S({ ty: 4, el: -20, az: 0, top: '#02040a', hor: '#0c172b', sun: '#4a68a0', si: .6, g1: '#b4c3dc', g2: '#4a5874', fog: .0035, cld: .1, str: .8, exp: 2.0, camy: 4, pit: .2, seed: 5.9 }) },
-  { n: '메르한', h: '한낮', m: '해 아래', d: '해가 바로 머리 위에 있는 땅. 빛을 다루는 기술이 가장 발달했고, 완성된 질서를 지키는 일을 무엇보다 중요하게 여긴다.',
+  { n: '메르한', en: 'MERHAN', h: '한낮', m: '해 아래', d: '해가 바로 머리 위에 있는 땅. 빛을 다루는 기술이 가장 발달했고, 완성된 질서를 지키는 일을 무엇보다 중요하게 여긴다.',
     p: S({ ty: 5, el: 74, az: 35, top: '#5f95d2', hor: '#eaf0f4', sun: '#fffaf0', si: 3.2, g1: '#f3ead6', g2: '#a88f66', fog: .0014, cld: .12, exp: .7, camy: 6, pit: .14, seed: 6.2 }) },
-  { n: '네이', h: '자정', m: '끝이자 처음', d: '가장 깊은 밤에 속한 땅. 다른 여섯 땅과 근본적으로 다른 곳이라고 전해진다.', night: true,
+  { n: '네이', en: 'NEI', h: '자정', m: '끝이자 처음', d: '가장 깊은 밤에 속한 땅. 다른 여섯 땅과 근본적으로 다른 곳이라고 전해진다.', night: true,
     p: S({ ty: 6, el: -45, az: 0, top: '#000002', hor: '#0c1226', sun: '#0d1630', si: .3, g1: '#0a0b12', g2: '#030308', fog: .0016, cld: 0, str: 1, exp: 2.2, camy: 3, pit: .2, seed: 7.5 }) }
 ];
 const tall = (p, o) => Object.assign({}, p, { pit: .3 }, o || {});
@@ -43,33 +43,33 @@ const NEWS = [
 ];
 const FTABS = [['all', '전체'], ['note', '알림'], ['world', '세계'], ['dev', '개발']];
 const FACTIONS = [
-  { short: '방랑자', name: '방랑자 일행', sub: '주인공', dot: '#7fb0ff',
+  { short: '방랑자', en: 'WANDERER', name: '방랑자 일행', sub: '주인공', dot: '#7fb0ff',
     desc: '제 시각의 띠를 벗어나 일곱 땅을 여행하는 방랑자와 그 동행. 탈미라의 사람들은 대부분 자기 시각의 띠 안에서 평생을 보내기 때문에, 띠를 넘어 다니는 이는 드물다.',
     cards: [
       { n: '방랑자', t: '일곱 땅을 가로지르며 멈춘 시간을 다시 흐르게 하는 여행자. 여러 시각의 빛을 다룰 수 있는 드문 존재지만, 여행을 시작할 때는 힘을 대부분 잃은 상태다.', w: '무기: 한손검 「자정 속 별」', p: tall(LANDS[6].p, { seed: 9.1 }), fx: 'ring' },
       { n: '하루', t: '방랑자의 곁에서 쫑알대며 함께 여행하는 작은 존재. 공중을 헤엄치듯 떠다니며 길 안내와 설명을 맡는다.', w: '어디서 왔는지는 알려지지 않았다.', p: tall(LANDS[3].p, { seed: 4.9 }), fx: 'wisp' }] },
-  { short: '수호자', name: '수호자', sub: '각 땅의 수호자', dot: '#f0dcae',
+  { short: '수호자', en: 'GUARDIANS', name: '수호자', sub: '각 땅의 수호자', dot: '#f0dcae',
     desc: '일곱 시각의 해를 붙잡고 있는 존재들. 각자의 땅에서 신앙과 권위의 중심으로 받들어지며, 땅의 사람들에게는 오래된 질서 그 자체다.',
     cards: [
       { n: '아침의 수호자', t: '아르하의 해를 붙잡고 있는 수호자. 아르하 사람들에게 신앙과 권위의 중심이다.', w: '', p: tall(LANDS[0].p, { seed: 1.9 }) },
       { n: '한낮의 수호자', t: '메르한의 해를 붙잡고 있는 수호자. 일곱 시각 가운데 가장 높은 해를 맡고 있다.', w: '', p: tall(LANDS[5].p, { seed: 6.8 }) }] },
-  { short: '온기상회', name: '온기상회', sub: '미라세', dot: '#ffb466',
+  { short: '온기상회', en: 'MIRASE', name: '온기상회', sub: '미라세', dot: '#ffb466',
     desc: '밤쪽에서 시작해 탈미라 전역으로 진출한 거대 상업 조직. 정식 이름은 미라세지만 사람들은 흔히 온기상회라고 부른다. 어두운 지역의 사람들은 상회가 공급하는 등불과 물자에 생활을 의존한다.',
     cards: [
       { n: '상회장', t: '온기상회를 이끄는 최고 지도자. 조직의 규모와 목표를 통제하며, 일곱 시각에 대응하는 일곱 간부를 거느린다.', w: '', p: tall(LANDS[4].p, { seed: 5.2 }), fx: 'lamps' },
       { n: '온기 등불', t: '긴 밤을 견딜 열을 만들어 내는 특수한 등불. 온기상회가 생산과 공급을 장악하고 있으며, 등불 하나에 공동체의 존속이 달린 마을도 있다.', w: '작동 원리는 공개되지 않았다.', p: tall(LANDS[4].p, { seed: 3.3, exp: 1.6 }), fx: 'lamp' }] }
 ];
 const LORE = [
-  { t: '멈춘 해', c: '세계', d: '탈미라는 하늘의 해가 움직이지 않는 둥근 세계다. 먼 옛날 해가 멈춘 뒤로 빛과 시각은 제자리에 고정되었고, 그 뒤의 역사는 멈춘 해 아래에서 이어졌다. 해의 높이가 땅마다 달라서 어떤 땅은 늘 아침이고 어떤 땅은 늘 밤이다. 사람들은 움직이지 않는 해를 세상의 당연한 질서로 받아들이며 살아간다.', w: '사람들은 해가 멈춘 날을 「멈추던 날」이라 부른다.', p: tall(HERO, { pit: .34, seed: 2.6 }) },
-  { t: '일곱 시각', c: '세계', d: '탈미라의 빛은 한낮, 정오, 아침, 노을, 황혼, 새벽, 자정의 일곱 갈래로 나뉜다. 해의 높이가 같은 지점들은 세계를 한 바퀴 두르는 띠를 이루고, 띠마다 하나의 시각과 하나의 땅이 있다. 밝은 쪽의 땅은 빛을 당연히 여기지만, 어두운 쪽의 땅에서는 작은 온기조차 귀중한 자원이다. 시각마다 빛의 색과 성질이 달라 문명과 싸우는 방식에도 영향을 준다.', w: '', p: tall(LANDS[2].p) },
-  { t: '떨어지는 별', c: '세계', d: '탈미라의 하늘에서는 별이 하나씩 떨어지고 있다. 많은 사람은 이를 길조로 받아들여, 별이 떨어지는 날이면 땅마다 축제를 연다.', w: '별이 왜 떨어지는지 정확히 아는 사람은 드물다.', p: tall(LANDS[6].p, { seed: 8.2 }), fx: 'falls' },
-  { t: '수호자', c: '사람', d: '수호자는 일곱 시각의 해를 붙잡고 있는 존재들이다. 각 수호자는 자신의 시각에 속한 땅에서 신앙과 권위의 중심으로 받들어진다. 땅의 사람들에게 수호자는 해를 지키는 이이자 오래된 질서 그 자체다.', w: '해를 붙잡고 있는 이유는 수호자마다 다르다.', p: tall(LANDS[5].p, { seed: 7.7 }) },
-  { t: '멈춤', c: '법칙', d: '멈춤은 시간과 함께 존재하는 또 하나의 근본 원리다. 흐르는 것을 실제로 정지시킬 수 있지만, 그 정지를 영원히 유지하지는 못한다. 이 원리는 해가 멈춘 날보다 훨씬 오래전부터 세계에 있었다.', w: '', p: tall(LANDS[4].p, { seed: 2.2 }) },
-  { t: '미끄러짐', c: '법칙', d: '오래 지속된 멈춤이 조금씩 약해지면서, 정지해 있던 사물과 현상에 변화가 되돌아오는 징후가 나타나고 있다. 굳은 땅에서 풀이 돋았다는 보고가 각지에서 이어진다.', w: '', p: tall(LANDS[0].p, { seed: 5.5 }) },
-  { t: '밀린 시간', c: '법칙', d: '멈춰 있던 대상이 다시 흐르기 시작하면, 그동안 쌓여 있던 변화가 한꺼번에 나타난다. 오래 멈춘 꽃이 순식간에 피었다 지거나, 굳어 있던 바위가 한 번에 풍화되어 무너지는 식이다. 회복과 붕괴는 같은 원리에서 나온 서로 다른 결과다.', w: '방랑자의 힘도 이 원리와 맞닿아 있다.', p: tall(LANDS[3].p, { seed: 6.6 }) },
-  { t: '발현자', c: '사람', d: '발현자는 시각판을 통해 빛의 힘을 다루는 사람이다. 발현의 단계는 3성, 4성, 5성으로 나뉜다. 시각판을 지니고도 힘이 켜지지 않은 사람이 있고, 시각판 자체가 없는 사람도 있다. 시각판이 없다고 약한 것은 아니며, 기술과 경험, 훈련으로 뛰어난 역량을 갖춘 사람도 많다.', w: '', p: tall(LANDS[1].p, { seed: 9.4 }) },
-  { t: '멈춘 지형', c: '땅', d: '굳어 버린 폭포, 허공에 머문 바위, 더 이상 밀려오지 않는 파도 같은 지형이 곳곳에 남아 있다. 일부는 다시 움직이기도 해서 평범해 보이는 길이 갑자기 위험해질 수 있다. 멈춤이 아주 짙은 곳은 풀도 자라지 않고 돌도 삭지 않아, 오랫동안 아무 변화가 없었던 것처럼 보인다.', w: '', p: tall(HERO, { el: 14, az: -40, top: '#1a2a44', hor: '#9fb4cc', sun: '#eef3ff', si: 2.4, g1: '#5c6a7a', g2: '#262c36', cld: .5, str: 0, exp: .9, seed: 4.1 }) },
-  { t: '옛 이름', c: '세계', d: '해가 멈추기 전, 이 세계는 지금과 다른 이름으로 불렸다고 전해진다. 그 이름은 옛 문자로만 남아 있는데, 지금 사람들은 그 문자를 읽지 못한다. 옛 문자는 유적의 비문과 오래된 문, 그리고 온기상회의 간판에서도 볼 수 있다.', w: '', p: tall(LANDS[6].p, { top: '#030208', hor: '#1a1230', seed: 3.9 }) }
+  { t: '멈춘 해', en: 'The Still Sun', c: '세계', d: '탈미라는 하늘의 해가 움직이지 않는 둥근 세계다. 먼 옛날 해가 멈춘 뒤로 빛과 시각은 제자리에 고정되었고, 그 뒤의 역사는 멈춘 해 아래에서 이어졌다. 해의 높이가 땅마다 달라서 어떤 땅은 늘 아침이고 어떤 땅은 늘 밤이다. 사람들은 움직이지 않는 해를 세상의 당연한 질서로 받아들이며 살아간다.', w: '사람들은 해가 멈춘 날을 「멈추던 날」이라 부른다.', p: tall(HERO, { pit: .34, seed: 2.6 }) },
+  { t: '일곱 시각', en: 'Seven Hours', c: '세계', d: '탈미라의 빛은 한낮, 정오, 아침, 노을, 황혼, 새벽, 자정의 일곱 갈래로 나뉜다. 해의 높이가 같은 지점들은 세계를 한 바퀴 두르는 띠를 이루고, 띠마다 하나의 시각과 하나의 땅이 있다. 밝은 쪽의 땅은 빛을 당연히 여기지만, 어두운 쪽의 땅에서는 작은 온기조차 귀중한 자원이다. 시각마다 빛의 색과 성질이 달라 문명과 싸우는 방식에도 영향을 준다.', w: '', p: tall(LANDS[2].p) },
+  { t: '떨어지는 별', en: 'Falling Stars', c: '세계', d: '탈미라의 하늘에서는 별이 하나씩 떨어지고 있다. 많은 사람은 이를 길조로 받아들여, 별이 떨어지는 날이면 땅마다 축제를 연다.', w: '별이 왜 떨어지는지 정확히 아는 사람은 드물다.', p: tall(LANDS[6].p, { seed: 8.2 }), fx: 'falls' },
+  { t: '수호자', en: 'Guardians', c: '사람', d: '수호자는 일곱 시각의 해를 붙잡고 있는 존재들이다. 각 수호자는 자신의 시각에 속한 땅에서 신앙과 권위의 중심으로 받들어진다. 땅의 사람들에게 수호자는 해를 지키는 이이자 오래된 질서 그 자체다.', w: '해를 붙잡고 있는 이유는 수호자마다 다르다.', p: tall(LANDS[5].p, { seed: 7.7 }) },
+  { t: '멈춤', en: 'Stillness', c: '법칙', d: '멈춤은 시간과 함께 존재하는 또 하나의 근본 원리다. 흐르는 것을 실제로 정지시킬 수 있지만, 그 정지를 영원히 유지하지는 못한다. 이 원리는 해가 멈춘 날보다 훨씬 오래전부터 세계에 있었다.', w: '', p: tall(LANDS[4].p, { seed: 2.2 }) },
+  { t: '미끄러짐', en: 'The Slip', c: '법칙', d: '오래 지속된 멈춤이 조금씩 약해지면서, 정지해 있던 사물과 현상에 변화가 되돌아오는 징후가 나타나고 있다. 굳은 땅에서 풀이 돋았다는 보고가 각지에서 이어진다.', w: '', p: tall(LANDS[0].p, { seed: 5.5 }) },
+  { t: '밀린 시간', en: 'Delayed Time', c: '법칙', d: '멈춰 있던 대상이 다시 흐르기 시작하면, 그동안 쌓여 있던 변화가 한꺼번에 나타난다. 오래 멈춘 꽃이 순식간에 피었다 지거나, 굳어 있던 바위가 한 번에 풍화되어 무너지는 식이다. 회복과 붕괴는 같은 원리에서 나온 서로 다른 결과다.', w: '방랑자의 힘도 이 원리와 맞닿아 있다.', p: tall(LANDS[3].p, { seed: 6.6 }) },
+  { t: '발현자', en: 'Manifesters', c: '사람', d: '발현자는 시각판을 통해 빛의 힘을 다루는 사람이다. 발현의 단계는 3성, 4성, 5성으로 나뉜다. 시각판을 지니고도 힘이 켜지지 않은 사람이 있고, 시각판 자체가 없는 사람도 있다. 시각판이 없다고 약한 것은 아니며, 기술과 경험, 훈련으로 뛰어난 역량을 갖춘 사람도 많다.', w: '', p: tall(LANDS[1].p, { seed: 9.4 }) },
+  { t: '멈춘 지형', en: 'Frozen Terrain', c: '땅', d: '굳어 버린 폭포, 허공에 머문 바위, 더 이상 밀려오지 않는 파도 같은 지형이 곳곳에 남아 있다. 일부는 다시 움직이기도 해서 평범해 보이는 길이 갑자기 위험해질 수 있다. 멈춤이 아주 짙은 곳은 풀도 자라지 않고 돌도 삭지 않아, 오랫동안 아무 변화가 없었던 것처럼 보인다.', w: '', p: tall(HERO, { el: 14, az: -40, top: '#1a2a44', hor: '#9fb4cc', sun: '#eef3ff', si: 2.4, g1: '#5c6a7a', g2: '#262c36', cld: .5, str: 0, exp: .9, seed: 4.1 }) },
+  { t: '옛 이름', en: 'The Old Name', c: '세계', d: '해가 멈추기 전, 이 세계는 지금과 다른 이름으로 불렸다고 전해진다. 그 이름은 옛 문자로만 남아 있는데, 지금 사람들은 그 문자를 읽지 못한다. 옛 문자는 유적의 비문과 오래된 문, 그리고 온기상회의 간판에서도 볼 수 있다.', w: '', p: tall(LANDS[6].p, { top: '#030208', hor: '#1a1230', seed: 3.9 }) }
 ];
 
 /* 그림 캐시: 같은 장면 같은 크기는 한 번만 */
@@ -131,8 +131,34 @@ document.addEventListener('click', (e) => {
 document.querySelectorAll('.card,.nlist li').forEach(() => {});
 document.addEventListener('mouseover', (e) => { const c = e.target.closest('.card,.lc'); if (c && !c.dataset.h) { c.dataset.h = '1'; SND.soft(); c.addEventListener('mouseleave', () => { delete c.dataset.h; }, { once: true }); } });
 
-/* 처음 여는 막 */
-setTimeout(() => $('#intro').classList.add('done'), RM ? 0 : 1900);
+/* 로딩: 해 점이 일곱 시각을 돌고, 준비되면 자정에서 멈춘다 */
+const LD = (() => {
+  const box = $('#intro'), dot = $('#sunDot'), name = $('#hourName'), en = $('#hourEn');
+  const HN = ['한낮', '정오', '아침', '노을', '황혼', '새벽', '자정'], HE = ['MIDDAY', 'NOON', 'MORNING', 'SUNSET', 'DUSK', 'DAWN', 'MIDNIGHT'];
+  const R = 150, C = 200, T0 = performance.now(), PER = 7000;
+  $('#ticks').innerHTML = HN.map((_, i) => { const a = -Math.PI / 2 + i * Math.PI * 2 / 7; return '<line data-i="' + i + '" x1="' + (C + Math.cos(a) * 160) + '" y1="' + (C + Math.sin(a) * 160) + '" x2="' + (C + Math.cos(a) * 184) + '" y2="' + (C + Math.sin(a) * 184) + '" stroke="#d6be8c" stroke-width="2" opacity=".3"/>'; }).join('');
+  const ticks = [...document.querySelectorAll('#ticks line')];
+  let ready = false, stopAt = null, last = -1, done = false;
+  const frame = (t) => {
+    if (done) return;
+    let p = ((t - T0) % PER) / PER;
+    if (ready && stopAt === null) { const cyc = Math.floor((t - T0) / PER); stopAt = T0 + (cyc + (p > 6 / 7 ? 1 : 0)) * PER + PER * 6 / 7; }
+    if (stopAt !== null && t >= stopAt) p = 6 / 7;
+    const a = -Math.PI / 2 + p * Math.PI * 2;
+    dot.setAttribute('cx', C + Math.cos(a) * R); dot.setAttribute('cy', C + Math.sin(a) * R);
+    const hi = Math.round(p * 7) % 7;
+    if (hi !== last) { last = hi; name.textContent = HN[hi]; en.textContent = HE[hi]; }
+    ticks.forEach((l, i) => { const d = Math.abs(((p * 7 - i + 10.5) % 7) - 3.5); l.setAttribute('opacity', (.3 + .7 * Math.max(0, 1 - d)).toFixed(2)); });
+    if (stopAt !== null && t >= stopAt) {
+      done = true; box.classList.add('stop'); dot.setAttribute('fill', '#7fb0ff'); ticks[6].setAttribute('stroke', '#7fb0ff'); ticks[6].setAttribute('opacity', '1');
+      setTimeout(() => box.classList.add('done'), 900); return;
+    }
+    requestAnimationFrame(frame);
+  };
+  requestAnimationFrame(frame);
+  return { finish: () => { ready = true; if (RM) box.classList.add('done'); } };
+})();
+setTimeout(() => LD.finish(), 25000);
 
 /* 메인 */
 $('#hours').innerHTML = HOURS.map((h) => '<li><i style="background:' + h[1] + '"></i>' + h[0] + '</li>').join('');
@@ -143,7 +169,7 @@ const placeRing = () => {
   horizonY = (1 + HERO.pit) / 2 * .98;
   if (s) { ring.style.left = (s.x * 100) + '%'; ring.style.top = (s.y * 100) + '%'; }
 };
-const paintHero = () => { placeRing(); paint(heroPic, 'hero', HERO, 10, () => { ring.style.opacity = .4; }); };
+const paintHero = () => { placeRing(); return paint(heroPic, 'hero', HERO, 10, () => { ring.style.opacity = .4; }); };
 
 /* 탭 따라가기, 나타나기 */
 const tabs = [...document.querySelectorAll('.tabs a')], arc = $('#arc');
@@ -152,7 +178,7 @@ const setTab = (id) => {
   const a = tabs.find((t) => t.dataset.s === id);
   if (a) arc.style.transform = 'translateX(' + (a.offsetLeft + a.offsetWidth / 2 - 32) + 'px)';
 };
-const secObs = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) setTab(e.target.id); }), { rootMargin: '-45% 0px -50% 0px' });
+const secObs = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting && !document.documentElement.classList.contains('fp')) setTab(e.target.id); }), { rootMargin: '-45% 0px -50% 0px' });
 document.querySelectorAll('main > section').forEach((s) => secObs.observe(s));
 setTab('main');
 const revObs = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); revObs.unobserve(e.target); } }), { threshold: .12 });
@@ -200,7 +226,7 @@ const drawLamps = (c, w, h, t, list, big) => {
   });
 };
 const heroGl = glints(26, .04, .45), heroMet = meteorField();
-let heroOn = true; new IntersectionObserver((es) => { heroOn = es[0].isIntersecting; }).observe(heroFx);
+let heroOn = true; new IntersectionObserver((es) => { if (!document.documentElement.classList.contains('fp')) heroOn = es[0].isIntersecting; }).observe(heroFx);
 
 /* 소식 */
 let ftab = 'all';
@@ -246,7 +272,7 @@ const renderPeople = (first) => {
   $('#rail').innerHTML = FACTIONS.map((f, i) => '<button role="tab" data-i="' + i + '" aria-selected="' + (i === pi) + '"><span class="mk" aria-hidden="true"><i style="background:' + f.dot + ';box-shadow:0 0 12px ' + f.dot + '"></i></span><span>' + f.short + '</span></button>').join('');
   const f = FACTIONS[pi];
   $('#crestDot').setAttribute('fill', f.dot);
-  const fill = () => { $('#pname').textContent = f.name; $('#psub').textContent = f.sub; $('#pdesc').textContent = f.desc; };
+  const fill = () => { $('#pen').textContent = f.en; $('#pname').textContent = f.name; $('#psub').textContent = f.sub; $('#pdesc').textContent = f.desc; };
   first ? fill() : swap($('#pbox'), fill);
   $('#cards').innerHTML = f.cards.map((c, i) => '<article class="card" style="animation-delay:' + (150 + i * 120) + 'ms"><canvas class="pic wait" aria-hidden="true"></canvas><div class="tx"><h3>' + c.n + '</h3><p>' + c.t + '</p><p class="w">' + c.w + '</p></div></article>').join('');
   requestAnimationFrame(() => [...$('#cards').querySelectorAll('canvas')].forEach((cv, i) => { const c = f.cards[i]; paint(cv, 'card' + pi + '-' + i, c.p, 3, c.fx ? cardFx(c.fx) : null); }));
@@ -262,7 +288,7 @@ const renderLoreCards = () => {
 };
 const renderLore = (first) => {
   const d = LORE[li];
-  const fill = () => { $('#lmeta').textContent = d.c + ' · ' + (li + 1) + ' / ' + LORE.length; $('#ltitle').textContent = d.t; $('#ldesc').textContent = d.d; $('#lfrag').textContent = d.w; };
+  const fill = () => { $('#len').textContent = d.en; $('#lmeta').textContent = d.c + ' · ' + (li + 1) + ' / ' + LORE.length; $('#ltitle').textContent = d.t; $('#ldesc').textContent = d.d; $('#lfrag').textContent = d.w; };
   first ? fill() : swap($('#lbox'), fill);
   renderLoreCards();
 };
@@ -283,7 +309,7 @@ const loadLand = (i, prio) => { const [w, h] = size(wPic); return getImg('land' 
 const showLand = (i, first) => {
   const L = LANDS[i], N = LANDS[(i + 1) % LANDS.length];
   $('#scene').setAttribute('aria-label', L.n + '의 풍경');
-  const fill = () => { $('#wname').textContent = L.n; $('#wsub').textContent = L.h + ' · ' + L.m; $('#wdesc').textContent = L.d; };
+  const fill = () => { $('#wen').textContent = L.en; $('#wname').textContent = L.n; $('#wsub').textContent = L.h + ' · ' + L.m; $('#wdesc').textContent = L.d; };
   if (first) fill(); else { swap($('#wn'), fill); swap($('#wdesc'), () => {}); }
   $('#peekname').textContent = N.n; $('#peek').setAttribute('aria-label', '다음 땅 ' + N.n);
   $('#dots').innerHTML = LANDS.map((l, k) => '<button class="dot" data-i="' + k + '" aria-label="' + l.n + '"' + (k === i ? ' aria-current="true"' : '') + '><i></i></button>').join('');
@@ -298,7 +324,56 @@ $('#dots').addEventListener('click', (e) => { const b = e.target.closest('.dot')
 let wx0 = null;
 $('#scene').addEventListener('pointerdown', (e) => { wx0 = e.clientX; });
 $('#scene').addEventListener('pointerup', (e) => { if (wx0 !== null && Math.abs(e.clientX - wx0) > 50) goW(wi2 + (e.clientX < wx0 ? 1 : -1)); wx0 = null; });
-let worldOn = false; new IntersectionObserver((es) => { worldOn = es[0].isIntersecting; }).observe(wPic);
+let worldOn = false; new IntersectionObserver((es) => { if (!document.documentElement.classList.contains('fp')) worldOn = es[0].isIntersecting; }).observe(wPic);
+
+
+/* 한 화면에 한 칸 (넓은 화면) */
+const secs = [...document.querySelectorAll('main > section')];
+let cur = 0, lock = 0;
+const pager = document.createElement('nav'); pager.className = 'pager'; pager.setAttribute('aria-label', '칸 이동');
+pager.innerHTML = secs.map((s, i) => '<button data-i="' + i + '" aria-label="' + s.getAttribute('aria-label') + '"><i></i></button>').join('');
+document.body.appendChild(pager);
+const fpOK = () => innerWidth >= 900 && innerHeight >= 700;
+const go = (i, force) => {
+  i = Math.max(0, Math.min(secs.length - 1, i));
+  if (i === cur && !force) return;
+  const down = i > cur;
+  secs.forEach((s, k) => { s.classList.toggle('on', k === i); s.classList.toggle('up', k !== i && (k < i)); });
+  cur = i; lock = performance.now();
+  setTab(secs[i].id);
+  heroOn = secs[i].id === 'main'; worldOn = secs[i].id === 'world';
+  [...pager.children].forEach((b, k) => b.setAttribute('aria-current', String(k === i)));
+  try { history.replaceState(null, '', '#' + secs[i].id); } catch (e) {}
+  secs[i].querySelectorAll('.reveal').forEach((r) => r.classList.add('in'));
+};
+const fpOn = () => {
+  const want = fpOK();
+  document.documentElement.classList.toggle('fp', want);
+  if (want) { const h = location.hash.slice(1), k = secs.findIndex((s) => s.id === h); go(k >= 0 ? k : cur, true); }
+  else secs.forEach((s) => s.classList.remove('on', 'up'));
+};
+const isFp = () => document.documentElement.classList.contains('fp');
+addEventListener('wheel', (e) => {
+  if (!isFp()) return;
+  e.preventDefault();
+  if (performance.now() - lock < 1100 || Math.abs(e.deltaY) < 24) return;
+  go(cur + (e.deltaY > 0 ? 1 : -1));
+}, { passive: false });
+addEventListener('keydown', (e) => {
+  if (!isFp() || e.target.closest('input,textarea,.track')) return;
+  if (['ArrowDown', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); go(cur + 1); }
+  if (['ArrowUp', 'PageUp'].includes(e.key)) { e.preventDefault(); go(cur - 1); }
+  if (e.key === 'Home') go(0); if (e.key === 'End') go(secs.length - 1);
+});
+let ty0 = null;
+addEventListener('touchstart', (e) => { ty0 = e.touches[0].clientY; }, { passive: true });
+addEventListener('touchend', (e) => { if (!isFp() || ty0 === null) return; const d = ty0 - e.changedTouches[0].clientY; if (Math.abs(d) > 60) go(cur + (d > 0 ? 1 : -1)); ty0 = null; });
+document.addEventListener('click', (e) => {
+  const a = e.target.closest('a[href^="#"]'); const p = e.target.closest('.pager button');
+  if (p) { go(+p.dataset.i); return; }
+  if (a && isFp()) { const k = secs.findIndex((s) => '#' + s.id === a.getAttribute('href')); if (k >= 0) { e.preventDefault(); go(k); } }
+});
+fpOn();
 
 /* 한 고리: 움직이는 것만 매 프레임 */
 const loop = (t) => {
@@ -327,10 +402,10 @@ const repaintAll = () => {
   paintHero(); renderPeople(true); renderLoreCards(); showFeat(); curImg = null; startW();
 };
 qBtns.forEach((b) => b.onclick = () => { if (Q === b.dataset.q) return; Q = b.dataset.q; try { localStorage.setItem('tal-q', Q); } catch (e) {} markQ(); repaintAll(); });
-let rT = 0; addEventListener('resize', () => { const on = tabs.find((t) => t.classList.contains('on')); if (on) setTab(on.dataset.s); clearTimeout(rT); rT = setTimeout(() => { placeRing(); paintHero(); curImg = null; startW(); }, 400); });
+let rT = 0; addEventListener('resize', () => { fpOn(); const on = tabs.find((t) => t.classList.contains('on')); if (on) setTab(on.dataset.s); clearTimeout(rT); rT = setTimeout(() => { placeRing(); paintHero(); curImg = null; startW(); }, 400); });
 
 /* 차례: 메인 먼저, 나머지는 뒤에 */
-paintHero();
+paintHero().then(() => LD.finish());
 renderNews(); renderPeople(true); renderLore(true); showFeat(); startW();
 setInterval(() => { if (featBusy) return; fi = (fi + 1) % LANDS.length; showFeat(); }, 7000);
 setTimeout(() => LANDS.forEach((L, i) => { if (i !== wi2) loadLand(i, 0); }), 4000);

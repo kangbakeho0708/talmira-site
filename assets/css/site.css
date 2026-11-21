@@ -19,11 +19,6 @@ button{font:inherit;color:inherit;cursor:pointer}
 .pic{position:absolute;inset:0;width:100%;height:100%;display:block;transition:opacity 1.2s ease}
 .pic.wait{opacity:0}
 
-#intro{position:fixed;inset:0;z-index:50;background:#09090c;display:grid;place-items:center;transition:opacity 1s ease,visibility 1s}
-#intro.done{opacity:0;visibility:hidden}
-#intro svg{width:min(240px,50vw)}
-#intro .r{stroke-dasharray:1070;stroke-dashoffset:1070;animation:draw 1.4s ease forwards}
-#intro .t{opacity:0;animation:fade .4s ease forwards}
 @keyframes draw{to{stroke-dashoffset:0}}
 @keyframes fade{to{opacity:1}}
 @keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
@@ -161,3 +156,34 @@ h1,h2,.lead,.logo,.wname b,.card h3,.cap b{letter-spacing:-.01em}
 @keyframes eq{50%{height:12px}}
 
 .ltext .d,.pinfo .d,.wdesc,.card p{line-height:1.75}.ltext .d{font-size:15px}
+
+/* 로딩: 하루 한 바퀴 */
+#intro{position:fixed;inset:0;z-index:60;background:#08080b;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;transition:opacity 1.1s ease,visibility 1.1s}
+#intro.done{opacity:0;visibility:hidden}
+#intro svg{width:min(220px,46vw);margin-bottom:18px}
+#intro #hourName{margin:0;font:500 20px/1.3 "Pretendard Variable",Pretendard,sans-serif;color:var(--ink);letter-spacing:.2em;transition:color .4s}
+#intro .ld-en{margin:0;font:500 12px/1.3 "Pretendard Variable",Pretendard,sans-serif;color:var(--dim);letter-spacing:.32em}
+#intro.stop #hourName{color:var(--blue)}
+/* 영어 + 한국어 큰 말 */
+.en{display:block;font:500 15px/1.2 "Pretendard Variable",Pretendard,sans-serif;letter-spacing:.18em;color:var(--dim);margin-bottom:8px}
+.en.big{font-size:clamp(28px,3.4vw,44px);letter-spacing:.02em;color:rgba(236,231,220,.55);margin:0 0 -6px;font-weight:500}
+.hero-en{font-size:clamp(18px,2vw,24px);letter-spacing:.42em;color:rgba(240,220,174,.75);margin:6px 0 -10px}
+.h2 .en{color:var(--dim)}
+.wname .en{font-size:13px}
+/* 한 화면에 한 칸 */
+html.fp,html.fp body{overflow:hidden;height:100%;scroll-snap-type:none}
+html.fp main>section{position:fixed;inset:0;min-height:0;height:100vh;overflow:hidden;border-top:0;opacity:0;visibility:hidden;transform:translateY(46px);transition:opacity .9s ease,transform 1s cubic-bezier(.2,.7,.2,1),visibility 0s linear 1s;z-index:1}
+html.fp main>section.up{transform:translateY(-46px)}
+html.fp main>section.on{opacity:1;visibility:visible;transform:none;transition:opacity .9s ease .15s,transform 1s cubic-bezier(.2,.7,.2,1) .15s,visibility 0s;z-index:2}
+html.fp .sec{padding:96px 0 56px}
+html.fp #world{padding:92px 0 0;justify-content:flex-start}
+html.fp .scene,html.fp .peek{height:min(520px,48vh)}
+html.fp #world footer{position:absolute;left:0;right:0;bottom:0;padding:14px 0;border-top:1px solid var(--line);background:rgba(11,11,14,.85)}
+html.fp .reveal{opacity:1;transform:none}
+.pager{position:fixed;right:max(16px,2vw);top:50%;transform:translateY(-50%);z-index:25;display:none;flex-direction:column;gap:10px}
+html.fp .pager{display:flex}
+.pager button{width:28px;height:28px;background:none;border:0;display:grid;place-items:center;padding:0}
+.pager i{width:6px;height:6px;border-radius:50%;border:1px solid var(--gold);transition:background .3s,transform .3s}
+.pager button[aria-current=true] i{background:var(--gold2);transform:scale(1.3)}
+html.fp .hero{min-height:0;height:100vh;gap:16px;padding-bottom:96px}
+html.fp .hero h1{font-size:clamp(64px,min(11vw,16vh),148px)}
