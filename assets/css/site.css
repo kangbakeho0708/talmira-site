@@ -211,3 +211,6 @@ html.fp .card{min-height:0;height:min(460px,52vh)}
 #world{background:radial-gradient(120% 80% at 50% 0%,#241d16 0%,#13110f 50%,#0b0b0d 100%)}
 #world::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Cg fill='none' stroke='%23d6be8c'%3E%3Ccircle cx='200' cy='200' r='170'/%3E%3Ccircle cx='200' cy='200' r='118' stroke-width='.6' stroke-dasharray='3 6'/%3E%3Ccircle cx='200' cy='200' r='60' stroke-width='.5'/%3E%3Cg stroke-width='2'%3E%3Cline x1='200' y1='50' x2='200' y2='15'/%3E%3Cline x1='317.3' y1='106.5' x2='344.6' y2='84.7'/%3E%3Cline x1='346.2' y1='233.4' x2='380.4' y2='241.2'/%3E%3Cline x1='265.1' y1='335.2' x2='280.3' y2='366.7'/%3E%3Cline x1='134.9' y1='335.2' x2='119.7' y2='366.7'/%3E%3Cline x1='53.8' y1='233.4' x2='19.6' y2='241.2'/%3E%3Cline x1='82.7' y1='106.5' x2='55.4' y2='84.7'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");background-size:min(1100px,90vw);background-position:50% -60%;opacity:.05}
 .cbox .card:only-child{flex:0 0 100%}
+
+/* 마우스로 누른 탭에는 테두리를 안 그린다 (키보드는 그대로) */
+:focus:not(:focus-visible){outline:none}
