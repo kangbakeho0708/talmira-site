@@ -96,36 +96,41 @@ const getImg = (key, params, w, h, prio) => {
 
 /* 소리: 잡음 없는 사인파만. 선율 없이 바닥 화음과 종소리. 누르기 전엔 안 난다 */
 const SND = (() => {
-  let ac = null, master = null, on = false, padNodes = [];
-  const start = () => {
-    ac = ac || new (window.AudioContext || window.webkitAudioContext)();
-    master = ac.createGain(); master.gain.value = 0; master.connect(ac.destination);
-    const lp = ac.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 900; lp.connect(master);
-    [110, 164.81, 220, 277.18, 329.63].forEach((f, i) => {
-      const o = ac.createOscillator(), g = ac.createGain(), l = ac.createOscillator(), lg = ac.createGain();
-      o.type = 'sine'; o.frequency.value = f; g.gain.value = [.16, .1, .08, .05, .04][i];
-      l.frequency.value = .05 + i * .03; lg.gain.value = g.gain.value * .6; l.connect(lg); lg.connect(g.gain);
-      o.connect(g); g.connect(lp); o.start(); l.start(); padNodes.push(o, l);
+  let ac = null, out = null, master = null, on = false;
+  const boot = () => {
+    if (ac) return;
+    ac = new (window.AudioContext || window.webkitAudioContext)();
+    const comp = ac.createDynamicsCompressor(); comp.threshold.value = -18; comp.ratio.value = 3; comp.connect(ac.destination);
+    out = ac.createGain(); out.gain.value = 1; out.connect(comp);
+    master = ac.createGain(); master.gain.value = 0; master.connect(out);
+    const lp = ac.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 2400; lp.connect(master);
+    /* 노트북 스피커가 내는 높이 (220 ~ 660Hz) 의 화음. 선율 없음 */
+    [[220, .18], [329.63, .14], [440, .12], [554.37, .08], [659.25, .06]].forEach(([f, v], i) => {
+      [0, 1.5].forEach((det) => {
+        const o = ac.createOscillator(), g = ac.createGain(), l = ac.createOscillator(), lg = ac.createGain();
+        o.type = i === 0 ? 'triangle' : 'sine'; o.frequency.value = f; o.detune.value = det ? 6 : -4;
+        g.gain.value = v * .5; l.frequency.value = .07 + i * .04 + det * .01; lg.gain.value = v * .3;
+        l.connect(lg); lg.connect(g.gain); o.connect(g); g.connect(lp); o.start(); l.start();
+      });
     });
-    master.gain.linearRampToValueAtTime(.5, ac.currentTime + 3);
   };
+  const fade = (to, sec) => { const t = ac.currentTime; master.gain.cancelScheduledValues(t); master.gain.setValueAtTime(master.gain.value, t); master.gain.linearRampToValueAtTime(to, t + sec); };
   const bell = (f, v, d) => {
     if (!on || !ac) return;
-    const t = ac.currentTime;
-    [[1, 1], [2.76, .35], [5.4, .12]].forEach(([m, a]) => {
+    const t = ac.currentTime + .01;
+    [[1, 1], [2.76, .3], [5.4, .1]].forEach(([m, a]) => {
       const o = ac.createOscillator(), g = ac.createGain(); o.type = 'sine'; o.frequency.value = f * m;
-      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(v * a, t + .008); g.gain.exponentialRampToValueAtTime(.0001, t + d / m);
-      o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t + d);
+      g.gain.setValueAtTime(.0001, t); g.gain.linearRampToValueAtTime(v * a, t + .01); g.gain.exponentialRampToValueAtTime(.0001, t + d / m);
+      o.connect(g); g.connect(out); o.start(t); o.stop(t + d + .1);
     });
   };
   const toggle = () => {
+    boot(); ac.resume();
     on = !on;
-    if (on) { if (!ac || !master) start(); else { ac.resume(); master.gain.linearRampToValueAtTime(.5, ac.currentTime + 1.5); } bell(880, .08, 2.5); }
-    else if (ac) { master.gain.linearRampToValueAtTime(0, ac.currentTime + .8); }
-    try { localStorage.setItem('tal-snd', on ? '1' : '0'); } catch (e) {}
+    if (on) { fade(.55, 2); bell(880, .35, 2.5); } else fade(0, .8);
     return on;
   };
-  return { toggle, tick: () => bell(1318.5, .035, .9), move: () => bell(659.25, .05, 1.8), soft: () => bell(987.77, .025, 1.2) };
+  return { toggle, tick: () => bell(1318.5, .22, .9), move: () => bell(659.25, .3, 1.8), soft: () => bell(987.77, .12, 1.1) };
 })();
 const sndBtn = $('#snd');
 sndBtn.onclick = () => { const v = SND.toggle(); sndBtn.setAttribute('aria-pressed', String(v)); sndBtn.setAttribute('aria-label', v ? '소리 끄기' : '소리 켜기'); };
