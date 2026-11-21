@@ -360,7 +360,7 @@ const showFeat = () => {
 /* 인물 */
 const swap = (el, fn) => { if (RM) { fn(); return; } el.classList.add('out'); setTimeout(() => { fn(); el.classList.remove('out'); }, 300); };
 /* 사람 표현 방식: 가 silhouette · 나 shadow · 다 symbol (강백호가 고른다) */
-let FIG_MODE = 'silhouette'; try { const q = new URLSearchParams(location.search).get('fig'); if (q && ['silhouette', 'shadow', 'symbol'].includes(q)) localStorage.setItem('tal-fig', q); FIG_MODE = localStorage.getItem('tal-fig') || FIG_MODE; } catch (e) {}
+let FIG_MODE = 'symbol'; try { const q = new URLSearchParams(location.search).get('fig'); if (q && ['silhouette', 'shadow', 'symbol'].includes(q)) localStorage.setItem('tal-fig', q); FIG_MODE = localStorage.getItem('tal-fig') || FIG_MODE; } catch (e) {}
 const figFx = (c0) => (cv) => {
   const c = cv.getContext('2d'), w = cv.width, h = cv.height;
   const o = { kind: c0.fig, hour: c0.hour || 0, sunX: .55 };
