@@ -252,6 +252,7 @@ const pickHero = () => {
   return f[0] > cap ? HIMG.files.filter((x) => x[0] <= cap).pop()[1] : f[1];
 };
 const drawHero = () => {
+  setTimeout(() => { try { drawEnd(); } catch (e) {} }, 0);
   const [W, H] = size(heroPic); if (heroPic.width !== W || heroPic.height !== H) { heroPic.width = W; heroPic.height = H; }
   const k = Math.max(W / HIMG.w, H / HIMG.h), dw = HIMG.w * k, dh = HIMG.h * k;
   let ox = (W - dw) / 2; const sxp = ox + HIMG.sx * dw, lim = W * .8;
@@ -470,7 +471,7 @@ let cur = 0, lock = 0;
 const pager = document.createElement('nav'); pager.className = 'pager'; pager.setAttribute('aria-label', '칸 이동');
 pager.innerHTML = secs.map((s, i) => '<button data-i="' + i + '" aria-label="' + s.getAttribute('aria-label') + '"><i></i></button>').join('');
 document.body.appendChild(pager);
-const fpOK = () => innerWidth >= 900 && innerHeight >= 700;
+const fpOK = () => (innerWidth >= 900 && innerHeight >= 700) || (innerWidth < 900 && innerHeight >= 540);
 const go = (i, force) => {
   i = Math.max(0, Math.min(secs.length - 1, i));
   if (i === cur && !force) return;
@@ -482,6 +483,7 @@ const go = (i, force) => {
   [...pager.children].forEach((b, k) => b.setAttribute('aria-current', String(k === i)));
   try { history.replaceState(null, '', '#' + secs[i].id); } catch (e) {}
   secs[i].querySelectorAll('.reveal').forEach((r) => r.classList.add('in'));
+  if (secs[i].id === 'end' && typeof drawEnd === 'function') { drawEnd(); typeEnd(); }
 };
 const fpOn = () => {
   const want = fpOK();
@@ -511,6 +513,39 @@ document.addEventListener('click', (e) => {
   if (a && isFp()) { const k = secs.findIndex((s) => '#' + s.id === a.getAttribute('href')); if (k >= 0) { e.preventDefault(); go(k); } }
 });
 fpOn();
+
+/* 끝 칸: 메인 그림을 어둡게 깔고, 맺음 문장이 한 글자씩 맞춰진다 (가제 문장) */
+const ENDLINE = ['멈춘 빛 아래에서 일곱 땅이 오늘을 살고,', '빛은 다시 돌 날을 기다린다'];
+const endPic = $('#endPic');
+const drawEnd = () => {
+  if (!heroImg) return;
+  const [W, H] = size(endPic); if (endPic.width !== W || endPic.height !== H) { endPic.width = W; endPic.height = H; }
+  const c = endPic.getContext('2d'), k = Math.max(W / HIMG.w, H / HIMG.h), dw = HIMG.w * k, dh = HIMG.h * k;
+  let ox = (W - dw) / 2; const sxp = ox + HIMG.sx * dw; if (sxp > W * .82) ox -= sxp - W * .82; ox = Math.min(0, Math.max(W - dw, ox));
+  c.filter = 'brightness(.62) saturate(.85)'; c.drawImage(heroImg, ox, (H - dh) / 2, dw, dh); c.filter = 'none';
+};
+let endTimer = null, endDone = false;
+const GL = '빛손별해밤새벽노을자정시각멈춘다시도는';
+const typeEnd = () => {
+  if (endDone) return; endDone = true;
+  const el = $('#eline'), full = ENDLINE.join('\n'); const n = full.length; let t0 = performance.now();
+  if (RM) { el.innerHTML = ENDLINE.join('<br>'); return; }
+  const step = () => {
+    const k = Math.min(n, Math.floor((performance.now() - t0) / 55));
+    let out = '';
+    for (let i = 0; i < n; i++) { const ch = full[i]; if (i < k) out += ch === '\n' ? '<br>' : ch; else if (i < k + 4 && ch !== '\n' && ch !== ' ') out += '<span class="g">' + GL[(i * 7 + (performance.now() / 60 | 0)) % GL.length] + '</span>'; }
+    el.innerHTML = out;
+    if (k < n) endTimer = requestAnimationFrame(step);
+  };
+  step();
+};
+new IntersectionObserver((es) => { if (es[0].isIntersecting) { drawEnd(); typeEnd(); } }, { threshold: .4 }).observe($('#end'));
+
+/* 모바일 메뉴 */
+const burger = $('#burger'), menu = $('#menu');
+const menuOpen = (v) => { document.body.classList.toggle('menu-open', v); burger.setAttribute('aria-expanded', String(v)); };
+burger.onclick = () => menuOpen(!document.body.classList.contains('menu-open'));
+menu.addEventListener('click', (e) => { if (e.target.closest('a')) menuOpen(false); });
 
 /* 한 고리: 움직이는 것만 매 프레임 */
 const loop = (t) => {
