@@ -1,5 +1,5 @@
-<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../assets/css/site.css"><style>body{padding:30px;background:#0b0b0e}.g{display:grid;grid-template-columns:repeat(3,300px);gap:22px}.g div{position:relative}.g canvas{width:300px;height:450px;border:1px solid #333;border-radius:4px;display:block}.g p{position:absolute;left:0;right:0;bottom:0;margin:0;padding:14px;background:linear-gradient(180deg,rgba(12,12,16,0),rgba(12,12,16,.9));color:#f4efe2;font:500 20px Pretendard,sans-serif}.g p small{display:block;color:#bbb;font-size:13px}h3{color:#d6be8c;font:500 16px Pretendard;margin:26px 0 10px}</style></head><body>
-<script src="../assets/js/figure.js"></script>
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../kr/assets/css/site.css"><style>body{padding:30px;background:#0b0b0e}.g{display:grid;grid-template-columns:repeat(3,300px);gap:22px}.g div{position:relative}.g canvas{width:300px;height:450px;border:1px solid #333;border-radius:4px;display:block}.g p{position:absolute;left:0;right:0;bottom:0;margin:0;padding:14px;background:linear-gradient(180deg,rgba(12,12,16,0),rgba(12,12,16,.9));color:#f4efe2;font:500 20px Pretendard,sans-serif}.g p small{display:block;color:#bbb;font-size:13px}h3{color:#d6be8c;font:500 16px Pretendard;margin:26px 0 10px}</style></head><body>
+<script src="../kr/assets/js/figure.js"></script>
 <div id="root"></div>
 <script>
 const bg = (n) => 'bg' + n;
@@ -20,7 +20,7 @@ rows.forEach(([title, fn]) => {
   subs.forEach((s) => {
     const d = document.createElement('div'); const cv = document.createElement('canvas'); cv.width = 600; cv.height = 900; d.appendChild(cv);
     const p = document.createElement('p'); p.innerHTML = s.name + '<small>' + title.split(' ')[0] + '</small>'; d.appendChild(p); g.appendChild(d);
-    const im = new Image(); im.src = '../assets/img/s/' + s.img + '.webp';
+    const im = new Image(); im.src = '../kr/assets/img/s/' + s.img + '.webp';
     im.onload = () => {
       const c = cv.getContext('2d'); c.drawImage(im, 0, 0, 600, 900);
       const o = Object.assign({}, s);
