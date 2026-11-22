@@ -1,4 +1,5 @@
 {
+const IMGV = '2';
 const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
 /* 새로고침하거나 처음 들어오면 늘 메인부터 */
 try { history.scrollRestoration = 'manual'; if (location.hash) history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
@@ -118,7 +119,7 @@ const imgCache = new Map();
 const loadBaked = (key) => {
   const k = bakedKey(key); if (!BAKED.has(k)) return Promise.resolve(null);
   if (imgCache.has(k)) return imgCache.get(k);
-  const p = new Promise((ok) => { const im = new Image(); im.decoding = 'async'; im.src = 'assets/img/s/' + k + '.webp'; (im.decode ? im.decode() : new Promise((r, e) => { im.onload = r; im.onerror = e; })).then(() => ok(im), () => ok(null)); });
+  const p = new Promise((ok) => { const im = new Image(); im.decoding = 'async'; im.src = 'assets/img/s/' + k + '.webp?v=' + IMGV; (im.decode ? im.decode() : new Promise((r, e) => { im.onload = r; im.onerror = e; })).then(() => ok(im), () => ok(null)); });
   imgCache.set(k, p); return p;
 };
 const cover = (c, im, w, h) => { const k = Math.max(w / im.width, h / im.height), dw = im.width * k, dh = im.height * k; c.imageSmoothingQuality = 'high'; c.drawImage(im, (w - dw) / 2, (h - dh) / 2, dw, dh); };
@@ -384,7 +385,7 @@ const ART = [
     ['p', '초당 60프레임을 기준으로 만들고, 그래픽 설정에서 품질을 낮출 수 있게 하겠습니다.']] })
 ];
 const artEl = $('#art'), artBox = $('#artBox');
-const artImg = (k) => '<img src="assets/img/' + (k === 'hero' ? 'hero-1280.webp' : 's/' + k + '.webp') + '" alt="" loading="lazy" decoding="async">';
+const artImg = (k) => '<img src="assets/img/' + (k === 'hero' ? 'hero-1280.webp' : 's/' + k + '.webp?v=' + IMGV) + '" alt="" loading="lazy" decoding="async">';
 const artHTML = (k) => {
   const n = NEWS[k], a = ART[k] ? ART[k]() : { body: [] };
   let h = '<div class="ahead"><span class="tag">' + esc(n[1]) + '</span><span class="nd">' + esc(n[3]) + '</span></div><h1>' + esc(n[2]) + '</h1>';
