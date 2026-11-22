@@ -409,3 +409,13 @@ header{background:linear-gradient(180deg,rgba(14,16,22,.82),rgba(14,16,22,.45));
 .card::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;z-index:3;background:linear-gradient(90deg,transparent,rgba(255,236,196,.7),transparent)}
 .feat,.scene{border-radius:2px}
 html.lowq #dust{display:none}
+
+/* 인물 갈래가 여덟 (띠 밖 + 일곱 땅): 세로 줄 간격 줄이고, 폰에서는 옆으로 밀기 */
+#people .rail{gap:8px}
+#people .rail .mk{width:34px;height:34px}
+#people .rail button{font-size:12px}
+@media (max-width:899px){
+  #people .rail{justify-content:flex-start;overflow-x:auto;scrollbar-width:none;gap:6px;padding:0 4px}
+  #people .rail button{flex:none;min-width:52px}
+  #people .rail .mk{width:32px;height:32px}
+}

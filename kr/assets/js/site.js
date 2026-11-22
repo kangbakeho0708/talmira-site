@@ -77,7 +77,16 @@ const FACTIONS_ALL = [
       { n: '일곱 간부', fig: 'seven', t: '미라세의 핵심 권력자 일곱 명. 일곱 시각에 대응하는 자리를 하나씩 맡아, 각 지역과 미라세의 사업에 저마다 다른 이해관계를 갖는다.', w: '', p: tall(LANDS0[1].p, { seed: 6.1, exp: .9 }), fx: 'lamps' },
       { n: '온기 등불', t: '긴 밤을 견딜 열을 만들어 내는 특수한 등불. 미라세가 생산과 공급을 장악하고 있으며, 등불 하나에 공동체의 존속이 달린 마을도 있다.', w: '작동 원리는 공개되지 않았다.', p: tall(LANDS0[4].p, { seed: 3.3, exp: 1.6 }), fx: 'lamp' }] }
 ];
-const PEOPLE = FACTIONS_ALL.filter((f) => ['방랑자', '수호자'].includes(f.short));
+/* 인물: 명조처럼 출신 땅별로 나눈다. 띠 밖 (방랑자와 동행) + 일곱 땅 (해에 가까운 순). 이름 「띠 밖」 은 가제 */
+const PEOPLE = (() => {
+  const Wd = FACTIONS_ALL[0], Gd = FACTIONS_ALL[1];
+  const out = [{ short: '띠 밖', en: 'Beyond the Bands', name: '띠 밖', sub: '시각의 띠를 넘어 다니는 이들', dot: '#7fb0ff', desc: Wd.desc, cards: Wd.cards.map((c, i) => Object.assign({}, c, { key: 'card0-' + i })) }];
+  LANDS.forEach((L, i) => {
+    const k = Gd.cards.findIndex((c) => c.w.endsWith(L.n));
+    out.push({ short: L.n, en: L.en, name: L.n, sub: L.h + ' · ' + L.m, dot: HOURS[i][1], desc: L.d, cards: k >= 0 ? [Object.assign({}, Gd.cards[k], { key: 'card1-' + k })] : [] });
+  });
+  return out;
+})();
 const ORGS = FACTIONS_ALL.filter((f) => ['이음회', '미라세'].includes(f.short));
 const LORE = [
   { t: '멈춘 해', en: 'The Still Sun', c: '세계', d: '탈미라는 하늘의 해가 움직이지 않는 둥근 세계다. 먼 옛날 해가 멈춘 뒤로 빛과 시각은 제자리에 고정되었고, 그 뒤의 역사는 멈춘 해 아래에서 이어졌다. 해의 높이가 땅마다 달라서 어떤 땅은 늘 아침이고 어떤 땅은 늘 밤이다. 사람들은 움직이지 않는 해를 세상의 당연한 질서로 받아들이며 살아간다.', w: '사람들은 해가 멈춘 날을 「멈추던 날」이라 부른다.', p: tall(HERO_OLD, { pit: .34, seed: 2.6 }) },
@@ -484,7 +493,7 @@ const makeGroup = (root, DATA, tag) => {
     first ? fill() : swap(R('pbox'), fill);
     box.innerHTML = f.cards.map((c, i) => '<article class="card" style="animation-delay:' + (150 + i * 120) + 'ms"><canvas class="pic wait" aria-hidden="true"></canvas><div class="tx"><h3>' + c.n + '</h3><p>' + c.t + '</p>' + (c.w ? '<p class="w">' + c.w + '</p>' : '') + '</div></article>').join('');
     box.scrollLeft = 0; nav();
-    requestAnimationFrame(() => [...box.querySelectorAll('canvas')].forEach((cv, i) => { const c = f.cards[i]; paint(cv, 'card' + FACTIONS_ALL.indexOf(f) + '-' + i, c.p, 3, c.fig ? figFx(c) : (c.fx ? cardFx(c.fx) : null)); }));
+    requestAnimationFrame(() => [...box.querySelectorAll('canvas')].forEach((cv, i) => { const c = f.cards[i]; paint(cv, c.key || ('card' + FACTIONS_ALL.indexOf(f) + '-' + i), c.p, 3, c.fig ? figFx(c) : (c.fx ? cardFx(c.fx) : null)); }));
   };
   box.addEventListener('scroll', nav, { passive: true });
   const step = (d) => { const one = box.children[0].getBoundingClientRect().width + 18; box.scrollBy({ left: d * one, behavior: 'smooth' }); };
