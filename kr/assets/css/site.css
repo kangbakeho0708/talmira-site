@@ -500,3 +500,4 @@ html.fp .grp .card{height:min(640px,70vh)}
 @keyframes ldl{from{opacity:0;transform:translateY(4px)}to{opacity:.75;transform:none}}
 .ldsky{position:absolute;inset:0;background-color:var(--t,#fbf6e6);opacity:.11;transition:background-color 1.4s ease;-webkit-mask-image:radial-gradient(ellipse 60% 55% at 50% 46%,#000 0,transparent 75%);mask-image:radial-gradient(ellipse 60% 55% at 50% 46%,#000 0,transparent 75%);pointer-events:none}
 #intro.stop .ldsky{background-color:#7fb0ff}
+.qpop .qual+.qual{margin-top:8px}

@@ -191,29 +191,63 @@ const SND = (() => {
     g.gain.setValueAtTime(.0001, t); g.gain.linearRampToValueAtTime(v, t + .004); g.gain.exponentialRampToValueAtTime(.0001, t + d);
     o.connect(lp); lp.connect(g); g.connect(out); o.start(t); o.stop(t + d + .05);
   };
-  /* 배경음악: 누를 때만. 반복은 파일이 이음매 없이 이어진다. 2초 페이드는 여기서 */
-  /* 음량: 0.7 의 1.5배 = 1.05. 오디오 태그는 1 을 못 넘으니 태그는 1 까지, 나머지 1.05 배는 웹오디오로 (최고점 -1.9 dBFS 라 넘쳐도 -1.5 dBFS) */
-  const bgm = $('#bgm'); const BGM_VOL = 1, BGM_BOOST = 1.05; let ft = null, bgmWired = false;
-  const wire = () => { if (bgmWired || !ac) return; try { const src = ac.createMediaElementSource(bgm), g = ac.createGain(); g.gain.value = BGM_BOOST; src.connect(g); g.connect(ac.destination); bgmWired = true; } catch (e) {} };
-  const fade = (to, ms) => {
-    clearInterval(ft);
-    const from = bgm.volume, t0 = performance.now();
-    ft = setInterval(() => {
-      const k = Math.min(1, (performance.now() - t0) / ms);
-      bgm.volume = from + (to - from) * k;
-      if (k === 1) { clearInterval(ft); if (to === 0) bgm.pause(); }
-    }, 40);
+  /* 배경음악 (소리 방 sound/32, S77 · S80): 여덟 판을 같은 박에 맞춰 함께 돌리고, 크기만 바꿔 넘긴다.
+     home = 세계 칸 밖, 땅 판 = 세계 칸에서 그 땅. 판은 표본 하나까지 길이가 같다 (53.333초) */
+  const MUS = { files: ['home', 'arha', 'karad', 'seira', 'mure', 'dorn', 'merhan', 'nei'], ext: 'ogg', buf: {}, src: {}, gain: {}, loading: {}, t0: 0, len: 0, want: 'home', cur: 'home', tau: .45, level: .9, mode: 'all' };
+  try { MUS.ext = new Audio().canPlayType('audio/ogg; codecs="vorbis"') ? 'ogg' : 'mp3'; } catch (e) { MUS.ext = 'mp3'; }
+  const lowMem = (navigator.deviceMemory && navigator.deviceMemory <= 4) || matchMedia('(max-width:899px)').matches;
+  try { MUS.mode = localStorage.getItem('tal-mus') || (lowMem ? 'light' : 'all'); } catch (e) { MUS.mode = lowMem ? 'light' : 'all'; }
+  let mus = null;
+  const musStart = (n) => {
+    const s = ac.createBufferSource(), g = ac.createGain(); s.buffer = MUS.buf[n]; s.loop = true; g.gain.value = 0; s.connect(g); g.connect(mus);
+    const when = ac.currentTime + .05;
+    if (!MUS.len) { MUS.len = MUS.buf[n].duration; MUS.t0 = when; s.start(when, 0); }
+    else s.start(when, (((when - MUS.t0) % MUS.len) + MUS.len) % MUS.len);  /* 늦게 온 판도 「지금 자리」 에서 */
+    MUS.src[n] = s; MUS.gain[n] = g;
+  };
+  const musDrop = (n) => { try { MUS.src[n].stop(); } catch (e) {} delete MUS.src[n]; delete MUS.gain[n]; delete MUS.buf[n]; };
+  const musLoad = (n) => {
+    if (MUS.buf[n] || MUS.loading[n] || !ac) return MUS.loading[n] || Promise.resolve();
+    MUS.loading[n] = fetch('assets/snd/site/' + n + '.' + MUS.ext).then((r) => r.arrayBuffer()).then((a) => new Promise((ok, no) => ac.decodeAudioData(a, ok, no)))
+      .then((b) => { MUS.buf[n] = b; musStart(n); musApply(); }).catch(() => {}).finally(() => { delete MUS.loading[n]; });
+    return MUS.loading[n];
+  };
+  const musApply = () => {
+    if (!ac || !mus) return;
+    const t = ac.currentTime, play = MUS.gain[MUS.want] ? MUS.want : (MUS.gain[MUS.cur] ? MUS.cur : 'home');
+    for (const n in MUS.gain) { const g = MUS.gain[n].gain; g.cancelScheduledValues(t); g.setTargetAtTime(n === play ? 1 : 0, t, MUS.tau); }
+    MUS.cur = play;
+    if (MUS.mode === 'light') setTimeout(() => { for (const n in MUS.gain) if (n !== 'home' && n !== MUS.cur && n !== MUS.want) musDrop(n); }, MUS.tau * 6000);
+  };
+  /* land: LANDS0 번호 (0 arha … 6 nei) 또는 null (세계 칸 밖) */
+  const LANDKEY = ['arha', 'karad', 'seira', 'mure', 'dorn', 'merhan', 'nei'];
+  const pick = (land) => {
+    MUS.want = (land == null || MUS.mode === 'home') ? 'home' : LANDKEY[land];
+    if (on && ac && mus) { if (!MUS.buf[MUS.want]) musLoad(MUS.want); musApply(); }
+  };
+  const preload = (land) => {  /* 세계 칸이 가까워지면: 지금 땅 → 양옆 → 나머지 */
+    if (!on || !ac || MUS.mode !== 'all') return;
+    const order = [land, (land + 1) % 7, (land + 6) % 7, (land + 2) % 7, (land + 5) % 7, (land + 3) % 7, (land + 4) % 7];
+    order.reduce((p, k) => p.then(() => musLoad(LANDKEY[k])), Promise.resolve());
+  };
+  const setMode = (m) => {
+    MUS.mode = m; try { localStorage.setItem('tal-mus', m); } catch (e) {}
+    if (m !== 'all') for (const n in MUS.gain) if (n !== 'home' && n !== MUS.cur) musDrop(n);
+    if (m === 'home') MUS.want = 'home';
+    musApply();
   };
   const toggle = () => {
     boot(); ac.resume();
     on = !on;
-    if (on) { tap(523.25, .1, .18); wire(); try { if (bgm.volume === 0 && bgm.paused) bgm.volume = 0; bgm.play().then(() => fade(BGM_VOL, 2000)).catch(() => {}); } catch (e) {} }
-    else fade(0, 2000);
+    if (!mus) { mus = ac.createGain(); mus.gain.value = 0; mus.connect(ac.destination); }
+    const t = ac.currentTime; mus.gain.cancelScheduledValues(t); mus.gain.setValueAtTime(mus.gain.value, t);
+    if (on) { tap(523.25, .1, .18); musLoad('home').then(() => { if (MUS.want !== 'home') musLoad(MUS.want); musApply(); }); mus.gain.setTargetAtTime(MUS.level, t, .6); }  /* 2초쯤에 걸쳐 */
+    else mus.gain.setTargetAtTime(0, t, .6);
     return on;
   };
-  bgm.volume = 0;
+  document.addEventListener('visibilitychange', () => { if (!ac) return; if (document.hidden) ac.suspend(); else if (on) ac.resume(); });
   const chime = () => [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => setTimeout(() => tap(f, .055 - i * .008, 1.1), i * 150));
-  return { toggle, chime, tick: () => tap(440, .07, .06), move: () => tap(349.23, .09, .1), soft: () => tap(392, .04, .05) };
+  return { toggle, chime, pick, preload, setMode, mode: () => MUS.mode, tick: () => tap(440, .07, .06), move: () => tap(349.23, .09, .1), soft: () => tap(392, .04, .05) };
 })();
 const sndBtn = $('#snd');
 const sndSet = (v) => { sndBtn.setAttribute('aria-pressed', String(v)); sndBtn.setAttribute('aria-label', v ? '소리 끄기' : '소리 켜기'); };
@@ -573,6 +607,7 @@ const showLand = (i, first) => {
   $('#dots').innerHTML = LANDS.map((l, k) => '<button class="dot" data-i="' + k + '" aria-label="' + l.n + '"' + (k === i ? ' aria-current="true"' : '') + '><i></i></button>').join('');
   loadLand(i, 6).then((img) => { if (!img || wi2 !== i) return; from = curImg; curImg = img; fadeStart = performance.now(); });
   paint($('#peekPic'), 'peek' + LANDS0.indexOf(N), Object.assign({}, N.p, { pit: .3 }), 1);
+  if (window.musWorld) window.musWorld();
 };
 const goW = (n) => { wi2 = (n + LANDS.length) % LANDS.length; showLand(wi2, false); };
 $('#wprev').onclick = () => goW(wi2 - 1);
@@ -582,7 +617,10 @@ $('#dots').addEventListener('click', (e) => { const b = e.target.closest('.dot')
 let wx0 = null;
 $('#scene').addEventListener('pointerdown', (e) => { wx0 = e.clientX; });
 $('#scene').addEventListener('pointerup', (e) => { if (wx0 !== null && Math.abs(e.clientX - wx0) > 50) goW(wi2 + (e.clientX < wx0 ? 1 : -1)); wx0 = null; });
-let worldOn = false; new IntersectionObserver((es) => { if (!document.documentElement.classList.contains('fp')) worldOn = es[0].isIntersecting; }).observe(wPic);
+let worldOn = false;
+window.musWorld = () => SND.pick(worldOn ? LANDS0.indexOf(LANDS[wi2]) : null);
+new IntersectionObserver((es) => { if (!document.documentElement.classList.contains('fp')) { worldOn = es[0].isIntersecting; window.musWorld(); } }).observe(wPic);
+new IntersectionObserver((es) => { if (es[0].isIntersecting) SND.preload(LANDS0.indexOf(LANDS[wi2])); }, { rootMargin: '100% 0px' }).observe(wPic);
 
 
 /* 한 화면에 한 칸 (넓은 화면) */
@@ -624,6 +662,7 @@ const go = (i, force) => {
   cur = i; lock = performance.now();
   setTab(secs[i].id);
   heroOn = secs[i].id === 'main'; worldOn = secs[i].id === 'world';
+  if (window.musWorld) { window.musWorld(); if (Math.abs(i - secs.findIndex((s) => s.id === 'world')) <= 1) SND.preload(LANDS0.indexOf(LANDS[wi2])); }
   [...pager.children].forEach((b, k) => b.setAttribute('aria-current', String(k === i)));
   try { history.replaceState(null, '', '#' + secs[i].id); } catch (e) {}
   secs[i].querySelectorAll('.reveal').forEach((r) => r.classList.add('in'));
@@ -740,7 +779,7 @@ const loop = (t) => {
 const startW = () => { wPic.dataset.done = ''; showLand(wi2, true); };
 
 /* 화질 */
-const qBtns = [...document.querySelectorAll('.qual button')];
+const qBtns = [...document.querySelectorAll('.qual button[data-q]')];
 const QN = { low: '낮음', mid: '중간', high: '높음' };
 const markQ = () => { qBtns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.q === Q))); $('#qnow').textContent = QN[Q]; };
 const qBtn = $('#qbtn'), qPop = $('#qpop');
@@ -786,5 +825,13 @@ requestAnimationFrame(loop);
     }
   };
   requestAnimationFrame(loop);
+})();
+
+/* 음악 설정 (규칙 5): 전부 = 여덟 판 다 들고 있음, 가볍게 = 기본 판 + 지금 땅만, 기본 판만 = 땅이 바뀌어도 기본 판 */
+(() => {
+  const bs = [...document.querySelectorAll('[data-m]')];
+  const mark = () => bs.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.m === SND.mode())));
+  bs.forEach((b) => b.addEventListener('click', () => { SND.setMode(b.dataset.m); mark(); if (window.musWorld) window.musWorld(); }));
+  mark();
 })();
 }
