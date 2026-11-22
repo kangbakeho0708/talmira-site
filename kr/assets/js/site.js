@@ -472,6 +472,7 @@ const pager = document.createElement('nav'); pager.className = 'pager'; pager.se
 pager.innerHTML = secs.map((s, i) => '<button data-i="' + i + '" aria-label="' + s.getAttribute('aria-label') + '"><i></i></button>').join('');
 document.body.appendChild(pager);
 const fpOK = () => (innerWidth >= 900 && innerHeight >= 700) || (innerWidth < 900 && innerHeight >= 540);
+let endTimer = null, endDone = false, endDelay = 0, endReady = false;
 const go = (i, force) => {
   i = Math.max(0, Math.min(secs.length - 1, i));
   if (i === cur && !force) return;
@@ -483,7 +484,10 @@ const go = (i, force) => {
   [...pager.children].forEach((b, k) => b.setAttribute('aria-current', String(k === i)));
   try { history.replaceState(null, '', '#' + secs[i].id); } catch (e) {}
   secs[i].querySelectorAll('.reveal').forEach((r) => r.classList.add('in'));
-  if (secs[i].id === 'end' && typeof drawEnd === 'function') { drawEnd(); typeEnd(); }
+  if (endReady) {
+    clearTimeout(endDelay); if (endTimer) { cancelAnimationFrame(endTimer); endTimer = null; }
+    if (secs[i].id === 'end') { drawEnd(); $('#eline').innerHTML = ''; endDelay = setTimeout(typeEnd, 700); }
+  }
 };
 const fpOn = () => {
   const want = fpOK();
@@ -524,10 +528,9 @@ const drawEnd = () => {
   let ox = (W - dw) / 2; const sxp = ox + HIMG.sx * dw; if (sxp > W * .82) ox -= sxp - W * .82; ox = Math.min(0, Math.max(W - dw, ox));
   c.filter = 'brightness(.62) saturate(.85)'; c.drawImage(heroImg, ox, (H - dh) / 2, dw, dh); c.filter = 'none';
 };
-let endTimer = null, endDone = false;
 /* 빛이 지나간 자리만 글자가 깨어난다. 첫 줄 끝에서 빛이 멈췄다가, 둘째 줄 끝에서 다시 돌기 시작한다 */
 const typeEnd = () => {
-  if (endDone) return; endDone = true;
+  if (endTimer) cancelAnimationFrame(endTimer);
   const el = $('#eline');
   el.innerHTML = ENDLINE.map((l) => '<span class="ln">' + [...l].map((ch) => '<span class="c">' + (ch === ' ' ? '&nbsp;' : ch) + '</span>').join('') + '</span>').join('<br>');
   const cs = [...el.querySelectorAll('.c')];
@@ -553,13 +556,17 @@ const typeEnd = () => {
   };
   step();
 };
-new IntersectionObserver((es) => { if (es[0].isIntersecting) { drawEnd(); typeEnd(); } }, { threshold: .4 }).observe($('#end'));
+endReady = true;
+if (location.hash === '#end' && document.documentElement.classList.contains('fp')) { drawEnd(); endDelay = setTimeout(typeEnd, 700); }
+/* 한 장씩 넘기는 화면에서는 끝 칸에 들어올 때마다 처음부터 다시 쓴다 (go 에서 부름) */
+new IntersectionObserver((es) => { if (es[0].isIntersecting && !document.documentElement.classList.contains('fp')) { if (!endDone) { endDone = true; drawEnd(); typeEnd(); } } }, { threshold: .4 }).observe($('#end'));
 
 /* 모바일 메뉴 */
 const burger = $('#burger'), menu = $('#menu');
 const menuOpen = (v) => { document.body.classList.toggle('menu-open', v); burger.setAttribute('aria-expanded', String(v)); };
 burger.onclick = () => menuOpen(!document.body.classList.contains('menu-open'));
 menu.addEventListener('click', (e) => { if (e.target.closest('a')) menuOpen(false); });
+document.body.addEventListener('click', (e) => { if (e.target === document.body && document.body.classList.contains('menu-open')) menuOpen(false); });
 
 /* 한 고리: 움직이는 것만 매 프레임 */
 const loop = (t) => {
