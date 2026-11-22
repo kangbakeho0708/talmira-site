@@ -1,5 +1,8 @@
 {
 const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* 새로고침하거나 처음 들어오면 늘 메인부터 */
+try { history.scrollRestoration = 'manual'; if (location.hash) history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
+scrollTo(0, 0);
 const $ = (s) => document.querySelector(s);
 const DPR = () => Math.min(devicePixelRatio || 1, 1.5);
 
@@ -194,7 +197,17 @@ const SND = (() => {
   return { toggle, tick: () => tap(440, .07, .06), move: () => tap(349.23, .09, .1), soft: () => tap(392, .04, .05) };
 })();
 const sndBtn = $('#snd');
-sndBtn.onclick = () => { const v = SND.toggle(); sndBtn.setAttribute('aria-pressed', String(v)); sndBtn.setAttribute('aria-label', v ? '소리 끄기' : '소리 켜기'); };
+const sndSet = (v) => { sndBtn.setAttribute('aria-pressed', String(v)); sndBtn.setAttribute('aria-label', v ? '소리 끄기' : '소리 켜기'); };
+let sndTouched = false;
+sndBtn.onclick = () => { sndTouched = true; const v = SND.toggle(); sndSet(v); try { localStorage.setItem('tal-snd', v ? 'on' : 'off'); } catch (e) {} };
+/* 브라우저는 소리 자동재생을 막는다. 그래서 화면을 처음 누르거나 키를 누르는 순간 음악을 켠다. 전에 직접 끈 사람은 켜지 않는다 */
+const firstTouch = (e) => {
+  ['pointerup', 'keydown', 'touchend'].forEach((t) => removeEventListener(t, firstTouch, true));
+  if (sndTouched || (e.target && e.target.closest && e.target.closest('#snd'))) return;
+  let off = false; try { off = localStorage.getItem('tal-snd') === 'off'; } catch (er) {}
+  if (!off) sndSet(SND.toggle());
+};
+['pointerup', 'keydown', 'touchend'].forEach((t) => addEventListener(t, firstTouch, true));
 document.addEventListener('click', (e) => {
   if (e.target.closest('#snd')) return;
   if (e.target.closest('.arrow,.dot,.lc,.peek,.rail button')) SND.move();
