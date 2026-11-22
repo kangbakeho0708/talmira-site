@@ -326,3 +326,7 @@ html.fp #world{padding-bottom:0}
   .eline{font-size:clamp(17px,4.6vw,22px);letter-spacing:.04em}
   .efoot .credit{font-size:10px}
 }
+/* 글자 선택 · 깜빡이는 커서 · 길게 눌러 뜨는 메뉴 막기 (입력칸만 예외) */
+html{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;caret-color:transparent}
+input,textarea{-webkit-user-select:text;user-select:text;caret-color:auto}
+img,canvas{-webkit-user-drag:none;user-drag:none}
