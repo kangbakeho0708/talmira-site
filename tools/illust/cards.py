@@ -62,7 +62,7 @@ for k in [a for a in sys.argv[1:] if a in SC and not a.startswith('card1-')]:
 HOURSKY = [
     ('#2a66c0', '#9cc2ea', '#f4ecd8', (.5, -.05), '#fff6e0', 0, '#b9b2a4', '#ece4d2'),
     ('#3a74c4', '#a9c8e8', '#eef0ee', (.7, .02), '#fff6e0', 0, '#a6aeb8', '#e2e6ea'),
-    ('#6f93c4', '#d4dce4', '#f6dcb8', (.2, .7), '#ffe2b0', 0, '#5a7050', '#c9cf98'),
+    ('#4f7fbf', '#a9c4de', '#f3d2a2', (.16, .8), '#ffd9a0', 0, '#3f5a36', '#b9c776'),
     ('#2a1f45', '#b0507a', '#ffaa66', (.55, .8), '#ffd090', 0, '#4a2438', '#b8605a'),
     ('#0b1430', '#34558a', '#8fb0d8', (.3, .86), '#a8c4f0', 120, '#1d2d48', '#4c6890'),
     ('#03060f', '#0f1d38', '#2d4a72', None, None, 300, '#141e30', '#5a6c8a'),
@@ -71,8 +71,20 @@ HOURSKY = [
 def gsky(h):
     top, mid, hor, sun, sc, st, d, l = HOURSKY[h]
     cv = Canvas(W, H, 40 + h)
-    cv.sky(top, mid, hor, horiz=.82, sun=sun, sunc=sc or '#ffffff', halo=sc or '#ffffff', halo_k=3, sun_k=30, sun_amt=1. if sun else 0, cloud=[.4, .45, .4, .55, .35, .3, .2][h], cloudc=['#f6f2ea', '#f6f2ea', '#fbf1e2', '#ffc28a', '#6f8fbc', '#22385a', '#0c1428'][h], cloud_dark=['#8696aa', '#8696aa', '#9aa6ba', '#6a3a5a', '#1b2a4a', '#050a14', '#000000'][h], cseed=50 + h)
+    cv.sky(top, mid, hor, horiz=.82, sun=sun, sunc=sc or '#ffffff', halo=sc or '#ffffff', halo_k=3 if h != 2 else 7, sun_k=30 if h != 2 else 45, sun_amt=1. if sun else 0, cloud=[.4, .45, .4, .55, .35, .3, .2][h], cloudc=['#f6f2ea', '#f6f2ea', '#fbf1e2', '#ffc28a', '#6f8fbc', '#22385a', '#0c1428'][h], cloud_dark=['#8696aa', '#8696aa', '#9aa6ba', '#6a3a5a', '#1b2a4a', '#050a14', '#000000'][h], cseed=50 + h)
     if st: cv.stars(st, .8, 60 + h)
+    if h == 2:  # 아침: 또렷한 뭉게구름 띠, 낮은 해 아래 초원 언덕과 풍차 실루엣
+        cl = vnoise(H, W, 3, 77, 6)
+        band = np.exp(-((cv.v - .5) / .16) ** 2)
+        cv.img = mix(cv.img, C('#fff3e2'), smooth(cl, .5, .6) * band * .85)
+        cv.img = mix(cv.img, C('#8ea2c0'), smooth(cl, .6, .72) * band * .45)
+        cv.ridge(.8, .06, 3, 71, '#56708a', '#b9c6d2', light=(-.8, -.4, .3), fog='#e9dcc4', fogamt=.55)
+        cv.ridge(.86, .06, 2.4, 72, '#3f5a36', '#b9c776', light=(-.8, -.4, .3), sharp=False, n=20)
+        cv.block([(.8, .83), (.81, .77), (.83, .77), (.84, .83)], '#2c2a24', '#6a5c48', n=1, seed=3)
+        for a in (.5, 2.07, 3.64, 5.21):
+            p0 = cv.P([(.82, .772), (.82 + np.cos(a) * .035 * H / W, .772 + np.sin(a) * .035)]).astype(np.int32); cv2.line(cv.img, tuple(p0[0]), tuple(p0[1]), tuple(float(c) for c in C('#2c2a24')), 2, cv2.LINE_AA)
+        cv.ridge(.95, .07, 3, 82, '#24361f', '#7f9548', light=(-.8, -.4, .3), sharp=False, n=20)
+        return cv, dict(dust=30, dust_c=(.2, .7), dust_s=(.2, .1))
     cv.ridge(.84, .05, 4, 70 + h, d, l, light=(.3, -.6, .4), fog=hor, fogamt=.5)
     cv.ridge(.93, .07, 3, 80 + h, d, l, light=(.3, -.6, .4))
     return cv, dict(dust=40 if h < 5 else 0, dust_c=(.5, .5), dust_s=(.3, .2))

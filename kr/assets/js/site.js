@@ -1,5 +1,5 @@
 {
-const IMGV = '4';
+const IMGV = '5';
 const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
 /* 새로고침하거나 처음 들어오면 늘 메인부터 */
 try { history.scrollRestoration = 'manual'; if (location.hash) history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
@@ -476,7 +476,7 @@ const figFx = (c0) => (cv) => {
   const scrim = () => { const g = c.createRadialGradient(w * .5, h * .42, 0, w * .5, h * .42, Math.min(w, h) * .55); g.addColorStop(0, 'rgba(8,8,12,.62)'); g.addColorStop(1, 'rgba(8,8,12,0)'); c.fillStyle = g; c.fillRect(0, 0, w, h); };
   if (c0.fig === 'bond') { scrim(); TalFigure.symbol(c, w, h, o); return; }
   if (c0.fig === 'guardian' && window.Path2D) {  /* 일곱 손: 문장식 손이 그 시각의 해를 쥔다 (가제) */
-    scrim(); const S = Math.min(w, h) * .64, X = w / 2 - S / 2, Y = h * .4 - S * .44;
+    { const g = c.createRadialGradient(w * .5, h * .4, 0, w * .5, h * .4, Math.min(w, h) * .5); g.addColorStop(0, 'rgba(8,8,12,' + ((c0.hour || 0) < 3 ? .22 : .4) + ')'); g.addColorStop(1, 'rgba(8,8,12,0)'); c.fillStyle = g; c.fillRect(0, 0, w, h); } const S = Math.min(w, h) * .64, X = w / 2 - S / 2, Y = h * .4 - S * .44;
     c.save(); c.translate(X, Y); c.scale(S / 100, S / 100);
     const p = new Path2D(HANDS['hand' + (c0.hour || 0)]), g = c.createLinearGradient(0, 0, 0, 100);
     g.addColorStop(0, '#fff4d6'); g.addColorStop(.5, '#e8cb92'); g.addColorStop(1, '#a8844e');
