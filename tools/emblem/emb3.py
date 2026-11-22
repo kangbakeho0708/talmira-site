@@ -3,7 +3,9 @@ import json, math
 from shapely.geometry import Point, Polygon, box, LineString
 from shapely.ops import unary_union
 from shapely import affinity
-from emb import circ, ring, kite, sector, crescent, star4, tear, cut, frame, to_d, C, unknown, bond, mirase
+from emb import circ, ring, kite, sector, crescent, star4, tear, cut, to_d, C, unknown, bond, mirase
+from shapely.geometry import GeometryCollection
+def frame(hour): return GeometryCollection()
 
 def mir(half, cx=50):
     """오른쪽 반 점들 → 좌우 대칭 다각형 (위에서 아래로 순서)"""
@@ -60,7 +62,8 @@ def karad():  # 사막여우: 정면 머리, 큰 귀, 귀 사이 짧은 그림�
     head = unary_union([head.difference(nose.buffer(.8)), nose])
     sun = unary_union([circ((50, 26), 4.2)] + [kite((50, 26), a, 6, 9.5, 2.2) for a in range(0, 360, 45)])
     sun = cut(sun, head, 1.5)
-    return unary_union([head, sun, frame(1)])
+    fan = cut(unary_union([kite((50, 52), a, 30, 46 - abs(a + 45) * .12, 4.2, .3) for a in range(-100, 11, 14)]), unary_union([head, sun]), 1.5)
+    return unary_union([head, sun, fan])
 
 def arha():  # 종달새: 위로 솟는 새, 머리 깃, 뒤에 떠오르는 해, 아래 이삭
     sun = circ((50, 66), 20).intersection(box(0, 0, 100, 66)).difference(circ((50, 66), 14))
@@ -104,8 +107,9 @@ def mure():  # 부엉이: 정면, 귀깃, 한쪽 눈은 찬 원 · 한쪽은 빈
     owl = owl.difference(beak.buffer(1))
     breast = unary_union([crescent((50, 60 + k * 5), 6 - k, 0, 2.4, .9) for k in range(3)])
     owl = owl.difference(breast.buffer(.5))
-    moon = crescent((76, 22), 7, -3.6, 1.6, .9)
-    return unary_union([owl, eyeLf, eyeRr, beak, moon, frame(4)])
+    moon = crescent((80, 20), 10, -5, 2.4, .9)
+    fan = cut(unary_union([kite((50, 70), a, 26, 40, 4, .4) for a in range(150, 231, 16)]), owl, 1.5)
+    return unary_union([owl, eyeLf, eyeRr, beak, moon, fan])
 
 def dorn():  # 늑대: 정면 머리, 각진 주둥이, 이마에 등불 불꽃
     head = mir([(50, 34), (55, 36), (60, 32), (66, 18), (68, 40), (66, 50), (60, 58), (56, 68), (52, 76), (50, 78)])
@@ -117,7 +121,7 @@ def dorn():  # 늑대: 정면 머리, 각진 주둥이, 이마에 등불 불꽃
     flame = tear((50, 44), 3.6, 10).difference(tear((50, 45), 1.5, 5))
     w = head.difference(unary_union([inner_ear, inner_l, eye_r, eye_l, cheek]).buffer(.3)).difference(muzzle.exterior.buffer(.7)).difference(flame.buffer(1.2))
     w = unary_union([w.difference(nose.buffer(.8)), nose, flame])
-    gear = unary_union([ring(C, 34, 37)] + [affinity.rotate(box(48.5, 9, 51.5, 13), a, origin=C) for a in range(0, 360, 30)])
+    gear = unary_union([sector(C, 33, 37, 110, 340)] + [affinity.rotate(box(48.5, 9, 51.5, 13.5), a, origin=C) for a in range(-150, 91, 24)])
     gear = cut(gear, w, 1.6)
     return unary_union([w, gear, frame(5)])
 
@@ -140,6 +144,10 @@ def nei():  # 고래: 둥근 머리에서 꼬리로 가늘어지며 활처럼 �
     return unary_union([whale, st, cut(water, whale, 1.4), frame(6)])
 
 ALL = dict(unknown=unknown, merhan=merhan, karad=karad, arha=arha, seira=seira, mure=mure, dorn=dorn, nei=nei, bond=bond, mirase=mirase)
-res = {k: to_d(f().simplify(.12)) for k, f in ALL.items()}
+def fit(g, pad=4):
+    x0, y0, x1, y1 = g.bounds; s = (100 - 2 * pad) / max(x1 - x0, y1 - y0)
+    g = affinity.scale(g, s, s, origin=(x0, y0)); x0, y0, x1, y1 = g.bounds
+    return affinity.translate(g, (100 - (x1 - x0)) / 2 - x0, (100 - (y1 - y0)) / 2 - y0)
+res = {k: to_d(fit(f()).simplify(.12)) for k, f in ALL.items()}
 json.dump(res, open('emblems3.json', 'w'))
 print('ok')

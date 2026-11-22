@@ -31,6 +31,20 @@
 <p class="ld-en" id="hourEn">MIDDAY</p>
 </div>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<filter id="metal" x="-15%" y="-15%" width="130%" height="130%" color-interpolation-filters="sRGB">
+<feGaussianBlur in="SourceAlpha" stdDeviation="1.1" result="b"/>
+<feSpecularLighting in="b" surfaceScale="3.2" specularConstant=".85" specularExponent="16" lighting-color="#fff6e2" result="s"><feDistantLight azimuth="235" elevation="42"/></feSpecularLighting>
+<feComposite in="s" in2="SourceAlpha" operator="in" result="s2"/>
+<feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="7" result="n"/>
+<feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .55 0" result="na"/>
+<feComposite in="na" in2="SourceAlpha" operator="in" result="n2"/>
+<feComposite in="SourceGraphic" in2="n2" operator="out" result="worn"/>
+<feMorphology in="SourceAlpha" operator="erode" radius=".8" result="er"/>
+<feComposite in="SourceAlpha" in2="er" operator="out" result="edge"/>
+<feFlood flood-color="#000" flood-opacity=".45"/><feComposite in2="edge" operator="in" result="edgeD"/>
+<feMerge><feMergeNode in="worn"/><feMergeNode in="edgeD"/><feMergeNode in="s2"/></feMerge>
+</filter></defs></svg>
 <canvas id="dust" aria-hidden="true"></canvas>
 <header>
 <div class="wrap">
