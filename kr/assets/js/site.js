@@ -695,4 +695,28 @@ paintHero().then(() => { LD.finish(); idle(() => { showFeat(); startW(); }); });
 setInterval(() => { if (featBusy) return; fi = (fi + 1) % LANDS.length; showFeat(); }, 7000);
 setTimeout(() => idle(() => LANDS.forEach((L, i) => { if (i !== wi2) loadLand(i, 0); })), 6000);
 requestAnimationFrame(loop);
+
+/* 떠다니는 빛 먼지: 화면 전체에 아주 옅게. 화질 낮음이나 움직임 줄이기에서는 끈다 */
+(() => {
+  const cv = $('#dust'); if (!cv) return;
+  const c = cv.getContext('2d'); let W = 0, H = 0, P = [], last = 0;
+  const N = () => (RM || Q === 'low') ? 0 : Q === 'mid' ? 26 : 46;
+  const make = () => ({ x: Math.random() * W, y: Math.random() * H, r: .5 + Math.random() * 1.6, vy: -(.05 + Math.random() * .18), vx: (Math.random() - .5) * .08, ph: Math.random() * 6.28, sp: .4 + Math.random() * 1.2, warm: Math.random() < .75 });
+  const fit = () => { const d = Math.min(devicePixelRatio || 1, 1.5); W = innerWidth; H = innerHeight; cv.width = W * d; cv.height = H * d; c.setTransform(d, 0, 0, d, 0, 0); P = Array.from({ length: N() }, make); };
+  fit(); addEventListener('resize', fit);
+  document.addEventListener('click', (e) => { if (e.target.closest('[data-q]')) setTimeout(fit, 50); });
+  const loop = (t) => {
+    requestAnimationFrame(loop);
+    if (document.hidden || t - last < 33) return; last = t;
+    c.clearRect(0, 0, W, H); if (!P.length) return;
+    for (const p of P) {
+      p.x += p.vx; p.y += p.vy; if (p.y < -10) { p.y = H + 10; p.x = Math.random() * W; }
+      const a = .25 + .55 * (.5 + .5 * Math.sin(t / 1000 * p.sp + p.ph));
+      const g = c.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 4);
+      g.addColorStop(0, p.warm ? `rgba(255,228,176,${a})` : `rgba(190,215,255,${a})`); g.addColorStop(1, 'rgba(0,0,0,0)');
+      c.fillStyle = g; c.beginPath(); c.arc(p.x, p.y, p.r * 4, 0, 6.283); c.fill();
+    }
+  };
+  requestAnimationFrame(loop);
+})();
 }

@@ -369,3 +369,43 @@ body.art-open{overflow:hidden}
   .abody h2{margin-top:34px;font-size:21px}
   .arel>div{gap:12px}.arel b{font-size:13px}
 }
+
+/* ===== 테마 2판 (2026-11-22): 흙빛 먹색 → 맑은 밤색. 같은 원 무늬 반복 줄이기. 영어 제목은 세리프, 꼬리표와 버튼은 깎은 모서리 ===== */
+:root{--bg:#11131a;--bg2:#161922;--ink:#f4f1ea;--soft:#d9d5cc;--mute:#b6b2a8;--dim:#9b978e;--gold:#e2c78f;--gold2:#f7e6bc;--line:rgba(226,199,143,.18);--line2:rgba(226,199,143,.4);--blue:#9cc6f2}
+body{background:var(--bg)}
+header{background:linear-gradient(180deg,rgba(14,16,22,.82),rgba(14,16,22,.45));border-bottom-color:rgba(226,199,143,.14)}
+/* 바탕: 위에서 내려오는 따뜻한 빛 + 아래 서늘한 반사. 칸마다 빛의 자리만 다르게 */
+#news{background:radial-gradient(70% 60% at 78% -8%,rgba(255,216,160,.17),transparent 62%),radial-gradient(60% 50% at 0% 105%,rgba(130,170,230,.10),transparent 60%),linear-gradient(180deg,#1b1f29,#11131a)}
+#people{background:radial-gradient(60% 70% at 18% -10%,rgba(255,214,156,.16),transparent 60%),radial-gradient(60% 50% at 100% 100%,rgba(130,170,230,.09),transparent 60%),linear-gradient(180deg,#1a1d27,#101219)}
+#orgs{background:radial-gradient(60% 70% at 82% -10%,rgba(255,196,130,.16),transparent 60%),radial-gradient(60% 50% at 0% 100%,rgba(130,170,230,.08),transparent 60%),linear-gradient(180deg,#1b1d26,#101118)}
+#lore{background:radial-gradient(70% 60% at 30% -10%,rgba(170,200,245,.14),transparent 60%),radial-gradient(50% 50% at 100% 100%,rgba(255,210,150,.08),transparent 60%),linear-gradient(180deg,#171b26,#0f1117)}
+#world{background:radial-gradient(80% 60% at 50% -12%,rgba(255,220,170,.14),transparent 60%),linear-gradient(180deg,#191c25,#0f1117)}
+#news::before,#people::before,#orgs::before,#lore::before,#world::before{background-image:linear-gradient(112deg,transparent 38%,rgba(255,232,190,.045) 46%,transparent 54%),linear-gradient(112deg,transparent 58%,rgba(255,232,190,.03) 63%,transparent 68%);background-size:100% 100%;background-position:0 0;opacity:1}
+.crest,.ltext>svg{display:none}
+#dust{position:fixed;inset:0;width:100%;height:100%;z-index:25;pointer-events:none;mix-blend-mode:screen;opacity:.9}
+/* 글꼴: 영어 제목은 세리프로, 한글 제목과 위아래 관계 분명하게 */
+.h2{font-size:22px;font-weight:500;color:var(--ink);letter-spacing:.04em}
+.h2 .en{font:500 clamp(44px,4.8vw,64px)/1 "Cormorant Garamond",serif;letter-spacing:.06em;color:var(--gold);margin:0 0 6px;text-transform:uppercase}
+.en.big,.wname .en,.hero-en{font-family:"Cormorant Garamond",serif}
+.en.big{color:var(--gold);opacity:.9;font-weight:500;letter-spacing:.03em}
+.hero-en{color:var(--gold2);font-weight:600}
+.wname .en{font-size:16px;letter-spacing:.14em;color:var(--gold)}
+.head{border-bottom:1px solid var(--line);padding-bottom:14px;position:relative}
+.head::after{content:"";position:absolute;left:0;bottom:-4px;width:7px;height:7px;background:var(--gold);transform:rotate(45deg)}
+/* 꼬리표: 깎은 육각 */
+.tag{border:0;border-radius:0;padding:2px 14px;background:rgba(226,199,143,.13);color:var(--gold2);font-size:12px;letter-spacing:.12em;clip-path:polygon(7px 0,calc(100% - 7px) 0,100% 50%,calc(100% - 7px) 100%,7px 100%,0 50%)}
+/* 버튼: 깎은 모서리 */
+.btn{border-radius:0;clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px)}
+.btn.main{background:linear-gradient(180deg,#f5e2b2,#d4b273);color:#17140e;font-weight:600}
+.btn.main:hover{background:linear-gradient(180deg,#fff0c8,#e2c283)}
+.btn.off{border:0;background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px var(--line2);color:var(--ink)}
+.btn.off:hover{background:rgba(226,199,143,.12)}
+/* 목록: 누르는 줄은 살짝 밝게 */
+.nlist li{transition:background .3s;padding-left:10px;padding-right:10px}
+.nlist li:hover{background:linear-gradient(90deg,rgba(226,199,143,.08),transparent)}
+.nlist .nt{color:var(--ink)}
+/* 카드: 위쪽 가는 빛줄 */
+.card{border-color:rgba(226,199,143,.28);border-radius:2px;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.card::before{content:"";position:absolute;left:0;right:0;top:0;height:1px;z-index:3;background:linear-gradient(90deg,transparent,rgba(255,236,196,.7),transparent)}
+.feat,.scene{border-radius:2px}
+html.lowq #dust{display:none}
