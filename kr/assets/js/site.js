@@ -349,9 +349,75 @@ let heroOn = true; new IntersectionObserver((es) => { if (!document.documentElem
 let ftab = 'all';
 const renderNews = () => {
   $('#ftabs').innerHTML = FTABS.map((f) => '<button role="tab" data-f="' + f[0] + '" aria-selected="' + (f[0] === ftab) + '">' + f[1] + '</button>').join('');
-  $('#nlist').innerHTML = NEWS.filter((n) => ftab === 'all' || n[0] === ftab).map((n, i) => '<li style="animation-delay:' + i * 60 + 'ms"><span class="tag">' + n[1] + '</span><span class="nt">' + n[2] + '</span><span class="nd">' + n[3] + '</span></li>').join('');
+  $('#nlist').innerHTML = NEWS.map((n, k) => [n, k]).filter(([n]) => ftab === 'all' || n[0] === ftab).map(([n, k], i) => '<li tabindex="0" role="button" data-a="' + k + '" style="animation-delay:' + i * 60 + 'ms"><span class="tag">' + n[1] + '</span><span class="nt">' + n[2] + '</span><span class="nd">' + n[3] + '</span></li>').join('');
 };
 $('#ftabs').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) { ftab = b.dataset.f; renderNews(); } });
+
+/* 소식 글: 누르면 명조처럼 글 한 편이 열린다. 내용은 홈페이지에 이미 공개한 세계 정보에서만 가져온다 (부풀리지 않는다) */
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const ART = [
+  () => ({ img: 'hero', body: [
+    ['p', '벨미라 공식 홈페이지가 문을 열었다. 앞으로 새 소식과 새로 공개되는 세계 정보는 이곳에 가장 먼저 올라온다.'],
+    ['h', '홈페이지에서 볼 수 있는 것'],
+    ['ul', ['소식: 개발 소식과 새로 공개되는 정보', '인물: 방랑자와 일곱 수호자', '조직: 이음회와 미라세', '정보: 탈미라의 세계와 법칙', '세계: 일곱 시각의 땅']],
+    ['h', '이용 안내'],
+    ['p', '휴대폰과 컴퓨터에서 모두 볼 수 있다. 화면이 끊기면 위쪽 「화질」에서 품질을 낮출 수 있고, 「소리」로 배경음악을 켜고 끌 수 있다.'],
+    ['p', '홈페이지의 그림은 개발 중인 장면을 바탕으로 만든 것으로, 실제 게임 화면과 다를 수 있다.']] }),
+  () => ({ img: 'land' + LANDS0.indexOf(LANDS[3]), body: [
+    ['p', '탈미라에는 해와의 거리에 따라 일곱 시각의 띠가 있고, 띠마다 하나의 땅이 있다. 해에 가까운 땅부터 차례로 소개한다.']]
+    .concat(...LANDS.map((L) => [['h', L.h + ' · ' + L.n, L.en + ' · ' + L.m], ['img', 'land' + LANDS0.indexOf(L)], ['p', L.d]]))
+    .concat([['p', '각 땅의 풍경은 「세계」에서 그림과 함께 볼 수 있다.']]) }),
+  () => { const pick = ['떨어지는 별', '멈춤', '밀린 시간'].map((t) => LORE.findIndex((d) => d.t === t)); return { img: 'lore' + pick[0], body: [
+    ['p', '「정보」에 세 가지 이야기가 새로 추가되었다.']]
+    .concat(...pick.map((i) => [['h', LORE[i].t, LORE[i].en], ['img', 'lore' + i], ['p', LORE[i].d]].concat(LORE[i].w ? [['q', LORE[i].w]] : []))) }; },
+  () => ({ img: 'card3-0', body: [
+    ['p', '탈미라를 움직이는 사람들과 조직을 소개한다.']]
+    .concat(...FACTIONS_ALL.map((f) => { const a = FACTIONS_ALL.indexOf(f); return [['h', f.name, f.en + ' · ' + f.sub], ['img', 'card' + a + '-0'], ['p', f.desc], ['dl', f.cards.map((c) => [c.n, c.t, c.w])]]; })) }),
+  () => ({ img: 'lore0', body: [
+    ['p', '오프닝 영상을 만들고 있다.'],
+    ['p', '내용과 공개 시기는 준비되는 대로 이 홈페이지에서 알린다.']] }),
+  () => ({ img: 'land' + LANDS0.indexOf(LANDS[0]), body: [
+    ['p', '벨미라는 언리얼 엔진 5.8로 만들고 있다.'],
+    ['h', '그림의 방향'],
+    ['p', '만화 같은 질감의 3D를 목표로 한다. 빛의 시각마다 색과 공기가 다른 일곱 땅을 실시간으로 보여주는 것이 목표다.'],
+    ['h', '성능'],
+    ['p', '초당 60프레임을 기준으로 만들고, 그래픽 설정에서 품질을 낮출 수 있게 한다.']] })
+];
+const artEl = $('#art'), artBox = $('#artBox');
+const artImg = (k) => '<img src="assets/img/' + (k === 'hero' ? 'hero-1280.webp' : 's/' + k + '.webp') + '" alt="" loading="lazy" decoding="async">';
+const artHTML = (k) => {
+  const n = NEWS[k], a = ART[k] ? ART[k]() : { body: [] };
+  let h = '<div class="ahead"><span class="tag">' + esc(n[1]) + '</span><span class="nd">' + esc(n[3]) + '</span></div><h1>' + esc(n[2]) + '</h1>';
+  if (a.img) h += '<figure class="aban">' + artImg(a.img) + '</figure>';
+  h += '<div class="abody">' + a.body.map((b) => {
+    if (b[0] === 'p') return '<p>' + esc(b[1]) + '</p>';
+    if (b[0] === 'q') return '<p class="aq">' + esc(b[1]) + '</p>';
+    if (b[0] === 'h') return '<h2>' + esc(b[1]) + (b[2] ? '<small>' + esc(b[2]) + '</small>' : '') + '</h2>';
+    if (b[0] === 'img') return '<figure>' + artImg(b[1]) + '</figure>';
+    if (b[0] === 'ul') return '<ul>' + b[1].map((x) => '<li>' + esc(x) + '</li>').join('') + '</ul>';
+    if (b[0] === 'dl') return '<dl>' + b[1].map((x) => '<dt>' + esc(x[0]) + '</dt><dd>' + esc(x[1]) + (x[2] ? '<small>' + esc(x[2]) + '</small>' : '') + '</dd>').join('') + '</dl>';
+    return '';
+  }).join('') + '</div>';
+  const rel = [1, 2].map((d) => (k + d) % NEWS.length);
+  h += '<div class="arel"><h3>관련 추천</h3><div>' + rel.map((r) => { const ra = ART[r] ? ART[r]() : {}; return '<button data-a="' + r + '">' + (ra.img ? artImg(ra.img) : '') + '<span class="tag">' + esc(NEWS[r][1]) + '</span><b>' + esc(NEWS[r][2]) + '</b></button>'; }).join('') + '</div></div>';
+  return h;
+};
+let artPushed = false;
+const openArt = (k) => {
+  artBox.innerHTML = artHTML(k); artEl.scrollTop = 0; artEl.hidden = false;
+  requestAnimationFrame(() => document.body.classList.add('art-open'));
+  if (!artPushed) { try { history.pushState({ art: k }, ''); artPushed = true; } catch (e) {} }
+  $('#artClose').focus({ preventScroll: true });
+};
+const shutArt = () => { document.body.classList.remove('art-open'); setTimeout(() => { if (!artOpen()) artEl.hidden = true; }, 400); };
+const closeArt = () => { if (artPushed) { artPushed = false; history.back(); } shutArt(); };
+addEventListener('popstate', () => { if (artOpen()) { artPushed = false; shutArt(); } });
+$('#nlist').addEventListener('click', (e) => { const li = e.target.closest('li[data-a]'); if (li) openArt(+li.dataset.a); });
+$('#nlist').addEventListener('keydown', (e) => { const li = e.target.closest('li[data-a]'); if (li && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); openArt(+li.dataset.a); } });
+$('#feat').addEventListener('click', (e) => { e.preventDefault(); openArt(1); });
+artBox.addEventListener('click', (e) => { const b = e.target.closest('button[data-a]'); if (b) openArt(+b.dataset.a); });
+$('#artClose').onclick = closeArt;
+addEventListener('keydown', (e) => { if (e.key === 'Escape' && artOpen()) closeArt(); });
 renderNews();
 let fi = 0; const featPic = $('#featPic');
 $('#fdots').innerHTML = LANDS.map(() => '<i></i>').join('');
@@ -509,21 +575,22 @@ const fpOn = () => {
   else secs.forEach((s) => s.classList.remove('on', 'up'));
 };
 const isFp = () => document.documentElement.classList.contains('fp');
+const artOpen = () => document.body.classList.contains('art-open');
 addEventListener('wheel', (e) => {
-  if (!isFp()) return;
+  if (!isFp() || artOpen()) return;
   e.preventDefault();
   if (performance.now() - lock < 1100 || Math.abs(e.deltaY) < 24) return;
   go(cur + (e.deltaY > 0 ? 1 : -1));
 }, { passive: false });
 addEventListener('keydown', (e) => {
-  if (!isFp() || e.target.closest('input,textarea,.track')) return;
+  if (!isFp() || artOpen() || e.target.closest('input,textarea,.track')) return;
   if (['ArrowDown', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); go(cur + 1); }
   if (['ArrowUp', 'PageUp'].includes(e.key)) { e.preventDefault(); go(cur - 1); }
   if (e.key === 'Home') go(0); if (e.key === 'End') go(secs.length - 1);
 });
 let ty0 = null;
 addEventListener('touchstart', (e) => { ty0 = e.touches[0].clientY; }, { passive: true });
-addEventListener('touchend', (e) => { if (!isFp() || ty0 === null) return; const d = ty0 - e.changedTouches[0].clientY; if (Math.abs(d) > 60) go(cur + (d > 0 ? 1 : -1)); ty0 = null; });
+addEventListener('touchend', (e) => { if (!isFp() || artOpen() || ty0 === null) return; const d = ty0 - e.changedTouches[0].clientY; if (Math.abs(d) > 60) go(cur + (d > 0 ? 1 : -1)); ty0 = null; });
 document.addEventListener('click', (e) => {
   const a = e.target.closest('a[href^="#"]'); const p = e.target.closest('.pager button');
   if (p) { go(+p.dataset.i); return; }
