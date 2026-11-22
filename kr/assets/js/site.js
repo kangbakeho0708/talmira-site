@@ -1,5 +1,5 @@
 {
-const IMGV = '3';
+const IMGV = '4';
 const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
 /* 새로고침하거나 처음 들어오면 늘 메인부터 */
 try { history.scrollRestoration = 'manual'; if (location.hash) history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
@@ -258,7 +258,7 @@ $('#hours').innerHTML = HOURS.map((h) => '<li><i style="background:' + h[1] + '"
 const heroPic = $('#heroPic'), heroFx = $('#heroFx'), ring = $('#ring');
 let horizonY = .7;
 /* 메인 그림은 미리 구워 둔 파일이다. 화질에 따라 크기만 고른다 */
-const HIMG = { w: 2560, h: 1200, sx: .64502, sy: .60259, files: [[1280, 'assets/img/hero-1280.webp'], [1920, 'assets/img/hero-1920.webp'], [2560, 'assets/img/hero-2560.webp']] };
+const HIMG = { w: 2560, h: 1200, sx: .64502, sy: .60259, files: [[1280, 'assets/img/hero-1280.webp?v=' + IMGV], [1920, 'assets/img/hero-1920.webp?v=' + IMGV], [2560, 'assets/img/hero-2560.webp?v=' + IMGV]] };
 let heroImg = null, heroSrc = '';
 const pickHero = () => {
   const need = heroPic.clientWidth * DPR(), cap = Q === 'low' ? 1280 : Q === 'mid' ? 1920 : 2560;

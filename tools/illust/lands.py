@@ -85,7 +85,17 @@ def arha():
     for i in range(len(pts) - 1): cv2.line(path, tuple(pts[i]), tuple(pts[i + 1]), 1., int(18 - i * 4), cv2.LINE_AA)
     cv.img = mix(cv.img, C('#e3cf9e'), cv2.GaussianBlur(path, (0, 0), 2) * .8)
     cv.ridge(.95, .12, 3, 5, '#2c3d24', '#7f9548', light=L, sharp=False, n=20)
-    cv.forest(.95, .06, 1.6, '#26341f', seed=6, jit=.02)
+    r = np.random.default_rng(7)
+    for (tx, tb, th) in [(.08, .92, .26), (.15, .94, .16), (.87, .92, .3), (.94, .95, .18), (.42, .775, .05), (.47, .78, .035)]:
+        cw, ch = th * .34 * H / W, th * .4
+        crown = rough([(tx + np.cos(a) * cw * r.uniform(.75, 1.1), tb - th * .62 + np.sin(a) * ch * r.uniform(.75, 1.1)) for a in np.linspace(0, 6.28, 10)[:-1]], 4, .15, int(tx * 100) + 1)
+        cv.block([(tx - .004, tb), (tx - .003, tb - th * .45), (tx + .003, tb - th * .45), (tx + .004, tb)], '#2a2018', '#6a5034', light=L, n=1, seed=int(tx * 1000))
+        cm = mask_poly(H, W, cv.P(crown)); cv.put(facets(H, W, cm, L, '#1f3418', '#a6bf62', n=14, seed=int(tx * 999), stretch=1, rim='#f6eab0', rimw=3), cm)
+    grass = np.zeros((H, W), np.float32)
+    for i in range(700):
+        x = r.random(); y = .88 + r.random() * .14; hgt = r.uniform(.01, .04)
+        p0 = cv.P([(x, y), (x + r.normal() * .006, y - hgt)]).astype(np.int32); cv2.line(grass, tuple(p0[0]), tuple(p0[1]), float(r.uniform(.5, 1)), 1, cv2.LINE_AA)
+    cv.put(C('#d2da86'), grass * .45)
     return cv, dict(dust=120, dust_c=(.2, .4), dust_s=(.15, .15))
 
 def karad():
@@ -120,8 +130,10 @@ def karad():
     water = (cv.v > .66).astype(np.float32)
     refl = cv2.flip(cv.img, 0); sh = int(H * (1 - 2 * .66)); refl = np.roll(refl, -sh, 0) if sh < 0 else np.roll(refl, sh, 0)
     wv = cv2.resize(vnoise(H, W // 40, 6, 9, 3), (W, H), interpolation=cv2.INTER_CUBIC)
-    refl = cv2.GaussianBlur(refl, (0, 0), 3)
-    cv.put(mix(refl * .75 + C('#2d5d8f') * .25, C('#e9f1f6'), smooth(wv, .62, .75) * .6), water)
+    refl = cv2.GaussianBlur(refl, (0, 0), 2)
+    shift = (cv2.resize(vnoise(H, W // 60, 5, 19, 3), (W, H), interpolation=cv2.INTER_CUBIC) - .5) * 28 * smooth(cv.v, .66, 1)
+    mx = (cv.xx + shift).astype(np.float32); refl = cv2.remap(refl.astype(np.float32), mx, cv.yy, cv2.INTER_LINEAR, borderMode=cv2.BORDER_REFLECT)
+    cv.put(mix(refl * .55 + C('#2d5d8f') * .45, C('#e9f1f6'), smooth(wv, .6, .74) * .7), water)
     cv.block([(-.02, .88), (.4, .86), (.6, .87), (1.02, .86), (1.02, 1.02), (-.02, 1.02)], '#6f6a62', '#e7dfcf', light=L, n=14, seed=450, stretch=2)
     p = cv.P([(0, .9), (1, .885)]).astype(np.int32); cv2.line(cv.gold, tuple(p[0]), tuple(p[1]), .6, 2, cv2.LINE_AA)
     return cv, dict(dust=80, dust_c=(.6, .35), dust_s=(.2, .15))
@@ -182,11 +194,27 @@ def dorn():
     r = np.random.default_rng(5)
     for i in range(22):
         x = r.uniform(.4, .8); w = r.uniform(.01, .025); h = r.uniform(.07, .22)
-        cv.block([(x - w, .67), (x - w * .8, .67 - h), (x + w * .8, .67 - h), (x + w, .67)], '#070a12', '#26324a', light=L, n=2, seed=600 + i, windows=4, wincol='#ffb860')
+        kind = i % 3
+        if kind == 0: top = [(x - w * .8, .67 - h), (x, .67 - h - w * 1.2), (x + w * .8, .67 - h)]
+        elif kind == 1: top = [(x - w * .8, .67 - h), (x - w * .8, .67 - h - w * .8), (x - w * .1, .67 - h), (x - w * .1, .67 - h - w * .8), (x + w * .6, .67 - h), (x + w * .8, .67 - h)]
+        else: top = [(x - w * .8, .67 - h), (x - w * .5, .67 - h - w * .5), (x + w * .5, .67 - h - w * .5), (x + w * .8, .67 - h)]
+        cv.block([(x - w, .67)] + top + [(x + w, .67)], '#070a12', '#26324a', light=L, n=2, seed=600 + i, windows=4, wincol='#ffb860')
         # 철골 격자
         for k in range(4):
             p = cv.P([(x - w * .8, .67 - h * k / 4), (x + w * .8, .67 - h * (k + 1) / 4)]).astype(np.int32)
             cv2.line(cv.img, tuple(p[0]), tuple(p[1]), tuple(float(c) for c in C('#2b364c')), 1, cv2.LINE_AA)
+    lat = np.zeros((H, W), np.float32)
+    for i in range(2):
+        x = .44 + i * .3; h = .2
+        A, T = cv.P([(x, .67), (x, .67 - h)]).astype(np.int32); E = cv.P([(x + .08, .67 - h + .01)]).astype(np.int32)[0]
+        cv2.line(lat, tuple(A), tuple(T), 1., 3, cv2.LINE_AA); cv2.line(lat, tuple(T), tuple(E), 1., 2, cv2.LINE_AA)
+        for k in range(1, 9): cv2.line(lat, (A[0] - 4, A[1] - int((A[1] - T[1]) * k / 9)), (A[0] + 4, A[1] - int((A[1] - T[1]) * (k + .5) / 9)), 1., 1, cv2.LINE_AA)
+        cv.lamp(x, .67 - h, .4, '#ff5a3a')
+    cv.put(C('#04060b'), lat)
+    for i in range(2):
+        x = .52 + i * .14; rr = .03
+        dome = [(x - rr + 2 * rr * t, .67 - .04 - rr * 1.5 * np.sqrt(max(0, 1 - (2 * t - 1) ** 2))) for t in np.linspace(0, 1, 20)]
+        cv.block([(x - rr, .67)] + dome + [(x + rr, .67)], '#0a0d16', '#3a4864', light=L, n=3, seed=620 + i, rim='#ff9e50')
     for i in range(5):
         x = r.uniform(.46, .74); h = r.uniform(.12, .2)
         cv.block([(x - .004, .67), (x - .004, .67 - h), (x + .004, .67 - h), (x + .004, .67)], '#06080e', '#1c2536', light=L, n=1, seed=650 + i)

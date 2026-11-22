@@ -15,21 +15,41 @@ def still_sun():  # 0 멈춘 해
     cv.ridge(.94, .1, 3, 13, '#140c16', '#3a2028', light=(0, -.2, .6))
     return cv, dict(dust=80, dust_c=(.5, .3), dust_s=(.2, .1))
 
-def seven_hours():  # 1 일곱 시각: 위 한낮 → 아래 자정, 일곱 띠의 땅
-    cv = Canvas(W, H, 11)
-    cols = ['#f8f1dd', '#f1d89a', '#f2c79a', '#e8875a', '#4f6f9e', '#24314d', '#0b1124']
-    ys = np.linspace(0, 1, 8)
-    img = np.zeros((H, W, 3), np.float32)
+def seven_hours():  # 1 일곱 시각: 높은 곳에서 내려다본 땅. 해 바로 아래(한낮)를 중심으로 동심원 띠
+    cv = Canvas(W, H, 11); u, v = cv.u, cv.v
+    HZ = .2
+    cv.sky('#05081a', '#2a2a4a', '#6a5a7a', horiz=HZ, cloud=0); cv.stars(250, .2, 11)
+    below = v > HZ + .003
+    z = 1.0 / np.maximum(v - HZ, 1e-3); xg = (u - .5) * z * 1.1
+    zc = 1.0 / (.29 - HZ)  # 해 바로 아래 지점 (멀리)
+    d = np.hypot(xg * .55, (z - zc) * .5) / 5.2
+    cols = ['#fffaf0', '#f6dea0', '#f2c08c', '#e07a50', '#4f6fa0', '#22304e', '#070b18']
+    edges = [0, .09, .2, .33, .48, .64, .82, 9]
+    col = np.zeros((H, W, 3), np.float32)
     for i in range(7):
-        t = smooth(cv.v, ys[i] - .04, ys[i] + .04)[..., None]
-        img = img * (1 - t) + C(cols[i]) * t if i else np.broadcast_to(C(cols[0]), (H, W, 3)).copy()
-    cv.img = img
-    cv.glow += C('#fffaf0')[None, None] * np.exp(-np.hypot(cv.u - .5, (cv.v + .02) * 1.5) * 6)[..., None]
-    for i in range(1, 8):  # 띠마다 산 능선
-        lit = cols[i - 1]; dk = cols[min(6, i)]
-        m = cv.ridge(ys[i] + .02, .05, 4 + i, 20 + i, dk, lit, light=(0, -.9, .3), fog=cols[min(6, i)], fogamt=.3, n=20)
-    cv.stars(120, 1.0, 9); cv.glow *= (smooth(cv.v, .6, 1) * .7 + .3)[..., None] ** 0 * 1
-    return cv, dict(dust=60, dust_c=(.5, .3), dust_s=(.25, .2))
+        a0, a1 = edges[i], edges[i + 1]
+        w = smooth(d, a0 - .02, a0 + .02) * (1 - smooth(d, a1 - .02, a1 + .02))
+        col += C(cols[i]) * w[..., None]
+    terr = vnoise(H, W, 30, 12, 6); terr2 = vnoise(H, W, 8, 13, 5)
+    shade = .75 + .45 * (terr * .6 + terr2 * .4)
+    col *= shade[..., None]
+    # 띠 경계의 가는 금선
+    ring = np.zeros((H, W), np.float32)
+    for e in edges[1:-1]: ring += np.exp(-((d - e) / .004) ** 2)
+    far = smooth(v, HZ + .06, HZ)
+    col = mix(col, C('#c9b8a8'), far * .5)
+    cv.put(col, below.astype(np.float32))
+    cv.gold += np.clip(ring, 0, 1) * below * (1 - far) * .5
+    # 해: 위에서 내려다보는 눈높이 위쪽
+    cv.glow += C('#fff6dc')[None, None] * (np.exp(-np.hypot(u - .5, (v - .06) * 1.4) * 9) * 1.0 + np.exp(-np.hypot(u - .5, v - .06) * 3) * .25)[..., None]
+    cv.beam(.5, .06, .5, .29, .015, '#fff0c8', .45)
+    cv.glow += C('#fffaf0')[None, None] * (np.exp(-np.hypot((u - .5), (v - .29) * 3) * 25) * .7)[..., None]
+    r = np.random.default_rng(14)
+    for i in range(55):
+        x, y = r.random(), r.uniform(.45, 1)
+        dd = d[int(y * (H - 1)), int(x * (W - 1))]
+        if dd > .48: cv.lamp(x, y, r.uniform(.08, .2) * (.5 + y), '#ffc070')
+    return cv, dict(dust=50, dust_c=(.5, .4), dust_s=(.25, .2))
 
 def falling_stars():  # 2 떨어지는 별 + 등불 축제
     cv = Canvas(W, H, 12)

@@ -8,7 +8,6 @@ def tall(k, fx=None, dark=1.0):
     return (c * dark).astype('uint8')
 for k in range(7): cv2.imwrite(f'out/peek{k}.png', tall(k))
 G = {0: 5, 1: 1, 2: 0, 3: 2, 4: 3, 5: 4, 6: 6}
-for h, k in G.items(): cv2.imwrite(f'out/card1-{h}.png', tall(k, FOC[k] - .08))
 cv2.imwrite('out/card0-0.png', tall(2, .45)); cv2.imwrite('out/card0-1.png', tall(3, .3))
-cv2.imwrite('out/card2-0.png', tall(2, .82)); cv2.imwrite('out/card3-0.png', tall(4, .55)); cv2.imwrite('out/card3-1.png', tall(1, .42)); cv2.imwrite('out/card3-2.png', tall(4, .3, .8))
+cv2.imwrite('out/card3-0.png', tall(4, .55))
 print('ok')

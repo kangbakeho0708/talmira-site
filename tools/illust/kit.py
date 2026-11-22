@@ -105,10 +105,33 @@ class Canvas:
         dist = np.abs(px * dy - py * dx) / L
         s.glow += C(col)[None, None] * (np.exp(-(dist / (w * s.W)) ** 2) * (1 - t) ** .7 * (tr > 0) * (tr < 1) * amt)[..., None]
 
-def finish(cv, radii=(14, 7, 3), thr=.028, gold_col='#ffcf7a', dust=0, dust_c=(.6, .45), dust_s=(.15, .15), paper_amt=.06, seed=3, detail=.2):
+def knife(p, src, n, seed=0, minlen=8, maxlen=22, wmin=2, wmax=5, edge_thr=.04):
+    """날카로운 납작 붓 (나이프) 자국: 경계가 있는 곳에, 결을 따라, 가장자리 흐림 없이"""
+    r = np.random.default_rng(seed); H, W = p.shape[:2]
+    lum = cv2.cvtColor((src * 255).astype(np.uint8), cv2.COLOR_RGB2GRAY).astype(np.float32) / 255
+    gx = cv2.Sobel(cv2.GaussianBlur(lum, (0, 0), 1.5), cv2.CV_32F, 1, 0, ksize=3); gy = cv2.Sobel(cv2.GaussianBlur(lum, (0, 0), 1.5), cv2.CV_32F, 0, 1, ksize=3)
+    mag = np.hypot(gx, gy)
+    ys, xs = np.nonzero(mag > edge_thr)
+    if len(xs) == 0: return p
+    out = (p * 255).astype(np.uint8)
+    for i in r.choice(len(xs), size=min(n, len(xs)), replace=False):
+        x, y = xs[i], ys[i]
+        tx, ty = -gy[y, x], gx[y, x]; L = np.hypot(tx, ty) + 1e-6; tx, ty = tx / L, ty / L
+        ln = r.uniform(minlen, maxlen); w = r.uniform(wmin, wmax)
+        side = 1 if r.random() < .5 else -1
+        sx, sy = int(np.clip(x + side * gx[y, x] / (mag[y, x] + 1e-6) * 3, 0, W - 1)), int(np.clip(y + side * gy[y, x] / (mag[y, x] + 1e-6) * 3, 0, H - 1))
+        col = src[sy, sx] * r.uniform(.94, 1.08)
+        nx, ny = -ty, tx
+        quad = np.array([(x - tx * ln / 2 - nx * w / 2, y - ty * ln / 2 - ny * w / 2), (x + tx * ln / 2 - nx * w * .3, y + ty * ln / 2 - ny * w * .3), (x + tx * ln / 2 + nx * w * .3, y + ty * ln / 2 + ny * w * .3), (x - tx * ln / 2 + nx * w / 2, y - ty * ln / 2 + ny * w / 2)], np.int32)
+        cv2.fillPoly(out, [quad], tuple(int(c) for c in np.clip(col * 255, 0, 255)))
+    return out.astype(np.float32) / 255
+
+def finish(cv, radii=(14, 7, 3), thr=.028, gold_col='#ffcf7a', dust=0, dust_c=(.6, .45), dust_s=(.15, .15), paper_amt=.06, seed=3, detail=.2, knives=None):
     img = np.clip(cv.img, 0, 1)
     p = paint(img, radii=radii, thr=thr, seed=seed, maxlen=10)
     p = (1 - detail) * p + detail * cv2.bilateralFilter((img * 255).astype(np.uint8), 7, 40, 7).astype(np.float32) / 255
+    if knives is None: knives = int(cv.W * cv.H / 500)
+    if knives: p = knife(p, img, knives, seed + 1)
     g = cv.gold
     if g.max() > 0:
         gl = cv2.GaussianBlur(g, (0, 0), 6) * 1.6 + cv2.GaussianBlur(g, (0, 0), 18) * 1.2
