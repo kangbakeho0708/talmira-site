@@ -45,7 +45,7 @@ const NEWS = [
   ['note', '알림', '공식 홈페이지 오픈', '26.11.22'],
   ['world', '세계', '일곱 땅 소개', '26.11.22'],
   ['world', '세계', '정보 추가: 떨어지는 별, 멈춤, 밀린 시간', '26.11.22'],
-  ['world', '조직', '조직 소개: 방랑자, 일곱 수호자, 이음회, 미라세', '26.11.22'],
+  ['world', '조직', '조직 소개: 방랑자, 일곱 손, 이음회, 미라세', '26.11.22'],
   ['dev', '개발', '오프닝 영상 제작 중', '26.11.21'],
   ['dev', '개발', '사용 엔진: 언리얼 엔진 5.8', '26.11.20']
 ];
@@ -56,16 +56,16 @@ const FACTIONS_ALL = [
     cards: [
       { n: '방랑자', fig: 'wanderer', t: '일곱 땅을 가로지르며 멈춘 시간을 다시 흐르게 하는 여행자. 여러 시각의 빛을 다룰 수 있는 드문 존재지만, 여행을 시작할 때는 힘을 대부분 잃은 상태다.', w: '무기: 한손검 「자정 속 별」', p: tall(LANDS0[2].p, { seed: 9.1, el: .6 }) },
       { n: '하루', t: '방랑자의 곁에서 쫑알대며 함께 여행하는 작은 존재. 공중을 헤엄치듯 떠다니며 길 안내와 설명을 맡는다.', w: '어디서 왔는지는 알려지지 않았다.', p: tall(LANDS0[3].p, { seed: 4.9 }), fx: 'wisp' }] },
-  { short: '수호자', en: 'The Seven Hands', name: '수호자', sub: '일곱 시각의 해를 붙잡은 이들', dot: '#f0dcae',
-    desc: '일곱 시각의 해를 붙잡고 있는 존재들. 시각마다 한 명씩, 모두 일곱이다. 각자의 땅에서 신앙과 권위의 중심으로 받들어지며, 땅의 사람들에게는 오래된 질서 그 자체다. 해를 붙잡고 있는 까닭은 수호자마다 다르다.',
+  { short: '일곱 손', en: 'The Seven Hands', name: '일곱 손', sub: '일곱 시각의 해를 붙잡은 이들', dot: '#f0dcae',
+    desc: '일곱 시각의 해를 붙잡고 있는 존재들. 시각마다 한 명씩, 모두 일곱이다. 각자의 땅에서 신앙과 권위의 중심으로 받들어지며, 땅의 사람들에게는 오래된 질서 그 자체다. 해를 붙잡고 있는 까닭은 손마다 다르다.',
     cards: [
-      { n: '한낮의 수호자', fig: 'guardian', hour: 0, t: '메르한의 해를 붙잡고 있는 수호자. 일곱 시각 가운데 가장 높은 해를 맡고 있다. 빛과 질서가 정점에 이른 메르한에서 받들어진다.', w: '한낮 · 메르한', p: tall(LANDS0[5].p, { seed: 6.8 }) },
-      { n: '정오의 수호자', fig: 'guardian', hour: 1, t: '카라드의 해를 붙잡고 있는 수호자. 흰 석조 도시와 법정, 기록 보관소가 늘어선 카라드에서 질서와 진실의 상징으로 받들어진다.', w: '정오 · 카라드', p: tall(LANDS0[1].p, { seed: 2.7 }) },
-      { n: '아침의 수호자', fig: 'guardian', hour: 2, t: '아르하의 해를 붙잡고 있는 수호자. 초원과 풍차가 이어지는 아르하의 마을들에게 신앙과 권위의 중심이다.', w: '아침 · 아르하', p: tall(LANDS0[0].p, { seed: 1.9 }) },
-      { n: '노을의 수호자', fig: 'guardian', hour: 3, t: '세이라의 해를 붙잡고 있는 수호자. 끝나지 않는 노을이 바다를 물들이는 항구 도시들에서 섬겨진다. 세이라 사람들은 예술과 기억을 소중히 여긴다.', w: '노을 · 세이라', p: tall(LANDS0[2].p, { seed: 3.6 }) },
-      { n: '황혼의 수호자', fig: 'guardian', hour: 4, t: '무레의 해를 붙잡고 있는 수호자. 푸른 황혼이 숲과 첨탑에 내려앉는 땅에서, 삶과 죽음의 경계를 존중하는 무레의 문화 한가운데에 있다.', w: '황혼 · 무레', p: tall(LANDS0[3].p, { seed: 5.1 }) },
-      { n: '새벽의 수호자', fig: 'guardian', hour: 5, t: '도른의 해를 붙잡고 있는 수호자. 해 없는 추위가 이어지는 도른에서, 등불의 온기로 버티는 도시들 위에 있다.', w: '새벽 · 도른', p: tall(LANDS0[4].p, { seed: 4.4 }) },
-      { n: '자정의 수호자', fig: 'guardian', hour: 6, t: '가장 깊은 밤의 시각, 네이의 해를 맡는 수호자. 그에 대해 알려진 것은 거의 없다.', w: '자정 · 네이', p: tall(LANDS0[6].p, { seed: 7.3 }) }] },
+      { n: '한낮의 손', fig: 'guardian', hour: 0, t: '메르한의 해를 붙잡고 있는 손. 일곱 시각 가운데 가장 높은 해를 맡고 있다. 빛과 질서가 정점에 이른 메르한에서 받들어진다.', w: '한낮 · 메르한', p: tall(LANDS0[5].p, { seed: 6.8 }) },
+      { n: '정오의 손', fig: 'guardian', hour: 1, t: '카라드의 해를 붙잡고 있는 손. 흰 석조 도시와 법정, 기록 보관소가 늘어선 카라드에서 질서와 진실의 상징으로 받들어진다.', w: '정오 · 카라드', p: tall(LANDS0[1].p, { seed: 2.7 }) },
+      { n: '아침의 손', fig: 'guardian', hour: 2, t: '아르하의 해를 붙잡고 있는 손. 초원과 풍차가 이어지는 아르하의 마을들에게 신앙과 권위의 중심이다.', w: '아침 · 아르하', p: tall(LANDS0[0].p, { seed: 1.9 }) },
+      { n: '노을의 손', fig: 'guardian', hour: 3, t: '세이라의 해를 붙잡고 있는 손. 끝나지 않는 노을이 바다를 물들이는 항구 도시들에서 섬겨진다. 세이라 사람들은 예술과 기억을 소중히 여긴다.', w: '노을 · 세이라', p: tall(LANDS0[2].p, { seed: 3.6 }) },
+      { n: '황혼의 손', fig: 'guardian', hour: 4, t: '무레의 해를 붙잡고 있는 손. 푸른 황혼이 숲과 첨탑에 내려앉는 땅에서, 삶과 죽음의 경계를 존중하는 무레의 문화 한가운데에 있다.', w: '황혼 · 무레', p: tall(LANDS0[3].p, { seed: 5.1 }) },
+      { n: '새벽의 손', fig: 'guardian', hour: 5, t: '도른의 해를 붙잡고 있는 손. 해 없는 추위가 이어지는 도른에서, 등불의 온기로 버티는 도시들 위에 있다.', w: '새벽 · 도른', p: tall(LANDS0[4].p, { seed: 4.4 }) },
+      { n: '자정의 손', fig: 'guardian', hour: 6, t: '가장 깊은 밤의 시각, 네이의 해를 맡는 손. 그에 대해 알려진 것은 거의 없다.', w: '자정 · 네이', p: tall(LANDS0[6].p, { seed: 7.3 }) }] },
   { short: '이음회', en: 'The Bond', name: '이음회', sub: '사람들의 공동체', dot: '#e6c27a',
     desc: '특정한 신을 따르기보다, 탈미라에서 살아가는 사람들의 내일을 지키는 일을 먼저 생각하는 공동체. 땅과 시각을 가리지 않고 어려운 사람을 돕는다.',
     cards: [
@@ -100,7 +100,7 @@ const LORE = [
   { t: '멈춘 해', en: 'The Still Sun', c: '세계', d: '탈미라는 하늘의 해가 움직이지 않는 둥근 세계다. 먼 옛날 해가 멈춘 뒤로 빛과 시각은 제자리에 고정되었고, 그 뒤의 역사는 멈춘 해 아래에서 이어졌다. 해의 높이가 땅마다 달라서 어떤 땅은 늘 아침이고 어떤 땅은 늘 밤이다. 사람들은 움직이지 않는 해를 세상의 당연한 질서로 받아들이며 살아간다.', w: '사람들은 해가 멈춘 날을 「멈추던 날」이라 부른다.', p: tall(HERO_OLD, { pit: .34, seed: 2.6 }) },
   { t: '일곱 시각', en: 'The Seven Hours', c: '세계', d: '탈미라의 빛은 한낮, 정오, 아침, 노을, 황혼, 새벽, 자정의 일곱 갈래로 나뉜다. 해의 높이가 같은 지점들은 세계를 한 바퀴 두르는 띠를 이루고, 띠마다 하나의 시각과 하나의 땅이 있다. 밝은 쪽의 땅은 빛을 당연히 여기지만, 어두운 쪽의 땅에서는 작은 온기조차 귀중한 자원이다. 시각마다 빛의 색과 성질이 달라 문명과 싸우는 방식에도 영향을 준다.', w: '', p: tall(LANDS0[2].p) },
   { t: '떨어지는 별', en: 'Falling Stars', c: '세계', d: '탈미라의 하늘에서는 별이 하나씩 떨어지고 있다. 많은 사람은 이를 길조로 받아들여, 별이 떨어지는 날이면 땅마다 축제를 연다.', w: '별이 왜 떨어지는지 정확히 아는 사람은 드물다.', p: tall(LANDS0[6].p, { seed: 8.2 }), fx: 'falls' },
-  { t: '수호자', en: 'The Seven Hands', c: '사람', d: '수호자는 일곱 시각의 해를 붙잡고 있는 존재들이다. 각 수호자는 자신의 시각에 속한 땅에서 신앙과 권위의 중심으로 받들어진다. 땅의 사람들에게 수호자는 해를 지키는 이이자 오래된 질서 그 자체다.', w: '해를 붙잡고 있는 이유는 수호자마다 다르다.', p: tall(LANDS0[5].p, { seed: 7.7 }) },
+  { t: '일곱 손', en: 'The Seven Hands', c: '사람', d: '일곱 손은 일곱 시각의 해를 붙잡고 있는 존재들이다. 각각의 손은 자신의 시각에 속한 땅에서 신앙과 권위의 중심으로 받들어진다. 땅의 사람들에게 손은 해를 지키는 이이자 오래된 질서 그 자체다.', w: '해를 붙잡고 있는 이유는 손마다 다르다.', p: tall(LANDS0[5].p, { seed: 7.7 }) },
   { t: '멈춤', en: 'Stillness', c: '법칙', d: '멈춤은 시간과 함께 존재하는 또 하나의 근본 원리다. 흐르는 것을 실제로 정지시킬 수 있지만, 그 정지를 영원히 유지하지는 못한다. 이 원리는 해가 멈춘 날보다 훨씬 오래전부터 세계에 있었다.', w: '', p: tall(LANDS0[4].p, { seed: 2.2 }) },
   { t: '미끄러짐', en: 'Unstilling', c: '법칙', d: '오래 지속된 멈춤이 조금씩 약해지면서, 정지해 있던 사물과 현상에 변화가 되돌아오는 징후가 나타나고 있다. 굳은 땅에서 풀이 돋았다는 보고가 각지에서 이어진다.', w: '', p: tall(LANDS0[0].p, { seed: 5.5 }) },
   { t: '밀린 시간', en: 'Overdue Time', c: '법칙', d: '멈춰 있던 대상이 다시 흐르기 시작하면, 그동안 쌓여 있던 변화가 한꺼번에 나타난다. 오래 멈춘 꽃이 순식간에 피었다 지거나, 굳어 있던 바위가 한 번에 풍화되어 무너지는 식이다. 회복과 붕괴는 같은 원리에서 나온 서로 다른 결과다.', w: '방랑자의 힘도 이 원리와 맞닿아 있다.', p: tall(LANDS0[3].p, { seed: 6.6 }) },
@@ -380,7 +380,7 @@ const ART = [
   () => ({ img: 'hero', body: [
     ['p', '벨미라 공식 홈페이지가 문을 열었습니다. 앞으로 새 소식과 새로 공개되는 세계 정보는 이곳에 가장 먼저 올라옵니다.'],
     ['h', '홈페이지에서 볼 수 있는 것'],
-    ['ul', ['소식: 개발 소식과 새로 공개되는 정보', '인물: 방랑자와 일곱 수호자', '조직: 이음회와 미라세', '정보: 탈미라의 세계와 법칙', '세계: 일곱 시각의 땅']],
+    ['ul', ['소식: 개발 소식과 새로 공개되는 정보', '인물: 방랑자와 일곱 손', '조직: 이음회와 미라세', '정보: 탈미라의 세계와 법칙', '세계: 일곱 시각의 땅']],
     ['h', '이용 안내'],
     ['p', '휴대폰과 컴퓨터에서 모두 보실 수 있습니다. 화면이 끊기면 위쪽 「화질」에서 품질을 낮춰 주세요. 「소리」로 배경음악을 켜고 끌 수 있습니다.'],
     ['p', '홈페이지의 그림은 개발 중인 장면을 바탕으로 만든 것으로, 실제 게임 화면과 다를 수 있습니다.']] }),
@@ -584,8 +584,22 @@ const pager = document.createElement('nav'); pager.className = 'pager'; pager.se
 pager.innerHTML = secs.map((s, i) => '<button data-i="' + i + '" aria-label="' + s.getAttribute('aria-label') + '"><i></i></button>').join('');
 document.body.appendChild(pager);
 const fpOK = () => (innerWidth >= 900 && innerHeight >= 700) || (innerWidth < 900 && innerHeight >= 540);
-let endTimer = null, endDone = false, endDelay = 0, endReady = false;
-/* 마침표가 찍히는 순간: 빛의 물결이 화면으로 퍼지고, 글자를 따라 빛이 한 번 훑고, 바탕이 한 단계 밝아진 채 남는다 (빛이 다시 돈다) */
+let endTimer = null, endDone = false, endDelay = 0, endReady = false, endSun = null;
+/* 마침표가 해가 된다 (강백호 고른 C): 마침표는 제자리에 남고, 그 빛 하나가 아주 느리게 떠올라 바탕 그림의 해 자리에 겹친다 */
+let riseT = 0;
+const endRise = (el, sun, px, py) => {
+  clearTimeout(riseT);
+  riseT = setTimeout(() => {
+    if (!endSun || !document.getElementById('end').classList.contains('on') && document.documentElement.classList.contains('fp')) return;
+    const sec = document.getElementById('end'), er = el.getBoundingClientRect(), sr = sec.getBoundingClientRect();
+    const g = document.createElement('i'); g.className = 'erise'; sec.appendChild(g);
+    const x0 = er.left - sr.left + px, y0 = er.top - sr.top + py;
+    g.style.transform = `translate(${x0}px,${y0}px) scale(.42)`;
+    void g.offsetWidth; g.classList.add('go');
+    g.style.transform = `translate(${endSun.x}px,${endSun.y}px) scale(3.2)`;
+  }, 1400);
+};
+/* (쓰지 않음) 마침표가 찍히는 순간: 빛의 물결이 화면으로 퍼지고, 글자를 따라 빛이 한 번 훑고, 바탕이 한 단계 밝아진 채 남는다 (빛이 다시 돈다) */
 const endClimax = (el, cs, px, py) => {
   const sec = document.getElementById('end'), r = el.getBoundingClientRect(), sr = sec.getBoundingClientRect();
   const x = r.left - sr.left + px, y = r.top - sr.top + py;
@@ -607,6 +621,7 @@ const go = (i, force) => {
   secs[i].querySelectorAll('.reveal').forEach((r) => r.classList.add('in'));
   if (endReady) {
     clearTimeout(endDelay); if (endTimer) { cancelAnimationFrame(endTimer); endTimer = null; }
+    document.querySelectorAll('.erise').forEach((n) => n.remove()); clearTimeout(riseT);
     if (secs[i].id === 'end') { drawEnd(); $('#eline').innerHTML = ''; $('#end').classList.remove('relit'); endDelay = setTimeout(typeEnd, 700); }
   }
 };
@@ -651,6 +666,7 @@ const drawEnd = () => {
   const c = endPic.getContext('2d'), k = Math.max(W / HIMG.w, H / HIMG.h), dw = HIMG.w * k, dh = HIMG.h * k;
   let ox = (W - dw) / 2; const sxp = ox + HIMG.sx * dw; if (sxp > W * .82) ox -= sxp - W * .82; ox = Math.min(0, Math.max(W - dw, ox));
   c.filter = 'brightness(.62) saturate(.85)'; c.drawImage(heroImg, ox, (H - dh) / 2, dw, dh); c.filter = 'none';
+  const k2 = endPic.clientWidth / W; endSun = { x: (ox + HIMG.sx * dw) * k2, y: ((H - dh) / 2 + HIMG.sy * dh) * k2 };
 };
 /* 빛이 지나간 자리만 글자가 깨어난다. 첫 줄 끝에서 빛이 멈췄다가, 둘째 줄 끝에서 다시 돌기 시작한다 */
 const typeEnd = () => {
@@ -677,7 +693,7 @@ const typeEnd = () => {
       const e = pos[cs.length - 1], px = e[1] + fs * .12, py = e[2] + fs * .32, R = fs * 1.1, u = t - T3;
       if (u < 450) { const q = u / 450, s = q * q * (3 - 2 * q); place(e[1] + (px - e[1]) * s, e[2] + (py - e[2]) * s, 1 - .2 * s, 1); }
       else if (u < 450 + ORB) { const a = (u - 450) / ORB * Math.PI * 2; place(px + R * Math.sin(a), py - R + R * Math.cos(a), .8, 1); }
-      else { sun.classList.add('dot'); void sun.offsetWidth; place(px, py, .42, 1); endTimer = null; return; }
+      else { sun.classList.add('dot'); void sun.offsetWidth; place(px, py, .42, 1); endTimer = null; endRise(el, sun, px, py); return; }
     }
     while (lit < Math.min(cs.length, Math.floor(k))) cs[lit++].classList.add('lit');
     if (t >= T3) { while (lit < cs.length) cs[lit++].classList.add('lit'); }

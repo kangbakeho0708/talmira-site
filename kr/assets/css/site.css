@@ -484,3 +484,8 @@ html.fp .grp .card{height:min(640px,70vh)}
 #end.relit .pic{animation:relit 3.2s ease forwards}
 @keyframes relit{0%{filter:none}28%{filter:brightness(1.5) saturate(1.15)}100%{filter:brightness(1.18) saturate(1.05)}}
 @media (prefers-reduced-motion:reduce){.ewave{display:none}.eline .c.glint{animation:none}#end.relit .pic{animation:none}}
+
+/* 마침표가 해로 떠오른다 */
+.erise{position:absolute;left:0;top:0;z-index:1;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:#f4efe2;box-shadow:0 0 6px 1px rgba(255,226,160,.35);pointer-events:none;opacity:.9}
+.erise.go{transition:transform 7s cubic-bezier(.45,0,.2,1),background 7s ease,box-shadow 7s ease,opacity 7s ease;background:#fff6dc;box-shadow:0 0 10px 3px rgba(255,226,160,.9),0 0 30px 10px rgba(255,190,110,.4);opacity:.85}
+@media (prefers-reduced-motion:reduce){.erise{display:none}}
