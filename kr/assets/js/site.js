@@ -212,7 +212,8 @@ const SND = (() => {
     return on;
   };
   bgm.volume = 0;
-  return { toggle, tick: () => tap(440, .07, .06), move: () => tap(349.23, .09, .1), soft: () => tap(392, .04, .05) };
+  const chime = () => [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => setTimeout(() => tap(f, .055 - i * .008, 1.1), i * 150));
+  return { toggle, chime, tick: () => tap(440, .07, .06), move: () => tap(349.23, .09, .1), soft: () => tap(392, .04, .05) };
 })();
 const sndBtn = $('#snd');
 const sndSet = (v) => { sndBtn.setAttribute('aria-pressed', String(v)); sndBtn.setAttribute('aria-label', v ? '소리 끄기' : '소리 켜기'); };
@@ -226,11 +227,13 @@ const firstTouch = (e) => {
   if (!off) sndSet(SND.toggle());
 };
 ['pointerup', 'keydown', 'touchend'].forEach((t) => addEventListener(t, firstTouch, true));
+/* 마우스로 고르는 모든 것에 효과음. 누르는 순간 목록이 다시 그려져도 놓치지 않게 먼저 (capture) 듣는다 */
 document.addEventListener('click', (e) => {
-  if (e.target.closest('#snd')) return;
-  if (e.target.closest('.arrow,.dot,.lc,.peek,.rail button')) SND.move();
-  else if (e.target.closest('.tabs a,.ftabs button,.qual button,.btn')) SND.tick();
-});
+  const t = e.target.closest ? e.target : null; if (!t || t.closest('#snd')) return;
+  if (t.closest('.arrow,.dot,.lc,.peek,.rail button,.pager button,#dots span,#fdots span')) SND.move();
+  else if (t.closest('.tabs a,.ftabs button,.qual button,.btn,.burger,#qbtn,.aback,.arel button,li[data-a],#feat,.card,#menu a,.logo')) SND.tick();
+  else if (t.closest('button,a,[role=button],[role=tab]')) SND.soft();
+}, true);
 document.querySelectorAll('.card,.nlist li').forEach(() => {});
 document.addEventListener('mouseover', (e) => { const c = e.target.closest('.card,.lc'); if (c && !c.dataset.h) { c.dataset.h = '1'; SND.soft(); c.addEventListener('mouseleave', () => { delete c.dataset.h; }, { once: true }); } });
 
@@ -582,6 +585,15 @@ pager.innerHTML = secs.map((s, i) => '<button data-i="' + i + '" aria-label="' +
 document.body.appendChild(pager);
 const fpOK = () => (innerWidth >= 900 && innerHeight >= 700) || (innerWidth < 900 && innerHeight >= 540);
 let endTimer = null, endDone = false, endDelay = 0, endReady = false;
+/* 마침표가 찍히는 순간: 빛의 물결이 화면으로 퍼지고, 글자를 따라 빛이 한 번 훑고, 바탕이 한 단계 밝아진 채 남는다 (빛이 다시 돈다) */
+const endClimax = (el, cs, px, py) => {
+  const sec = document.getElementById('end'), r = el.getBoundingClientRect(), sr = sec.getBoundingClientRect();
+  const x = r.left - sr.left + px, y = r.top - sr.top + py;
+  [0, 260, 620].forEach((d, i) => setTimeout(() => { const w = document.createElement('i'); w.className = 'ewave' + (i === 2 ? ' thin' : ''); w.style.left = x + 'px'; w.style.top = y + 'px'; sec.appendChild(w); setTimeout(() => w.remove(), 2600); }, d));
+  cs.forEach((c, i) => { c.style.animationDelay = (380 + i * 28) + 'ms'; c.classList.add('glint'); });
+  sec.classList.remove('relit'); void sec.offsetWidth; sec.classList.add('relit');
+  try { SND.chime(); } catch (e) {}
+};
 const go = (i, force) => {
   i = Math.max(0, Math.min(secs.length - 1, i));
   if (i === cur && !force) return;
@@ -595,7 +607,7 @@ const go = (i, force) => {
   secs[i].querySelectorAll('.reveal').forEach((r) => r.classList.add('in'));
   if (endReady) {
     clearTimeout(endDelay); if (endTimer) { cancelAnimationFrame(endTimer); endTimer = null; }
-    if (secs[i].id === 'end') { drawEnd(); $('#eline').innerHTML = ''; endDelay = setTimeout(typeEnd, 700); }
+    if (secs[i].id === 'end') { drawEnd(); $('#eline').innerHTML = ''; $('#end').classList.remove('relit'); endDelay = setTimeout(typeEnd, 700); }
   }
 };
 const fpOn = () => {
@@ -665,7 +677,7 @@ const typeEnd = () => {
       const e = pos[cs.length - 1], px = e[1] + fs * .12, py = e[2] + fs * .32, R = fs * 1.1, u = t - T3;
       if (u < 450) { const q = u / 450, s = q * q * (3 - 2 * q); place(e[1] + (px - e[1]) * s, e[2] + (py - e[2]) * s, 1 - .2 * s, 1); }
       else if (u < 450 + ORB) { const a = (u - 450) / ORB * Math.PI * 2; place(px + R * Math.sin(a), py - R + R * Math.cos(a), .8, 1); }
-      else { sun.classList.add('dot'); void sun.offsetWidth; place(px, py, .42, 1); endTimer = null; return; }
+      else { sun.classList.add('dot'); void sun.offsetWidth; place(px, py, .42, 1); endTimer = null; endClimax(el, cs, px, py); return; }
     }
     while (lit < Math.min(cs.length, Math.floor(k))) cs[lit++].classList.add('lit');
     if (t >= T3) { while (lit < cs.length) cs[lit++].classList.add('lit'); }
