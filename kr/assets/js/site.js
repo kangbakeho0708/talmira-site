@@ -1,5 +1,5 @@
 {
-const IMGV = '2';
+const IMGV = '3';
 const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
 /* 새로고침하거나 처음 들어오면 늘 메인부터 */
 try { history.scrollRestoration = 'manual'; if (location.hash) history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
