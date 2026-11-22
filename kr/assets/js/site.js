@@ -677,7 +677,7 @@ const typeEnd = () => {
       const e = pos[cs.length - 1], px = e[1] + fs * .12, py = e[2] + fs * .32, R = fs * 1.1, u = t - T3;
       if (u < 450) { const q = u / 450, s = q * q * (3 - 2 * q); place(e[1] + (px - e[1]) * s, e[2] + (py - e[2]) * s, 1 - .2 * s, 1); }
       else if (u < 450 + ORB) { const a = (u - 450) / ORB * Math.PI * 2; place(px + R * Math.sin(a), py - R + R * Math.cos(a), .8, 1); }
-      else { sun.classList.add('dot'); void sun.offsetWidth; place(px, py, .42, 1); endTimer = null; endClimax(el, cs, px, py); return; }
+      else { sun.classList.add('dot'); void sun.offsetWidth; place(px, py, .42, 1); endTimer = null; return; }
     }
     while (lit < Math.min(cs.length, Math.floor(k))) cs[lit++].classList.add('lit');
     if (t >= T3) { while (lit < cs.length) cs[lit++].classList.add('lit'); }
