@@ -419,3 +419,22 @@ html.lowq #dust{display:none}
   #people .rail button{flex:none;min-width:52px}
   #people .rail .mk{width:32px;height:32px}
 }
+
+/* 갈래 목록: 문장 그림 + 스크롤, 카드는 가운데 크게 (명조 구조) */
+.grp .pgrid{align-items:center}
+.grp .rail{align-self:stretch;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;gap:6px!important;padding:24px 0;-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 8%,#000 92%,transparent 100%);mask-image:linear-gradient(180deg,transparent 0,#000 8%,#000 92%,transparent 100%)}
+.grp .rail::-webkit-scrollbar{display:none}
+.rail .emb{display:block;width:56px;height:56px;color:rgba(214,205,190,.42);transition:color .35s,filter .35s,transform .35s}
+.rail .emb svg{width:100%;height:100%}
+.rail button:hover .emb{color:rgba(240,228,200,.75)}
+.rail button[aria-selected=true] .emb{color:var(--gold2);filter:drop-shadow(0 0 6px rgba(247,230,188,.55)) drop-shadow(0 0 16px var(--dot));transform:scale(1.06)}
+.rail button{flex:none}
+html.fp .grp .pgrid{height:calc(100vh - 150px)}
+html.fp .grp .card{height:min(640px,70vh)}
+.grp .cbox{justify-content:center}
+@media (max-width:899px){
+  .grp .rail{align-self:auto;flex-direction:row;overflow-x:auto;overflow-y:hidden;justify-content:flex-start;padding:0 6px;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 6%,#000 94%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 6%,#000 94%,transparent 100%)}
+  .rail .emb{width:40px;height:40px}
+  html.fp .grp .pgrid{height:calc(100svh - 110px)}
+  html.fp .grp .card{height:100%}
+}

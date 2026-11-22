@@ -77,17 +77,35 @@ const FACTIONS_ALL = [
       { n: '일곱 간부', fig: 'seven', t: '미라세의 핵심 권력자 일곱 명. 일곱 시각에 대응하는 자리를 하나씩 맡아, 각 지역과 미라세의 사업에 저마다 다른 이해관계를 갖는다.', w: '', p: tall(LANDS0[1].p, { seed: 6.1, exp: .9 }), fx: 'lamps' },
       { n: '온기 등불', t: '긴 밤을 견딜 열을 만들어 내는 특수한 등불. 미라세가 생산과 공급을 장악하고 있으며, 등불 하나에 공동체의 존속이 달린 마을도 있다.', w: '작동 원리는 공개되지 않았다.', p: tall(LANDS0[4].p, { seed: 3.3, exp: 1.6 }), fx: 'lamp' }] }
 ];
+
+/* 갈래 문장 (가제 디자인, 강백호가 바꿀 수 있다). 64 칸 안의 금선 그림 */
+const star4 = (x, y, r) => `<path d="M${x} ${y - r}L${x + r * .28} ${y - r * .28}L${x + r} ${y}L${x + r * .28} ${y + r * .28}L${x} ${y + r}L${x - r * .28} ${y + r * .28}L${x - r} ${y}L${x - r * .28} ${y - r * .28}Z"/>`;
+const ticks = (cx, cy, r0, r1, n, a0) => Array.from({ length: n }, (_, i) => { const a = a0 + i * Math.PI * 2 / n; return `<line x1="${(cx + Math.cos(a) * r0).toFixed(1)}" y1="${(cy + Math.sin(a) * r0).toFixed(1)}" x2="${(cx + Math.cos(a) * r1).toFixed(1)}" y2="${(cy + Math.sin(a) * r1).toFixed(1)}"/>`; }).join('');
+const EMB = {
+  unknown: `<circle cx="30" cy="34" r="17"/><circle cx="30" cy="34" r="11" stroke-dasharray="2 3"/>${ticks(30, 34, 17, 21, 7, -Math.PI / 2)}${star4(51, 12, 7)}`,
+  merhan: `<circle cx="32" cy="11" r="5"/>${ticks(32, 11, 7.5, 10.5, 8, 0)}<line x1="32" y1="17" x2="32" y2="26"/><path d="M27 56L32 24L37 56Z"/><path d="M20 56L23 44L26 56M38 56L41 46L44 56"/><line x1="14" y1="56" x2="50" y2="56"/>`,
+  karad: `<circle cx="32" cy="13" r="4"/>${ticks(32, 13, 6, 9, 8, 0)}<path d="M32 30C26 26 18 26 12 28V52C18 50 26 50 32 54C38 50 46 50 52 52V28C46 26 38 26 32 30Z"/><line x1="32" y1="30" x2="32" y2="54"/><path d="M16 34C20 33 25 33 28 35M16 40C20 39 25 39 28 41M36 35C39 33 44 33 48 34M36 41C39 39 44 39 48 40"/>`,
+  arha: `<path d="M14 56A18 18 0 0 1 50 56"/><path d="M28 56L29.5 34H34.5L36 56Z"/><line x1="32" y1="32" x2="18" y2="18"/><line x1="32" y1="32" x2="46" y2="18"/><line x1="32" y1="32" x2="20" y2="46"/><line x1="32" y1="32" x2="44" y2="46"/><path d="M18 18L22 15L33 30M46 18L49 22L34 33"/><line x1="10" y1="56" x2="54" y2="56"/>`,
+  seira: `<path d="M17 38A15 15 0 0 1 47 38"/>${ticks(32, 38, 18, 22, 7, Math.PI + Math.PI / 14)}<line x1="10" y1="38" x2="54" y2="38"/><path d="M12 45C18 43 22 47 28 45S38 43 44 45S50 47 52 45M16 52C22 50 26 54 32 52S42 50 48 52"/><path d="M40 36V22L48 34Z"/>`,
+  mure: `<path d="M32 6L29 22L27 54H37L35 22Z"/><circle cx="32" cy="30" r="1.6"/><path d="M12 54L17 38L22 54M42 54L47 36L52 54M17 44L13 50M47 42L51 50"/><path d="M50 12A6 6 0 1 1 44 6A4.6 4.6 0 1 0 50 12Z"/><line x1="8" y1="54" x2="56" y2="54"/>`,
+  dorn: `<circle cx="32" cy="34" r="22" stroke-dasharray="3 3"/><path d="M32 8V13M26 13H38L36 18H28Z"/><rect x="25" y="18" width="14" height="24" rx="3"/><path d="M32 37C29 34 30 30 32 27C34 30 35 34 32 37Z"/><path d="M24 42H40L37 47H27Z"/>`,
+  nei: `<path d="M8 32C16 20 48 20 56 32C48 44 16 44 8 32Z"/><circle cx="32" cy="32" r="8"/>${star4(32, 32, 5)}<circle cx="32" cy="32" r="24" stroke-dasharray="1 4"/>`,
+  bond: `<circle cx="14" cy="22" r="4"/><circle cx="50" cy="20" r="4"/><circle cx="32" cy="46" r="4"/><path d="M18 23Q32 34 46 21M16 26Q22 44 28 46M48 24Q42 44 36 46"/>`,
+  mirase: `<path d="M32 6L56 32L32 58L8 32Z"/><path d="M32 46C25 41 26 32 32 24C38 32 39 41 32 46Z"/><path d="M32 46C30 43 30 39 32 36C34 39 34 43 32 46Z"/>`
+};
+const embSvg = (k) => `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">${EMB[k] || ''}</svg>`;
+
 /* 인물: 명조처럼 출신 땅별로 나눈다. 띠 밖 (방랑자와 동행) + 일곱 땅 (해에 가까운 순). 이름 「띠 밖」 은 가제 */
 const PEOPLE = (() => {
   const Wd = FACTIONS_ALL[0], Gd = FACTIONS_ALL[1];
-  const out = [{ short: '띠 밖', en: 'Beyond the Bands', name: '띠 밖', sub: '시각의 띠를 넘어 다니는 이들', dot: '#7fb0ff', desc: Wd.desc, cards: Wd.cards.map((c, i) => Object.assign({}, c, { key: 'card0-' + i })) }];
+  const out = [{ short: '미공개', en: 'UNKNOWN', name: '미공개', sub: '출신이 알려지지 않은 이들', dot: '#7fb0ff', emb: 'unknown', desc: Wd.desc, cards: Wd.cards.map((c, i) => Object.assign({}, c, { key: 'card0-' + i })) }];
   LANDS.forEach((L, i) => {
     const k = Gd.cards.findIndex((c) => c.w.endsWith(L.n));
-    out.push({ short: L.n, en: L.en, name: L.n, sub: L.h + ' · ' + L.m, dot: HOURS[i][1], desc: L.d, cards: k >= 0 ? [Object.assign({}, Gd.cards[k], { key: 'card1-' + k })] : [] });
+    out.push({ short: L.n, en: L.en, name: L.n, sub: L.h + ' · ' + L.m, dot: HOURS[i][1], emb: ['merhan', 'karad', 'arha', 'seira', 'mure', 'dorn', 'nei'][i], desc: L.d, cards: k >= 0 ? [Object.assign({}, Gd.cards[k], { key: 'card1-' + k })] : [] });
   });
   return out;
 })();
-const ORGS = FACTIONS_ALL.filter((f) => ['이음회', '미라세'].includes(f.short));
+const ORGS = FACTIONS_ALL.filter((f) => ['이음회', '미라세'].includes(f.short)).map((f) => { const a = FACTIONS_ALL.indexOf(f); return Object.assign({}, f, { emb: f.short === '이음회' ? 'bond' : 'mirase', cards: f.cards.map((c, i) => Object.assign({}, c, { key: 'card' + a + '-' + i })) }); });
 const LORE = [
   { t: '멈춘 해', en: 'The Still Sun', c: '세계', d: '탈미라는 하늘의 해가 움직이지 않는 둥근 세계다. 먼 옛날 해가 멈춘 뒤로 빛과 시각은 제자리에 고정되었고, 그 뒤의 역사는 멈춘 해 아래에서 이어졌다. 해의 높이가 땅마다 달라서 어떤 땅은 늘 아침이고 어떤 땅은 늘 밤이다. 사람들은 움직이지 않는 해를 세상의 당연한 질서로 받아들이며 살아간다.', w: '사람들은 해가 멈춘 날을 「멈추던 날」이라 부른다.', p: tall(HERO_OLD, { pit: .34, seed: 2.6 }) },
   { t: '일곱 시각', en: 'Seven Hours', c: '세계', d: '탈미라의 빛은 한낮, 정오, 아침, 노을, 황혼, 새벽, 자정의 일곱 갈래로 나뉜다. 해의 높이가 같은 지점들은 세계를 한 바퀴 두르는 띠를 이루고, 띠마다 하나의 시각과 하나의 땅이 있다. 밝은 쪽의 땅은 빛을 당연히 여기지만, 어두운 쪽의 땅에서는 작은 온기조차 귀중한 자원이다. 시각마다 빛의 색과 성질이 달라 문명과 싸우는 방식에도 영향을 준다.', w: '', p: tall(LANDS0[2].p) },
@@ -486,7 +504,7 @@ const makeGroup = (root, DATA, tag) => {
     R('cpos').textContent = Math.min(n, Math.round(box.scrollLeft / one) + 1) + ' / ' + n;
   };
   const render = (first) => {
-    R('rail').innerHTML = DATA.map((f, i) => '<button role="tab" data-i="' + i + '" aria-selected="' + (i === gi) + '"><span class="mk" aria-hidden="true"><i style="background:' + f.dot + ';box-shadow:0 0 12px ' + f.dot + '"></i></span><span>' + f.short + '</span></button>').join('');
+    R('rail').innerHTML = DATA.map((f, i) => '<button role="tab" data-i="' + i + '" aria-selected="' + (i === gi) + '">' + (f.emb ? '<span class="emb" style="--dot:' + f.dot + '">' + embSvg(f.emb) + '</span>' : '<span class="mk" aria-hidden="true"><i style="background:' + f.dot + ';box-shadow:0 0 12px ' + f.dot + '"></i></span>') + '<span>' + f.short + '</span></button>').join('');
     const f = DATA[gi];
     R('crestDot').setAttribute('fill', f.dot);
     const fill = () => { R('pen').textContent = f.en; R('pname').textContent = f.name; R('psub').textContent = f.sub; R('pdesc').textContent = f.desc; };
@@ -588,6 +606,8 @@ const isFp = () => document.documentElement.classList.contains('fp');
 const artOpen = () => document.body.classList.contains('art-open');
 addEventListener('wheel', (e) => {
   if (!isFp() || artOpen()) return;
+  const rl = e.target.closest && e.target.closest('.rail');
+  if (rl && rl.scrollHeight > rl.clientHeight + 2) { const atTop = rl.scrollTop <= 0, atEnd = rl.scrollTop + rl.clientHeight >= rl.scrollHeight - 1; if (!((e.deltaY < 0 && atTop) || (e.deltaY > 0 && atEnd))) return; }
   e.preventDefault();
   if (performance.now() - lock < 1100 || Math.abs(e.deltaY) < 24) return;
   go(cur + (e.deltaY > 0 ? 1 : -1));
