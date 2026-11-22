@@ -171,7 +171,9 @@ const SND = (() => {
     o.connect(lp); lp.connect(g); g.connect(out); o.start(t); o.stop(t + d + .05);
   };
   /* 배경음악: 누를 때만. 반복은 파일이 이음매 없이 이어진다. 2초 페이드는 여기서 */
-  const bgm = $('#bgm'); const BGM_VOL = .7; let ft = null;
+  /* 음량: 0.7 의 1.5배 = 1.05. 오디오 태그는 1 을 못 넘으니 태그는 1 까지, 나머지 1.05 배는 웹오디오로 (최고점 -1.9 dBFS 라 넘쳐도 -1.5 dBFS) */
+  const bgm = $('#bgm'); const BGM_VOL = 1, BGM_BOOST = 1.05; let ft = null, bgmWired = false;
+  const wire = () => { if (bgmWired || !ac) return; try { const src = ac.createMediaElementSource(bgm), g = ac.createGain(); g.gain.value = BGM_BOOST; src.connect(g); g.connect(ac.destination); bgmWired = true; } catch (e) {} };
   const fade = (to, ms) => {
     clearInterval(ft);
     const from = bgm.volume, t0 = performance.now();
@@ -184,7 +186,7 @@ const SND = (() => {
   const toggle = () => {
     boot(); ac.resume();
     on = !on;
-    if (on) { tap(523.25, .1, .18); try { if (bgm.volume === 0 && bgm.paused) bgm.volume = 0; bgm.play().then(() => fade(BGM_VOL, 2000)).catch(() => {}); } catch (e) {} }
+    if (on) { tap(523.25, .1, .18); wire(); try { if (bgm.volume === 0 && bgm.paused) bgm.volume = 0; bgm.play().then(() => fade(BGM_VOL, 2000)).catch(() => {}); } catch (e) {} }
     else fade(0, 2000);
     return on;
   };
