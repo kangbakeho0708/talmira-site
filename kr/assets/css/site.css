@@ -239,7 +239,10 @@ footer .credit{margin:0;font-size:12px;color:var(--mute);line-height:1.5;max-wid
 #end .eshade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,8,11,.55),rgba(8,8,11,.1) 40%,rgba(8,8,11,.75))}
 #end .etext{position:relative;z-index:2;margin-top:-6vh}
 .eline{margin:0;font:500 clamp(22px,2.6vw,36px)/1.75 "Pretendard Variable",Pretendard,sans-serif;letter-spacing:.06em;color:#f4efe2;text-shadow:0 2px 18px rgba(0,0,0,.7);min-height:3.6em}
-.eline .g{color:rgba(127,176,255,.85)}
+.eline{position:relative}
+.eline .c{display:inline-block;opacity:0;filter:blur(6px);color:#ffd99a;text-shadow:0 0 18px rgba(255,200,120,.9);transition:opacity .5s ease,filter .9s ease,color 2.4s ease,text-shadow 2.4s ease}
+.eline .c.lit{opacity:1;filter:none;color:#f4efe2;text-shadow:0 2px 18px rgba(0,0,0,.7)}
+.esun{position:absolute;left:0;top:0;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:#fff6dc;box-shadow:0 0 10px 3px rgba(255,226,160,.95),0 0 34px 12px rgba(255,190,110,.45),0 0 80px 30px rgba(255,170,90,.15);pointer-events:none;opacity:0;will-change:transform}
 .efoot{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:14px 0;border-top:1px solid var(--line);background:rgba(11,11,14,.7)}
 html.fp #world{padding-bottom:0}
 .burger{display:none}
@@ -285,7 +288,7 @@ html.fp #world{padding-bottom:0}
   .grp .cbox .cards{height:100%;scroll-snap-type:x mandatory;padding:0 9vw;gap:12px}
   .grp .cbox .card{flex:0 0 72vw;scroll-snap-align:center;height:100%!important;min-height:0}
   .grp .card .tx{padding:16px}.grp .card h3{font-size:22px}.grp .card p{font-size:13px}
-  .grp .cnav{justify-content:center}
+  .grp .cnav{display:none}
   .grp .rail{order:3;flex:none;flex-direction:row;justify-content:center;gap:22px}
   .grp .rail .mk{width:40px;height:40px}.grp .rail button{padding:2px;font-size:12px}
   /* 정보: 글 위, 세로 그림 아래 */
@@ -296,7 +299,11 @@ html.fp #world{padding-bottom:0}
   .ltext .w{font-size:12px}
   #lbox{gap:8px!important}
   .slider{gap:8px}.slider .arrow{width:36px;height:36px}
-  .track{height:40svh}
+  .ltext{flex:none}
+  #lbox{flex:1 1 auto;min-height:0}
+  #lbox .slider{flex:1 1 auto;min-height:0;align-items:center}
+  .track{height:auto;align-self:stretch;flex:1 1 auto;min-height:0}
+  html.fp #lore .lgrid{height:calc(100svh - 112px)}
   .ltext .lmeta{display:none}
   html.fp #lore{justify-content:flex-start}
   .slider{width:100%}
@@ -307,6 +314,7 @@ html.fp #world{padding-bottom:0}
   .peek{display:none}
   .scene{height:52svh;border-radius:0}
   .wbar{flex-direction:column;align-items:flex-start;gap:10px;padding-top:16px}
+  .wname,.wdesc{flex:none}
   .wname b{font-size:30px}
   .wdesc{font-size:13px;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
   .wnav{align-self:stretch;justify-content:space-between}

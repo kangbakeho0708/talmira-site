@@ -525,17 +525,31 @@ const drawEnd = () => {
   c.filter = 'brightness(.62) saturate(.85)'; c.drawImage(heroImg, ox, (H - dh) / 2, dw, dh); c.filter = 'none';
 };
 let endTimer = null, endDone = false;
-const GL = '빛손별해밤새벽노을자정시각멈춘다시도는';
+/* 빛이 지나간 자리만 글자가 깨어난다. 첫 줄 끝에서 빛이 멈췄다가, 둘째 줄 끝에서 다시 돌기 시작한다 */
 const typeEnd = () => {
   if (endDone) return; endDone = true;
-  const el = $('#eline'), full = ENDLINE.join('\n'); const n = full.length; let t0 = performance.now();
-  if (RM) { el.innerHTML = ENDLINE.join('<br>'); return; }
+  const el = $('#eline');
+  el.innerHTML = ENDLINE.map((l) => '<span class="ln">' + [...l].map((ch) => '<span class="c">' + (ch === ' ' ? '&nbsp;' : ch) + '</span>').join('') + '</span>').join('<br>');
+  const cs = [...el.querySelectorAll('.c')];
+  if (RM) { cs.forEach((c) => c.classList.add('lit')); return; }
+  const sun = document.createElement('i'); sun.className = 'esun'; el.appendChild(sun);
+  const base = el.getBoundingClientRect();
+  const pos = cs.map((c) => { const r = c.getBoundingClientRect(); return [r.left - base.left, r.right - base.left, r.top - base.top + r.height * .5]; });
+  const n1 = [...ENDLINE[0]].length, PER = 75, HOLD = 1300;
+  const T1 = n1 * PER, T2 = T1 + HOLD, T3 = T2 + (cs.length - n1) * PER;
+  const t0 = performance.now(); let lit = 0;
+  const place = (x, y, s, o) => { sun.style.transform = `translate(${x}px,${y}px) scale(${s})`; sun.style.opacity = o; };
   const step = () => {
-    const k = Math.min(n, Math.floor((performance.now() - t0) / 55));
-    let out = '';
-    for (let i = 0; i < n; i++) { const ch = full[i]; if (i < k) out += ch === '\n' ? '<br>' : ch; else if (i < k + 4 && ch !== '\n' && ch !== ' ') out += '<span class="g">' + GL[(i * 7 + (performance.now() / 60 | 0)) % GL.length] + '</span>'; }
-    el.innerHTML = out;
-    if (k < n) endTimer = requestAnimationFrame(step);
+    const t = performance.now() - t0; let k, x, y;
+    if (t < T1) { k = t / PER; } else if (t < T2) { k = n1; } else if (t < T3) { k = n1 + (t - T2) / PER; } else { k = cs.length; }
+    const i = Math.min(cs.length - 1, Math.floor(k)), f = k - Math.floor(k);
+    const p = pos[Math.min(i, cs.length - 1)];
+    if (t >= T1 && t < T2) { x = pos[n1 - 1][1]; y = pos[n1 - 1][2]; place(x, y, 1 + .18 * Math.sin((t - T1) / 180), 1); }
+    else if (t < T3) { x = p[0] + (p[1] - p[0]) * f; y = p[2]; place(x, y, 1, Math.min(1, t / 300)); }
+    else { const u = (t - T3) / 1000, e = pos[cs.length - 1]; x = e[1] + 26 * Math.sin(u * 1.1) - 26 * 0; y = e[2] - 26 + 26 * Math.cos(u * 1.1); place(x, y, .8, Math.min(1, .55 + (t - T3) / 4000)); }
+    while (lit < Math.min(cs.length, Math.floor(k))) cs[lit++].classList.add('lit');
+    if (t >= T3) { while (lit < cs.length) cs[lit++].classList.add('lit'); }
+    endTimer = requestAnimationFrame(step);
   };
   step();
 };
