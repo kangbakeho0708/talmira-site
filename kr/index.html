@@ -22,13 +22,16 @@
 <body>
 
 <div id="intro" role="status" aria-label="불러오는 중">
-<svg viewBox="0 0 400 400" aria-hidden="true">
+<div class="ldsky" id="ldSky" aria-hidden="true"></div>
+<svg viewBox="-70 -70 540 540" aria-hidden="true">
+<g id="ldEmb"></g>
 <circle cx="200" cy="200" r="150" fill="none" stroke="rgba(214,190,140,.35)" stroke-width="1"/>
 <g id="ticks"></g>
 <circle id="sunDot" r="6" fill="#f0dcae"/>
 </svg>
 <p id="hourName">한낮</p>
 <p class="ld-en" id="hourEn">MIDDAY</p>
+<p class="ld-line" id="ldLine"></p>
 </div>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>

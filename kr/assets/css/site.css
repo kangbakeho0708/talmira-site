@@ -489,3 +489,14 @@ html.fp .grp .card{height:min(640px,70vh)}
 .erise{position:absolute;left:0;top:0;z-index:1;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:#f4efe2;box-shadow:0 0 6px 1px rgba(255,226,160,.35);pointer-events:none;opacity:.9}
 .erise.go{transition:transform 7s cubic-bezier(.45,0,.2,1),background 7s ease,box-shadow 7s ease,opacity 7s ease;background:#fff6dc;box-shadow:0 0 10px 3px rgba(255,226,160,.9),0 0 30px 10px rgba(255,190,110,.4);opacity:.85}
 @media (prefers-reduced-motion:reduce){.erise{display:none}}
+
+/* 로딩: 일곱 문장, 세계 한 줄, 시각 하늘 */
+#intro svg{width:min(300px,62vw);margin-bottom:10px;position:relative;z-index:1}
+#intro .le{fill:#8a857c;opacity:.35;transition:fill 1.2s ease,opacity 1.2s ease}
+#intro .le.on{fill:#e8cf98;opacity:.95;filter:drop-shadow(0 0 4px rgba(255,220,160,.5))}
+#intro p{position:relative;z-index:1}
+#intro .ld-line{margin:14px 0 0;font:400 13px/1.4 "Pretendard Variable",Pretendard,sans-serif;color:var(--soft);letter-spacing:.14em;opacity:0;min-height:1.4em}
+#intro .ld-line.in{animation:ldl 1s ease forwards}
+@keyframes ldl{from{opacity:0;transform:translateY(4px)}to{opacity:.75;transform:none}}
+.ldsky{position:absolute;inset:0;background-color:var(--t,#fbf6e6);opacity:.11;transition:background-color 1.4s ease;-webkit-mask-image:radial-gradient(ellipse 60% 55% at 50% 46%,#000 0,transparent 75%);mask-image:radial-gradient(ellipse 60% 55% at 50% 46%,#000 0,transparent 75%);pointer-events:none}
+#intro.stop .ldsky{background-color:#7fb0ff}

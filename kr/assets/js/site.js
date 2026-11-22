@@ -244,6 +244,11 @@ const LD = (() => {
   const R = 150, C = 200, T0 = performance.now(), PER = 7000;
   $('#ticks').innerHTML = HN.map((_, i) => { const a = -Math.PI / 2 + i * Math.PI * 2 / 7; return '<line data-i="' + i + '" x1="' + (C + Math.cos(a) * 160) + '" y1="' + (C + Math.sin(a) * 160) + '" x2="' + (C + Math.cos(a) * 184) + '" y2="' + (C + Math.sin(a) * 184) + '" stroke="#d6be8c" stroke-width="2" opacity=".3"/>'; }).join('');
   const ticks = [...document.querySelectorAll('#ticks line')];
+  /* 일곱 땅 문장: 해가 지나간 자리부터 금빛으로 켜진다 (원신 원소 막대 구조를 일곱 땅으로) */
+  const EK = ['merhan', 'karad', 'arha', 'seira', 'mure', 'dorn', 'nei'], ES = 46, ER = 222;
+  $('#ldEmb').innerHTML = EK.map((k, i) => { const a = -Math.PI / 2 + i * Math.PI * 2 / 7, x = C + Math.cos(a) * ER - ES / 2, y = C + Math.sin(a) * ER - ES / 2; return '<g class="le" transform="translate(' + x.toFixed(1) + ',' + y.toFixed(1) + ') scale(' + (ES / 100) + ')"><path fill-rule="evenodd" d="' + (EMB[k] || '') + '"/></g>'; }).join('');
+  const embs = [...document.querySelectorAll('#ldEmb .le')], lit = new Set();
+  const sky = $('#ldSky'), line = $('#ldLine');
   let ready = false, last = -1, done = false, rT = 0, rP = 0, rEnd = 0, fin = false;
   const frame = (t) => {
     if (done) return;
@@ -260,7 +265,10 @@ const LD = (() => {
     const a = -Math.PI / 2 + p * Math.PI * 2;
     dot.setAttribute('cx', C + Math.cos(a) * R); dot.setAttribute('cy', C + Math.sin(a) * R);
     const hi = Math.round(p * 7) % 7;
-    if (hi !== last) { last = hi; name.textContent = HN[hi]; en.textContent = HE[hi]; }
+    if (hi !== last) { last = hi; name.textContent = HN[hi]; en.textContent = HE[hi];
+      const L = LANDS[hi]; line.classList.remove('in'); void line.offsetWidth; line.textContent = L.n + ', ' + L.m; line.classList.add('in');
+      sky.style.setProperty('--t', HOURS[hi][1]); }
+    const passed = Math.floor(p * 7 + .5) % 7; if (!lit.has(passed)) { lit.add(passed); embs[passed].classList.add('on'); }
     ticks.forEach((l, i) => { const d = Math.abs(((p * 7 - i + 10.5) % 7) - 3.5); l.setAttribute('opacity', (.3 + .7 * Math.max(0, 1 - d)).toFixed(2)); });
     if (fin) {
       done = true; box.classList.add('stop'); dot.setAttribute('fill', '#7fb0ff'); ticks[6].setAttribute('stroke', '#7fb0ff'); ticks[6].setAttribute('opacity', '1');
