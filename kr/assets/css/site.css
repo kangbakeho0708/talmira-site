@@ -243,6 +243,7 @@ footer .credit{margin:0;font-size:12px;color:var(--mute);line-height:1.5;max-wid
 .eline .c{display:inline-block;opacity:0;filter:blur(6px);color:#ffd99a;text-shadow:0 0 18px rgba(255,200,120,.9);transition:opacity .5s ease,filter .9s ease,color 2.4s ease,text-shadow 2.4s ease}
 .eline .c.lit{opacity:1;filter:none;color:#f4efe2;text-shadow:0 2px 18px rgba(0,0,0,.7)}
 .esun{position:absolute;left:0;top:0;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:#fff6dc;box-shadow:0 0 10px 3px rgba(255,226,160,.95),0 0 34px 12px rgba(255,190,110,.45),0 0 80px 30px rgba(255,170,90,.15);pointer-events:none;opacity:0;will-change:transform}
+.esun.dot{transition:transform .8s cubic-bezier(.2,.7,.2,1),background 1.6s ease,box-shadow 1.6s ease;background:#f4efe2;box-shadow:0 0 6px 1px rgba(255,226,160,.35)}
 .efoot{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:14px 0;border-top:1px solid var(--line);background:rgba(11,11,14,.7)}
 html.fp #world{padding-bottom:0}
 .burger{display:none}

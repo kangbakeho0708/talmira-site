@@ -538,7 +538,7 @@ const typeEnd = () => {
   const sun = document.createElement('i'); sun.className = 'esun'; el.appendChild(sun);
   const base = el.getBoundingClientRect();
   const pos = cs.map((c) => { const r = c.getBoundingClientRect(); return [r.left - base.left, r.right - base.left, r.top - base.top + r.height * .5]; });
-  const n1 = [...ENDLINE[0]].length, PER = 75, HOLD = 1300;
+  const n1 = [...ENDLINE[0]].length, PER = 75, HOLD = 1300, ORB = 2600, fs = parseFloat(getComputedStyle(el).fontSize);
   const T1 = n1 * PER, T2 = T1 + HOLD, T3 = T2 + (cs.length - n1) * PER;
   const t0 = performance.now(); let lit = 0;
   const place = (x, y, s, o) => { sun.style.transform = `translate(${x}px,${y}px) scale(${s})`; sun.style.opacity = o; };
@@ -549,7 +549,12 @@ const typeEnd = () => {
     const p = pos[Math.min(i, cs.length - 1)];
     if (t >= T1 && t < T2) { x = pos[n1 - 1][1]; y = pos[n1 - 1][2]; place(x, y, 1 + .18 * Math.sin((t - T1) / 180), 1); }
     else if (t < T3) { x = p[0] + (p[1] - p[0]) * f; y = p[2]; place(x, y, 1, Math.min(1, t / 300)); }
-    else { const u = (t - T3) / 1000, e = pos[cs.length - 1]; x = e[1] + 26 * Math.sin(u * 1.1) - 26 * 0; y = e[2] - 26 + 26 * Math.cos(u * 1.1); place(x, y, .8, Math.min(1, .55 + (t - T3) / 4000)); }
+    else {
+      const e = pos[cs.length - 1], px = e[1] + fs * .12, py = e[2] + fs * .32, R = fs * 1.1, u = t - T3;
+      if (u < 450) { const q = u / 450, s = q * q * (3 - 2 * q); place(e[1] + (px - e[1]) * s, e[2] + (py - e[2]) * s, 1 - .2 * s, 1); }
+      else if (u < 450 + ORB) { const a = (u - 450) / ORB * Math.PI * 2; place(px + R * Math.sin(a), py - R + R * Math.cos(a), .8, 1); }
+      else { sun.classList.add('dot'); void sun.offsetWidth; place(px, py, .42, 1); endTimer = null; return; }
+    }
     while (lit < Math.min(cs.length, Math.floor(k))) cs[lit++].classList.add('lit');
     if (t >= T3) { while (lit < cs.length) cs[lit++].classList.add('lit'); }
     endTimer = requestAnimationFrame(step);
