@@ -807,7 +807,8 @@ requestAnimationFrame(loop);
 (() => {
   const cv = $('#dust'); if (!cv) return;
   const c = cv.getContext('2d'); let W = 0, H = 0, P = [], last = 0;
-  const N = () => (RM || Q === 'low') ? 0 : Q === 'mid' ? 26 : 46;
+  const SMALL = matchMedia('(max-width:899px), (pointer:coarse)').matches;  /* 휴대폰: 먼지 적게, 30프레임 */
+  const N = () => (RM || Q === 'low') ? 0 : SMALL ? (Q === 'mid' ? 8 : 16) : Q === 'mid' ? 26 : 46;
   const make = () => ({ x: Math.random() * W, y: Math.random() * H, r: .5 + Math.random() * 1.6, vy: -(.05 + Math.random() * .18), vx: (Math.random() - .5) * .08, ph: Math.random() * 6.28, sp: .4 + Math.random() * 1.2, warm: Math.random() < .75 });
   const fit = () => { const d = Math.min(devicePixelRatio || 1, 1.5); W = innerWidth; H = innerHeight; cv.width = W * d; cv.height = H * d; c.setTransform(d, 0, 0, d, 0, 0); P = Array.from({ length: N() }, make); };
   fit(); addEventListener('resize', fit);

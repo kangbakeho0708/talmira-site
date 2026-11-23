@@ -501,3 +501,28 @@ html.fp .grp .card{height:min(640px,70vh)}
 .ldsky{position:absolute;inset:0;background-color:var(--t,#fbf6e6);opacity:.11;transition:background-color 1.4s ease;-webkit-mask-image:radial-gradient(ellipse 60% 55% at 50% 46%,#000 0,transparent 75%);mask-image:radial-gradient(ellipse 60% 55% at 50% 46%,#000 0,transparent 75%);pointer-events:none}
 #intro.stop .ldsky{background-color:#7fb0ff}
 .qpop .qual+.qual{margin-top:8px}
+
+/* 휴대폰 최적화: 흐림 필터와 섞기 모드는 휴대폰 GPU 에 무겁다. 단색 반투명으로 대신 */
+@media (max-width:899px),(pointer:coarse){
+  header,.abar,.qpop,.tabs{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+  header{background:rgba(12,13,18,.94)!important}
+  .abar{background:rgba(10,10,14,.96)}
+  #dust{mix-blend-mode:normal;opacity:.7}
+  .card:hover .pic{transform:none}
+  .pinfo .wm{display:none}
+}
+@media (max-width:899px),(pointer:coarse){.rail .emb path{filter:none}}
+/* 휴대폰 배치 고침 (360 폭 기준) */
+@media (max-width:899px){
+  .grp .pgrid>*{min-width:0}
+  .grp .cbox{min-width:0;width:100%;align-self:stretch}
+  .grp .cbox .cards{width:100%;min-width:0;justify-content:flex-start}
+  html.fp .pager{display:none}
+  .h2 .en{font-size:clamp(28px,8vw,40px)}
+  html.fp .sec{justify-content:flex-start}
+}
+@media (max-width:899px) and (max-height:700px){
+  .h2{font-size:18px}.ftabs{margin-top:6px}
+  .grp .pinfo p.desc,.grp .pinfo .desc{-webkit-line-clamp:2}
+}
+@media (max-width:420px){#hours{flex-wrap:wrap;row-gap:6px;column-gap:12px;justify-content:flex-start}#hours li{font-size:12px}}
